@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { Router, Route, Switch } from 'react-router-dom';
+import history from './history';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Header from './components/Header';
+import HomePage from './pages/HomePage';
+import PreJoinPage from './pages/PreJoinPage';
+import MeetingRoom from './pages/MeetingRoom';
+
+function App () {
+	return (
+		<Router history={history}>
+			<React.Fragment>
+				<Header />
+				<Switch>
+					<Route path="/" exact component={HomePage} />
+					<Route path="/room/:id" exact component={PreJoinPage} />
+					<Route path="/meetingroom/:id" exact component={MeetingRoom} />
+				</Switch>
+			</React.Fragment>
+		</Router>
+	);
 }
 
 export default App;
