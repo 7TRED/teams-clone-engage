@@ -2,9 +2,6 @@ import * as Actions from './types';
 import api from '../../services/api';
 import history from '../../history';
 
-import { connect, createLocalTracks } from 'twilio-video';
-import MEDIA_CONSTRAINTS from '../../constants/MediaConstraints';
-
 export const createRoom = () => {
 	return async (dispatch) => {
 		try {

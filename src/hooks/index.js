@@ -4,5 +4,7 @@ import { useVideoDevices } from './useVideoDevices';
 import { useCardRatio } from './useCardRatio';
 import { useOffsets } from './useOffsets';
 import { useRoom } from './useRoom';
+import { useHandleRoomDisconnection } from './useHandleRoomDisconnection';
+import { useRoomContext } from './useRoomContext';
 
-export { useLocalMedia, useAudioDevices, useVideoDevices, useCardRatio, useOffsets, useRoom };
+export { useLocalMedia, useAudioDevices, useVideoDevices, useCardRatio, useOffsets, useRoom, useHandleRoomDisconnection, useRoomContext };

@@ -19,7 +19,7 @@ export function useRoom (localTracks, options) {
 			return roomConnect(token, { ...optionsRef.current, tracks: localTracks }).then(
 				(newRoom) => {
 					setRoom(newRoom);
-
+					console.log(newRoom);
 					const disconnect = () => newRoom.disconnect();
 
 					newRoom.setMaxListeners(15);

@@ -1,15 +1,16 @@
 import { useEffect, useState, useCallback } from 'react';
 import { createLocalAudioTrack, createLocalVideoTrack, createLocalTracks } from 'twilio-video';
+import MEDIA_CONSTRAINTS from '../constants/MediaConstraints';
 
-export const useLocalMedia = (mediaConstraints) => {
+export const useLocalMedia = () => {
 	const [ localTracks, setLocalTrack ] = useState([]);
 	const [ isAcquiringLocalTrack, setIsAcquiringLocalTrack ] = useState(false);
 
 	useEffect(
 		() => {
-			async function getMedia (mediaConstraints) {
+			async function getMedia () {
 				try {
-					setLocalTrack(await createLocalTracks(mediaConstraints));
+					setLocalTrack(await createLocalTracks(MEDIA_CONSTRAINTS));
 				} catch (err) {
 					console.log(err);
 				} finally {
@@ -19,7 +20,7 @@ export const useLocalMedia = (mediaConstraints) => {
 
 			if (!localTracks.length) {
 				setIsAcquiringLocalTrack(true);
-				getMedia(mediaConstraints);
+				getMedia();
 			} else {
 				// cleanup function to stop the localTrack when the component unmounts
 				return () => {
@@ -27,26 +28,6 @@ export const useLocalMedia = (mediaConstraints) => {
 						track.stop();
 					});
 				};
-			}
-		},
-		[ localTracks, mediaConstraints ],
-	);
-
-	const removeLocalAudioTrack = useCallback(
-		() => {
-			if (localTracks[0]) {
-				localTracks[0].stop();
-				setLocalTrack([ undefined, localTracks[1] ]);
-			}
-		},
-		[ localTracks ],
-	);
-
-	const removeLocalVideoTrack = useCallback(
-		() => {
-			if (localTracks[1]) {
-				localTracks[1].stop();
-				setLocalTrack([ localTracks[0], undefined ]);
 			}
 		},
 		[ localTracks ],
@@ -71,6 +52,26 @@ export const useLocalMedia = (mediaConstraints) => {
 	// 		return audioTrack;
 	// 	});
 	// }, []);
+
+	const removeLocalAudioTrack = useCallback(
+		() => {
+			if (localTracks[0]) {
+				localTracks[0].stop();
+				setLocalTrack([ undefined, localTracks[1] ]);
+			}
+		},
+		[ localTracks ],
+	);
+
+	const removeLocalVideoTrack = useCallback(
+		() => {
+			if (localTracks[1]) {
+				localTracks[1].stop();
+				setLocalTrack([ localTracks[0], undefined ]);
+			}
+		},
+		[ localTracks ],
+	);
 
 	// const getAudioAndVideoTracks = useCallback(
 	// 	() => {

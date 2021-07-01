@@ -27,12 +27,13 @@ function VideoTrack (props) {
 		() => {
 			if (props.track) {
 				// props.track[0]?.attach(userAudio.current);
-				props.track[1]?.attach(videoRef.current);
+				props.track?.attach(videoRef.current);
 			}
 		},
 		[ props.track ],
 	);
 
+	console.log(props.track);
 
 	function handleResize(contentRect) {
 		setContainer({

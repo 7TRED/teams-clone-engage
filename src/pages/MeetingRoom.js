@@ -1,20 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Grid, makeStyles, useTheme } from '@material-ui/core';
+import React, { useState, useEffect, useContext } from 'react';
+import { Grid, makeStyles } from '@material-ui/core';
 import MeetingControls from '../components/MeetingControls';
-import { useRoom, useLocalMedia } from '../hooks';
 import { connect } from 'react-redux';
-import MEDIA_CONSTRAINTS from '../constants/MediaConstraints.js';
 import ReactLoading from 'react-loading';
+
+import { RoomContext } from '../context/RoomContext';
 
 function MeetingRoom (props) {
 	const classes = useStyles();
-	const localTrack = useLocalMedia(MEDIA_CONSTRAINTS);
-
-	const { room, isConnecting, connect } = useRoom(localTrack, { name: props.roomDetails.uniqueName });
+	const { connect, isConnecting } = useContext(RoomContext);
 	const [ meetingState, setMeetingState ] = useState({ isAudioMuted: false, isVideoMuted: false, isChatActive: false, isScreenSharing: false, showParticipants: false });
 
 	useEffect(() => {
-		console.log(props.identity);
 		console.log(props.token);
 		connect(props.token);
 	}, []);
@@ -115,4 +112,6 @@ const mapStateToProps = (state) => {
 	return { roomDetails: state.meeting.room, localmediaConfig: state.meeting.localMediaConfig, identity: state.meeting.identity, token: state.meeting.token };
 };
 
-export default connect(mapStateToProps)(MeetingRoom);
+const MeetingRoomWithState = connect(mapStateToProps)(MeetingRoom);
+
+export default MeetingRoomWithState;
