@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, makeStyles, Button, MenuItem } from '@material-ui/core';
+import { generateToken } from '../../store/actions';
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles({
 	form : {
@@ -14,6 +16,7 @@ const useStyles = makeStyles({
 function PreJoinForm ({ audioDevices, videoDevices, mediaConfig, setMediaConfig, handleSubmit }) {
 	const classes = useStyles();
 	const [ selectedDevices, setDevices ] = useState({ audioDevice: { ...audioDevices[0] }, videoDevice: { ...videoDevices[0] } });
+	const [ userName, setUserName ] = useState('');
 
 	useEffect(
 		() => {
@@ -22,9 +25,13 @@ function PreJoinForm ({ audioDevices, videoDevices, mediaConfig, setMediaConfig,
 		[ selectedDevices ],
 	);
 
+	function handleJoin () {
+		handleSubmit(userName);
+	}
+
 	return (
 		<form className={classes.form} noValidate autoComplete="off">
-			<TextField id="standard-basic" label="UserName" />
+			<TextField id="standard-basic" label="UserName" value={userName} onChange={(e) => setUserName(e.target.value)} />
 			<TextField variant="outlined" label="Audio Device" select onChange={(e) => setDevices({ ...selectedDevices, audioDevice: e.target.value })}>
 				{audioDevices.map((option) => (
 					<MenuItem key={option.deviceID} value={option}>
@@ -39,11 +46,11 @@ function PreJoinForm ({ audioDevices, videoDevices, mediaConfig, setMediaConfig,
 					</MenuItem>
 				))}
 			</TextField>
-			<Button variant="contained" color="primary" onClick={handleSubmit}>
+			<Button variant="contained" color="primary" onClick={handleJoin}>
 				Join
 			</Button>
 		</form>
 	);
 }
 
-export default PreJoinForm;
+export default connect(null, { generateToken })(PreJoinForm);

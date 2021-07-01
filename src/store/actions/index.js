@@ -47,6 +47,8 @@ export const generateToken = (identity, roomName) => {
 					...response.data,
 				},
 			});
+
+			history.push(`/meetingroom/${roomName}`);
 		} catch (err) {
 			dispatch({
 				type  : Actions.TOKEN_ERROR,

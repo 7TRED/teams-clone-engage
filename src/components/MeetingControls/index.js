@@ -2,25 +2,22 @@ import React, { useState } from 'react';
 import { Button, makeStyles } from '@material-ui/core';
 import { Mic, MicOff, Videocam, VideocamOff, PresentToAll, StopScreenShareSharp, CallEnd, ChatBubble } from '@material-ui/icons';
 
-function MeetingControls () {
-	const [ isAudioMuted, setAudioMuted ] = useState(false);
-	const [ isVideoMuted, setVideoMuted ] = useState(false);
-	const [ isScreenSharing, setScreenSharing ] = useState(false);
-	const [ isChatActive, setChatActive ] = useState(false);
+function MeetingControls (props) {
+	const { meetingState } = props;
 	const classes = useStyles();
 
 	return (
 		<div className={classes.container}>
-			<Button variant="outlined" className={isAudioMuted ? classes.inactive : classes.root}>
-				{isAudioMuted ? <MicOff /> : <Mic />}
+			<Button variant="outlined" className={meetingState.isAudioMuted ? classes.inactive : classes.root} onClick={props.handleAudioToggle}>
+				{meetingState.isAudioMuted ? <MicOff /> : <Mic />}
 			</Button>
-			<Button variant="outlined" className={isVideoMuted ? classes.inactive : classes.root}>
-				{isVideoMuted ? <VideocamOff /> : <Videocam />}
+			<Button variant="outlined" className={meetingState.isVideoMuted ? classes.inactive : classes.root} onClick={props.handleVideoToggle}>
+				{meetingState.isVideoMuted ? <VideocamOff /> : <Videocam />}
 			</Button>
-			<Button variant="outlined" className={isScreenSharing ? classes.inactive : classes.root}>
-				{isScreenSharing ? <StopScreenShareSharp /> : <PresentToAll />}
+			<Button variant="outlined" className={meetingState.isScreenSharing ? classes.inactive : classes.root} onClick={props.handleScreenSharing}>
+				{meetingState.displayisScreenSharing ? <StopScreenShareSharp /> : <PresentToAll />}
 			</Button>
-			<Button variant="outlined" className={isChatActive ? classes.inactive : classes.root}>
+			<Button variant="outlined" className={meetingState.isChatActive ? classes.inactive : classes.root} onClick={props.handleChatToggle}>
 				<ChatBubble />
 			</Button>
 			<Button variant="contained" className={classes.callEnd} color="secondary">
@@ -39,6 +36,7 @@ const useStyles = makeStyles({
 		borderColor  : 'white',
 		color        : 'white',
 		height       : 60,
+		margin       : '0.4em',
 	},
 
 	inactive  : {
@@ -49,20 +47,21 @@ const useStyles = makeStyles({
 		borderColor  : 'red',
 		color        : 'red',
 		height       : 60,
+		margin       : '0.4em',
 	},
 
 	callEnd   : {
 		height       : 60,
 		borderRadius : 1000,
+		margin       : '0.4em',
 	},
 
 	container : {
-		width          : '18%',
 		display        : 'flex',
 		justifyContent : 'space-evenly',
 		position       : 'absolute',
 		top            : '90%',
-		left           : '43%',
+		left           : '40%',
 	},
 });
 

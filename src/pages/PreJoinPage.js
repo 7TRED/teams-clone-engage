@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, makeStyles, Typography } from '@material-ui/core';
+import { Grid, makeStyles, Typography, Button } from '@material-ui/core';
 import PreJoinForm from '../components/PreJoinForm';
 import VideoTrack from '../components/VideoTrack';
 import { connect } from 'react-redux';
-import { setMediaConfig } from '../store/actions';
+import { generateToken, setMediaConfig } from '../store/actions';
 import { useLocalMedia, useAudioDevices, useVideoDevices } from '../hooks';
 import MEDIA_CONSTRAINTS from '../constants/MediaConstraints';
 import history from '../history';
@@ -31,11 +31,28 @@ const useStyles = makeStyles({
 
 const PreJoinPage = (props) => {
 	const classes = useStyles();
-	const localTrack = useLocalMedia(MEDIA_CONSTRAINTS);
+	const { localTracks } = useLocalMedia(MEDIA_CONSTRAINTS);
 	const audioDevices = useAudioDevices();
 	const videoDevices = useVideoDevices();
 
 	const [ mediaConfigurations, setMediaConfigurations ] = useState({ isAudioMuted: false, isVideoMuted: false });
+
+	// useEffect(
+	// 	() => {
+	// 		const getMedia = async () => {
+	// 			await getLocalAudioTrack();
+	// 			await getLocalVideoTrack();
+	// 		};
+	// 		if (!localAudioTrack && !localVideoTrack) {
+	// 			getMedia();
+	// 		}
+	// 		return function cleanUp () {
+	// 			removeLocalVideoTrack();
+	// 			removeLocalAudioTrack();
+	// 		};
+	// 	},
+	// 	[ localAudioTrack, localVideoTrack, getLocalAudioTrack, getLocalVideoTrack, removeLocalAudioTrack, removeLocalVideoTrack ],
+	// );
 
 	useEffect(() => {
 		return function cleanUp () {
@@ -45,32 +62,32 @@ const PreJoinPage = (props) => {
 
 	const handleAudio = () => {
 		if (mediaConfigurations.isAudioMuted) {
-			localTrack[0].enable();
+			localTracks[0].enable();
 			setMediaConfigurations({ ...mediaConfigurations, isAudioMuted: false });
 		} else {
-			localTrack[0].disable();
+			localTracks[0].disable();
 			setMediaConfigurations({ ...mediaConfigurations, isAudioMuted: true });
 		}
 	};
 
 	const handleVideo = () => {
 		if (mediaConfigurations.isVideoMuted) {
-			localTrack[1].enable();
+			localTracks[1].enable();
 			setMediaConfigurations({ ...mediaConfigurations, isVideoMuted: false });
 		} else {
-			localTrack[1].disable();
+			localTracks[1].disable();
 			setMediaConfigurations({ ...mediaConfigurations, isVideoMuted: true });
 		}
 	};
 
 	const handleJoin = () => {
-		history.push(`/meetingroom/${props.match.params.id}`);
+		props.generateToken('Manish', props.match.params.id);
 	};
 
 	return (
 		<div style={{ display: 'flex', flex: 1, height: '95vh', justifyContent: 'center', alignItems: 'center' }}>
 			<Grid container item direction="row" xs={12} className={classes.card} justify="center" alignItems="center">
-				<VideoTrack track={localTrack} mediaConfig={mediaConfigurations} handleVideo={handleVideo} handleAudio={handleAudio} />
+				<VideoTrack track={localTracks} mediaConfig={mediaConfigurations} handleVideo={handleVideo} handleAudio={handleAudio} />
 
 				<Grid container item direction="row" xs={12} sm={4} lg={3} className={classes.container} justify="space-evenly" alignItems="center">
 					<PreJoinForm
@@ -79,7 +96,7 @@ const PreJoinPage = (props) => {
 						videoDevices={videoDevices}
 						mediaConfig={mediaConfigurations}
 						setMediaConfig={setMediaConfigurations}
-						handleSubmit={handleJoin}
+						handleSubmit={(userName) => handleJoin(userName)}
 					/>
 				</Grid>
 			</Grid>
@@ -87,4 +104,4 @@ const PreJoinPage = (props) => {
 	);
 };
 
-export default connect(null, { setMediaConfig })(PreJoinPage);
+export default connect(null, { generateToken, setMediaConfig })(PreJoinPage);
