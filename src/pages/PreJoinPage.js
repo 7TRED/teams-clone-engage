@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Grid, makeStyles, Typography, Button } from '@material-ui/core';
+import ReactLoading from 'react-loading';
 import PreJoinForm from '../components/PreJoinForm';
 import VideoTrack from '../components/VideoTrack';
 import { useLocalMedia, useAudioDevices, useVideoDevices } from '../hooks';
+import { MeetingContext } from '../context/MeetingContext';
+import history from '../history';
 
 const useStyles = makeStyles({
 	card      : {
@@ -28,8 +31,20 @@ const useStyles = makeStyles({
 const PreJoinPage = (props) => {
 	const classes = useStyles();
 	const { localTracks } = useLocalMedia(true);
+	const { getAccessToken, isLoading, roomState, isValidRoom } = useContext(MeetingContext);
 	const audioDevices = useAudioDevices();
 	const videoDevices = useVideoDevices();
+
+	useEffect(() => {
+		const check = async () => {
+			const res = await isValidRoom(props.match.params.id);
+			if (!res) {
+				history.push('/');
+			}
+		};
+
+		setTimeout(() => check());
+	}, []);
 
 	const [ mediaConfigurations, setMediaConfigurations ] = useState({ isAudioMuted: false, isVideoMuted: false });
 
@@ -53,24 +68,56 @@ const PreJoinPage = (props) => {
 		}
 	};
 
-	const handleJoin = () => {};
+	const handleJoin = (userName) => {
+		getAccessToken(props.match.params.id, userName).then((token) => {
+			if (token) {
+				history.push(`/inroom/${props.match.params.id}`);
+			}
+		});
+	};
+
+	function renderLoader () {
+		return (
+			<div>
+				<ReactLoading type={'spin'} color="#f7f7f7" />
+				<h3 style={{ color: '#f7f7f7' }}>Loading</h3>
+			</div>
+		);
+	}
 
 	return (
-		<div style={{ display: 'flex', flex: 1, height: '95vh', justifyContent: 'center', alignItems: 'center' }}>
-			<Grid container item direction="row" xs={12} className={classes.card} justify="center" alignItems="center">
-				<VideoTrack track={localTracks[1]} mediaConfig={mediaConfigurations} handleVideo={handleVideo} handleAudio={handleAudio} />
+		<div
+			style={{
+				display         : 'flex',
+				flex            : 1,
+				backgroundColor : '#222',
+				height          : '100vh',
+				width           : '100vw',
+				justifyContent  : 'center',
+				alignItems      : 'center',
+				position        : 'absolute',
+				top             : 0,
+				left            : 0,
+			}}
+		>
+			{isLoading ? (
+				renderLoader()
+			) : (
+				<Grid container item direction="row" xs={12} className={classes.card} justify="center" alignItems="center">
+					<VideoTrack track={localTracks[1]} mediaConfig={mediaConfigurations} handleVideo={handleVideo} handleAudio={handleAudio} />
 
-				<Grid container item direction="row" xs={12} sm={4} lg={3} className={classes.container} justify="space-evenly" alignItems="center">
-					<PreJoinForm
-						roomID={props.match.params.id}
-						audioDevices={audioDevices}
-						videoDevices={videoDevices}
-						mediaConfig={mediaConfigurations}
-						setMediaConfig={setMediaConfigurations}
-						handleSubmit={(userName) => handleJoin(userName)}
-					/>
+					<Grid container item direction="row" xs={12} sm={4} lg={3} className={classes.container} justify="space-evenly" alignItems="center">
+						<PreJoinForm
+							roomID={props.match.params.id}
+							audioDevices={audioDevices}
+							videoDevices={videoDevices}
+							mediaConfig={mediaConfigurations}
+							setMediaConfig={setMediaConfigurations}
+							handleSubmit={(userName) => handleJoin(userName)}
+						/>
+					</Grid>
 				</Grid>
-			</Grid>
+			)}
 		</div>
 	);
 };

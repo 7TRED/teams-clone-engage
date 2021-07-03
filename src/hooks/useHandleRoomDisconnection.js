@@ -1,6 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
+import history from '../history';
+import { MeetingContext } from '../context/MeetingContext';
 
-export function useHandleRoomDisconnection (room, removeLocalVideoTrack, removeLocalAudioTrack) {
+export function useHandleRoomDisconnection (room) {
+	const { setDefault } = useContext(MeetingContext);
 	useEffect(
 		() => {
 			if (room) {
@@ -8,9 +11,8 @@ export function useHandleRoomDisconnection (room, removeLocalVideoTrack, removeL
 					if (error) {
 						console.log(error);
 					}
-
-					removeLocalVideoTrack();
-					removeLocalAudioTrack();
+					setDefault();
+					history.replace('/');
 				};
 
 				room.on('disconnected', onDisconnected);
@@ -20,6 +22,6 @@ export function useHandleRoomDisconnection (room, removeLocalVideoTrack, removeL
 				};
 			}
 		},
-		[ room, removeLocalVideoTrack, removeLocalAudioTrack ],
+		[ room ],
 	);
 }

@@ -16,13 +16,6 @@ function PreJoinForm ({ audioDevices, videoDevices, mediaConfig, setMediaConfig,
 	const [ selectedDevices, setDevices ] = useState({ audioDevice: { ...audioDevices[0] }, videoDevice: { ...videoDevices[0] } });
 	const [ userName, setUserName ] = useState('');
 
-	useEffect(
-		() => {
-			setMediaConfig({ ...mediaConfig, ...selectedDevices });
-		},
-		[ selectedDevices ],
-	);
-
 	function handleJoin () {
 		handleSubmit(userName);
 	}

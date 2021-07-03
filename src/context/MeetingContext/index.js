@@ -20,6 +20,7 @@ const DEFAULT_STATE = {
 	roomDetails : undefined,
 	accessToken : null,
 	error       : undefined,
+	userName    : undefined,
 };
 
 export const MeetingContext = createContext(null);
@@ -36,6 +37,7 @@ export const MeetingProvider = ({ children }) => {
 			const response = await api.get('/rooms');
 			console.log(response);
 			setRoomState({ ...roomState, roomDetails: response.data, error: undefined });
+			return response.data;
 		} catch (err) {
 			console.log(err);
 			setRoomState({ ...roomState, roomDetails: undefined, error: { type: Errors.ROOM_NOT_CREATED } });
@@ -45,45 +47,46 @@ export const MeetingProvider = ({ children }) => {
 	};
 
 	const isValidRoom = async (roomID) => {
+		setIsLoading(true);
+		let result = false;
 		try {
 			const response = await api.get('/room', {
 				params : {
 					room : roomID,
 				},
 			});
-
 			const room = response.data;
-			if (room.status === 'completed') return false;
-			else return true;
+			if (room.status && room.status === 'in-progress') result = true;
+			else result = false;
 		} catch (err) {
-			return false;
+			result = false;
+		} finally {
+			setIsLoading(false);
 		}
+
+		return result;
 	};
 
-	const getAccessToken = (roomID, identity) => {
-		setIsLoading(true);
-		api
-			.get('/token', {
+	const getAccessToken = async (roomID, identity) => {
+		try {
+			const response = await api.get('/token', {
 				params : {
-					room     : roomID,
-					identity : identity,
+					room : roomID,
 				},
-			})
-			.then((res) => {
-				setRoomState({ ...roomState, accessToken: res.data.token, error: undefined });
-			})
-			.catch((err) => {
-				console.log(err);
-				setRoomState({ ...roomState, accessToken: null, error: { type: Errors.INVALID_TOKEN } });
-			})
-			.finally(() => {
-				setIsLoading(false);
 			});
+
+			setRoomState({ ...roomState, accessToken: response.data.token, error: undefined, userName: identity });
+			return response.data.token;
+		} catch (err) {
+			console.log(err);
+			setRoomState({ ...roomState, accessToken: null, error: { type: Errors.INVALID_TOKEN } });
+		}
 	};
 
 	const setDefault = () => {
 		setIsLoading(true);
 		setRoomState(DEFAULT_STATE);
+		console.log('setDefault');
 		setIsLoading(false);
 	};
 

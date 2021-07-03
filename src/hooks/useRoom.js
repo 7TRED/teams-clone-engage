@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { connect as roomConnect } from 'twilio-video';
+import MEDIA_CONSTRAINTS from '../constants/MediaConstraints';
 
 export function useRoom () {
 	const [ room, setRoom ] = useState(null);
@@ -7,7 +8,7 @@ export function useRoom () {
 
 	const connect = useCallback((token, options) => {
 		setIsConnecting(true);
-		return roomConnect(token, { ...options }).then(
+		return roomConnect(token, { ...options, ...MEDIA_CONSTRAINTS }).then(
 			(newRoom) => {
 				setRoom(newRoom);
 				console.log(newRoom);
@@ -23,7 +24,7 @@ export function useRoom () {
 				window.twilioRoom = newRoom;
 				newRoom.localParticipant.videoTracks.forEach((track) => track.setPriority('low'));
 
-				// window.addEventListener('beforeunload', disconnect);
+				window.addEventListener('beforeunload', disconnect);
 
 				setIsConnecting(false);
 			},

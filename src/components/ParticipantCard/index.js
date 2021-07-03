@@ -1,23 +1,28 @@
 import React from 'react';
 import { Avatar, Typography, makeStyles, Grow } from '@material-ui/core';
 
-import { useIsTrackSwitchedOff, usePublications, useTracks } from '../../hooks';
+import { useIsTrackEnabled, useIsTrackSwitchedOff, usePublications, useTracks } from '../../hooks';
 import ParticipantTracks from '../ParticipantTracks';
+import Video from '../Video';
+import AudioTrack from '../AudioTrack';
 
 import './styles.css';
 
 function ParticipantCard (props) {
 	const publications = usePublications(props.participant);
 	const { cardWidthAndMargin: dimensions } = props;
+	const filteredPublications = publications.filter(p => p !== undefined);
 
-	const audioPublication = publications.find((p) => p.kind === 'audio');
-	const videoPublication = publications.find((p) => p.kind === 'video');
+	const audioPublication = filteredPublications.find((p) => p.kind === 'audio');
+	const videoPublication = filteredPublications.find((p) => p.kind === 'video');
 
-	const isVideoEnabled = Boolean(videoPublication);
 	const videoTrack = useTracks(videoPublication);
-	const isVideoSwitchedOff = useIsTrackSwitchedOff(videoTrack);
+	const isVideoEnabled = useIsTrackEnabled(videoTrack);
+	// const isVideoSwitchedOff = useIsTrackSwitchedOff(videoTrack);
 
+	
 	const audioTrack = useTracks(audioPublication);
+	const isAudioEnabled = useIsTrackEnabled(audioTrack);
 
 	console.log(audioTrack, videoTrack);
 	console.log(publications);
@@ -33,18 +38,20 @@ function ParticipantCard (props) {
 				margin : `${dimensions.margin}px`,
 			}}
 		>
-			{props.children}
-			<Avatar
+			{isVideoEnabled ? <Video track={videoTrack} />:<Avatar
 				className={classes.avatar}
 				style={{
-					display         : `${!isVideoEnabled || !isVideoSwitchedOff ? '' : 'none'}`,
+					display         : `${!isVideoEnabled ? '' : 'none'}`,
 					backgroundColor : '#666611',
 					width           : '15%',
 					height          : '25%',
 				}}
 			>
 				{props.participant?.identity}
-			</Avatar>
+			</Avatar>}
+
+			{isAudioEnabled ? <AudioTrack track={audioTrack}/>:null}
+			
 		</div>
 	);
 }

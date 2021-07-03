@@ -3,6 +3,7 @@ import { Grid, makeStyles } from '@material-ui/core';
 import { useParticipants, useRoomContext } from '../../hooks';
 import Participant from '../Participant';
 import Measure from 'react-measure';
+import ParticipantCard from '../ParticipantCard'
 
 import './styles.css';
 
@@ -14,9 +15,6 @@ function VideoContainer () {
     const localParticipant = room?.localParticipant;
     const participants = useParticipants();
     console.log(participants);
-
-    
-    if (participants.length === 0) return null;
 
     
     const calcWidth = (contentRect) => {
@@ -47,11 +45,11 @@ function VideoContainer () {
         {({ measureRef }) => {
             return (
                 <div className={'container'} ref={measureRef}>
-                     <Participant participant={localParticipant} isLocalParticipant={true} cardWidthAndMargin={cardWidthAndMargin}/>
+                     <ParticipantCard participant={localParticipant} isLocalParticipant={true} cardWidthAndMargin={cardWidthAndMargin}/>
                     {
                         participants.map(participant => {
                             return (
-                                <Participant participant={participant} isLocalParticipant={false} key={participant.sid}cardWidthAndMargin={cardWidthAndMargin} />   
+                                <ParticipantCard participant={participant} isLocalParticipant={false} key={participant.sid}cardWidthAndMargin={cardWidthAndMargin} />   
                             )
                         })
                     }

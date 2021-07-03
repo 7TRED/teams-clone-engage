@@ -5,9 +5,11 @@ function AudioTrack ({ track }) {
 
 	React.useEffect(
 		() => {
-			audioRef.current = track.attach();
-			document.body.appendChild(audioRef.current);
-			return () => track.detach().forEach((el) => el.remove());
+			if (track) {
+				audioRef.current = track.attach();
+				document.body.appendChild(audioRef.current);
+				return () => track.detach().forEach((el) => el.remove());
+			}
 		},
 		[ track ],
 	);

@@ -1,55 +1,22 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Grid, makeStyles } from '@material-ui/core';
 import MeetingControls from '../components/MeetingControls';
-import { connect } from 'react-redux';
 import ReactLoading from 'react-loading';
 import { useLocalMedia } from '../hooks';
+import { MeetingContext } from '../context/MeetingContext';
 
 import { RoomContext } from '../context/RoomContext';
 import VideoContainer from '../components/VideoContainer';
 
 function MeetingRoom (props) {
 	const classes = useStyles();
-	const { localTracks } = useLocalMedia(true);
+	const { roomState } = useContext(MeetingContext);
 	const { connect, isConnecting } = useContext(RoomContext);
-	const [ meetingState, setMeetingState ] = useState({ isAudioMuted: false, isVideoMuted: false, isChatActive: false, isScreenSharing: false, showParticipants: false });
+	const [ isChatActive, setIsChatActive ] = useState(false);
 
 	useEffect(() => {
-		console.log(props.token);
-		connect(props.token, { name: props.match.params.id });
+		connect(roomState.accessToken, { name: props.match.params.id });
 	}, []);
-
-	const handleChatToggle = () => {
-		if (meetingState.isChatActive) {
-			setMeetingState({ ...meetingState, isChatActive: false });
-		} else {
-			setMeetingState({ ...meetingState, isChatActive: true });
-		}
-	};
-
-	const handleAudioToggle = () => {
-		if (meetingState.isAudioMuted) {
-			setMeetingState({ ...meetingState, isAudioMuted: false });
-		} else {
-			setMeetingState({ ...meetingState, isAudioMuted: true });
-		}
-	};
-
-	const handleVideoToggle = () => {
-		if (meetingState.isVideoMuted) {
-			setMeetingState({ ...meetingState, isVideoMuted: false });
-		} else {
-			setMeetingState({ ...meetingState, isVideoMuted: true });
-		}
-	};
-
-	const handleScreenSharing = () => {
-		if (meetingState.isScreenSharing) {
-			setMeetingState({ ...meetingState, isScreenSharing: false });
-		} else {
-			setMeetingState({ ...meetingState, isScreenSharing: true });
-		}
-	};
 
 	function renderLoader () {
 		return (
@@ -63,18 +30,12 @@ function MeetingRoom (props) {
 	function renderMeeting () {
 		return (
 			<React.Fragment>
-				<Grid container item xs={meetingState.isChatActive ? 9 : 12} direction="row" className={classes.videoContainer}>
+				<Grid container item xs={isChatActive ? 9 : 12} direction="row" className={classes.videoContainer}>
 					<VideoContainer />
-					<MeetingControls
-						meetingState={meetingState}
-						handleChatToggle={handleChatToggle}
-						handleAudioToggle={handleAudioToggle}
-						handleVideoToggle={handleVideoToggle}
-						handleScreenSharing={handleScreenSharing}
-					/>
+					<MeetingControls isChatActive={isChatActive} handleChatActive={setIsChatActive} />
 				</Grid>
 
-				{meetingState.isChatActive ? (
+				{isChatActive ? (
 					<Grid container item direction="row" xs={3} className={classes.chatContainer}>
 						chat
 					</Grid>
@@ -111,10 +72,4 @@ const useStyles = makeStyles({
 	},
 });
 
-const mapStateToProps = (state) => {
-	return { roomDetails: state.meeting.room, localmediaConfig: state.meeting.localMediaConfig, identity: state.meeting.identity, token: state.meeting.token };
-};
-
-const MeetingRoomWithState = connect(mapStateToProps)(MeetingRoom);
-
-export default MeetingRoomWithState;
+export default MeetingRoom;

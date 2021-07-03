@@ -5,6 +5,7 @@ import CreateMeetingButton from '../components/CreateMeetingButton';
 import JoinMeetingButton from '../components/JoinMeetingButton';
 import videoConferencingImage from '../assets/video_conferencing.jpg';
 import { MeetingContext } from '../context/MeetingContext';
+import Loader from '../components/Loader';
 
 const useStyles = makeStyles({
 	root         : {
@@ -21,31 +22,34 @@ const useStyles = makeStyles({
 	},
 });
 
-const Homepage = () => {
+const Homepage = (props) => {
 	const styles = useStyles();
-	const { setDefault } = React.useContext(MeetingContext);
+	const { isLoading, setDefault } = React.useContext(MeetingContext);
+
 	return (
-		<Grid container direction="row" className={styles.root}>
-			<Grid container item direction="row" xs={4} justify="center" alignItems="center" className={styles.subContainer}>
-				<Grid container item direction="column" xs={10} spacing={10} justify="center" alignContent="center">
-					<Typography variant="h2" color="primary">
-						Microsoft Teams
-					</Typography>
-					<Typography variant="h5" color="initial">
-						Meet, chat, call and collab all at one place.
-					</Typography>
-					<div className={styles.margin}>
-						<JoinMeetingButton />
-					</div>
-					<div className={styles.margin}>
-						<CreateMeetingButton />
-					</div>
+		<React.Fragment>
+			<Grid container direction="row" className={styles.root}>
+				<Grid container item direction="row" xs={4} justify="center" alignItems="center" className={styles.subContainer}>
+					<Grid container item direction="column" xs={10} spacing={10} justify="center" alignContent="center">
+						<Typography variant="h2" color="primary">
+							Microsoft Teams
+						</Typography>
+						<Typography variant="h5" color="initial">
+							Meet, chat, call and collab all at one place.
+						</Typography>
+						<div className={styles.margin}>
+							<JoinMeetingButton />
+						</div>
+						<div className={styles.margin}>
+							<CreateMeetingButton />
+						</div>
+					</Grid>
+				</Grid>
+				<Grid container item xs={8} className={styles.subContainer} justify="center" alignItems="center">
+					<img src={videoConferencingImage} alt="Video conferencing with team" width="80%" height="80%" />
 				</Grid>
 			</Grid>
-			<Grid container item xs={8} className={styles.subContainer} justify="center" alignItems="center">
-				<img src={videoConferencingImage} alt="Video conferencing with team" width="80%" height="80%" />
-			</Grid>
-		</Grid>
+		</React.Fragment>
 	);
 };
 

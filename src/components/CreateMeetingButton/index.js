@@ -5,16 +5,18 @@ import history from '../../history';
 import { MeetingContext, Errors } from '../../context/MeetingContext';
 
 function CreateMeetingButton (props) {
-	const { roomState, isLoading, createRoom } = React.useContext(MeetingContext);
+	const {isLoading, createRoom } = React.useContext(MeetingContext);
 
-	const handleOnClick = async () => {
-		await createRoom();
-		if (roomState.error) {
-			return;
-		} else {
-			history.push(`/room/${roomState.roomDetails.uniqueName}`);
-		}
+	const handleOnClick = () => {
+		createRoom().then((roomDetails) => {
+			if (roomDetails) {
+				console.log(roomDetails)
+				history.push(`/room/${roomDetails?.uniqueName}`);
+			}
+		});	
 	};
+
+	
 
 	function renderLoader () {
 		return isLoading ? (

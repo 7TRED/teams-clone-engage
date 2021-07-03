@@ -5,7 +5,7 @@ export const RoomContext = createContext(null);
 
 export function RoomProvider ({ children }) {
 	const { room, isConnecting, connect } = useRoom();
-	// useHandleRoomDisconnection(room, removeLocalAudioTrack, removeLocalVideoTrack);
+	useHandleRoomDisconnection(room);
 
 	return <RoomContext.Provider value={{ isConnecting, room, connect }}>{children}</RoomContext.Provider>;
 }
