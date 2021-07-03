@@ -6,5 +6,24 @@ import { useOffsets } from './useOffsets';
 import { useRoom } from './useRoom';
 import { useHandleRoomDisconnection } from './useHandleRoomDisconnection';
 import { useRoomContext } from './useRoomContext';
+import { useParticipants } from './useParticipants';
+import { usePublications } from './usePublications';
+import { useTracks } from './useTracks';
+import { useIsTrackEnabled } from './useIsTrackEnabled';
+import { useIsTrackSwitchedOff } from './useIsTrackSwitchedOff';
 
-export { useLocalMedia, useAudioDevices, useVideoDevices, useCardRatio, useOffsets, useRoom, useHandleRoomDisconnection, useRoomContext };
+export {
+	useLocalMedia,
+	useAudioDevices,
+	useVideoDevices,
+	useCardRatio,
+	useOffsets,
+	useRoom,
+	useHandleRoomDisconnection,
+	useRoomContext,
+	useParticipants,
+	usePublications,
+	useTracks,
+	useIsTrackEnabled,
+	useIsTrackSwitchedOff,
+};

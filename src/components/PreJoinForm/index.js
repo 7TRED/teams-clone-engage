@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, makeStyles, Button, MenuItem } from '@material-ui/core';
-import { generateToken } from '../../store/actions';
-import { connect } from 'react-redux';
 
 const useStyles = makeStyles({
 	form : {
@@ -53,4 +51,4 @@ function PreJoinForm ({ audioDevices, videoDevices, mediaConfig, setMediaConfig,
 	);
 }
 
-export default connect(null, { generateToken })(PreJoinForm);
+export default PreJoinForm;

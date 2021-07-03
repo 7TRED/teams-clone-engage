@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Grid, makeStyles, Typography, Button } from '@material-ui/core';
 import PreJoinForm from '../components/PreJoinForm';
 import VideoTrack from '../components/VideoTrack';
-import { connect } from 'react-redux';
-import { generateToken, setMediaConfig } from '../store/actions';
 import { useLocalMedia, useAudioDevices, useVideoDevices } from '../hooks';
 
 const useStyles = makeStyles({
@@ -29,17 +27,11 @@ const useStyles = makeStyles({
 
 const PreJoinPage = (props) => {
 	const classes = useStyles();
-	const { localTracks } = useLocalMedia();
+	const { localTracks } = useLocalMedia(true);
 	const audioDevices = useAudioDevices();
 	const videoDevices = useVideoDevices();
 
 	const [ mediaConfigurations, setMediaConfigurations ] = useState({ isAudioMuted: false, isVideoMuted: false });
-
-	useEffect(() => {
-		return function cleanUp () {
-			props.setMediaConfig(mediaConfigurations);
-		};
-	});
 
 	const handleAudio = () => {
 		if (mediaConfigurations.isAudioMuted) {
@@ -61,9 +53,7 @@ const PreJoinPage = (props) => {
 		}
 	};
 
-	const handleJoin = () => {
-		props.generateToken('Manish', props.match.params.id);
-	};
+	const handleJoin = () => {};
 
 	return (
 		<div style={{ display: 'flex', flex: 1, height: '95vh', justifyContent: 'center', alignItems: 'center' }}>
@@ -85,4 +75,4 @@ const PreJoinPage = (props) => {
 	);
 };
 
-export default connect(null, { generateToken, setMediaConfig })(PreJoinPage);
+export default PreJoinPage;

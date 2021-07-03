@@ -15,7 +15,7 @@ function App () {
 				<Switch>
 					<Route path="/" exact component={HomePage} />
 					<Route path="/room/:id" exact component={PreJoinPage} />
-					<Route path="/meetingroom/:id" exact component={MeetingRoom} />
+					<Route path="/inroom/:id" exact component={MeetingRoom} />
 				</Switch>
 			</React.Fragment>
 		</Router>

@@ -3,11 +3,11 @@ import { Button, Fab, makeStyles } from '@material-ui/core';
 import { Mic, MicOff } from '@material-ui/icons';
 
 function ToggleAudioButton ({ mediaConfig, handleClick }) {
-	const [ isMuted, setMuted ] = useState(mediaConfig.isAudioMuted);
+	const [ isMuted, setMuted ] = useState(mediaConfig?.isAudioMuted);
 	const classes = useStyles();
 	useEffect(
 		() => {
-			setMuted(mediaConfig.isAudioMuted);
+			setMuted(mediaConfig?.isAudioMuted);
 		},
 		[ mediaConfig ],
 	);

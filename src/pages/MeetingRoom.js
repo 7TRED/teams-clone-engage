@@ -3,17 +3,20 @@ import { Grid, makeStyles } from '@material-ui/core';
 import MeetingControls from '../components/MeetingControls';
 import { connect } from 'react-redux';
 import ReactLoading from 'react-loading';
+import { useLocalMedia } from '../hooks';
 
 import { RoomContext } from '../context/RoomContext';
+import VideoContainer from '../components/VideoContainer';
 
 function MeetingRoom (props) {
 	const classes = useStyles();
+	const { localTracks } = useLocalMedia(true);
 	const { connect, isConnecting } = useContext(RoomContext);
 	const [ meetingState, setMeetingState ] = useState({ isAudioMuted: false, isVideoMuted: false, isChatActive: false, isScreenSharing: false, showParticipants: false });
 
 	useEffect(() => {
 		console.log(props.token);
-		connect(props.token);
+		connect(props.token, { name: props.match.params.id });
 	}, []);
 
 	const handleChatToggle = () => {
@@ -61,6 +64,7 @@ function MeetingRoom (props) {
 		return (
 			<React.Fragment>
 				<Grid container item xs={meetingState.isChatActive ? 9 : 12} direction="row" className={classes.videoContainer}>
+					<VideoContainer />
 					<MeetingControls
 						meetingState={meetingState}
 						handleChatToggle={handleChatToggle}
@@ -91,7 +95,6 @@ const useStyles = makeStyles({
 		flex            : 1,
 		height          : '100vh',
 		backgroundColor : '#272727',
-		width           : '100vw',
 		position        : 'absolute',
 		top             : 0,
 		left            : 0,

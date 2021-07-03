@@ -3,11 +3,11 @@ import { Button, Fab, makeStyles } from '@material-ui/core';
 import { Videocam, VideocamOff } from '@material-ui/icons';
 
 function ToggleVideoButton ({ mediaConfig, handleClick }) {
-	const [ isMuted, setMuted ] = useState(mediaConfig.isVideoMuted);
+	const [ isMuted, setMuted ] = useState(mediaConfig?.isVideoMuted);
 	const classes = useStyles();
 	useEffect(
 		() => {
-			setMuted(mediaConfig.isVideoMuted);
+			setMuted(mediaConfig?.isVideoMuted);
 		},
 		[ mediaConfig ],
 	);

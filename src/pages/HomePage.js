@@ -4,6 +4,7 @@ import { Grid, makeStyles, Typography } from '@material-ui/core';
 import CreateMeetingButton from '../components/CreateMeetingButton';
 import JoinMeetingButton from '../components/JoinMeetingButton';
 import videoConferencingImage from '../assets/video_conferencing.jpg';
+import { MeetingContext } from '../context/MeetingContext';
 
 const useStyles = makeStyles({
 	root         : {
@@ -22,6 +23,7 @@ const useStyles = makeStyles({
 
 const Homepage = () => {
 	const styles = useStyles();
+	const { setDefault } = React.useContext(MeetingContext);
 	return (
 		<Grid container direction="row" className={styles.root}>
 			<Grid container item direction="row" xs={4} justify="center" alignItems="center" className={styles.subContainer}>

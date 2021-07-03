@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { createLocalAudioTrack, createLocalVideoTrack, createLocalTracks } from 'twilio-video';
 import MEDIA_CONSTRAINTS from '../constants/MediaConstraints';
 
-export const useLocalMedia = () => {
+export const useLocalMedia = (wantLocalTrack) => {
 	const [ localTracks, setLocalTrack ] = useState([]);
 	const [ isAcquiringLocalTrack, setIsAcquiringLocalTrack ] = useState(false);
 
@@ -18,40 +18,22 @@ export const useLocalMedia = () => {
 				}
 			}
 
-			if (!localTracks.length) {
+			if (!localTracks.length && wantLocalTrack) {
 				setIsAcquiringLocalTrack(true);
 				getMedia();
 			} else {
 				// cleanup function to stop the localTrack when the component unmounts
 				return () => {
-					localTracks.forEach((track) => {
-						track.stop();
-					});
+					if (localTracks.length > 0) {
+						localTracks.forEach((track) => {
+							track.stop();
+						});
+					}
 				};
 			}
 		},
-		[ localTracks ],
+		[ localTracks, wantLocalTrack ],
 	);
-
-	// const getLocalVideoTrack = useCallback(() => {
-	// 	setIsAcquiringLocalTrack(true);
-	// 	const videoOptions = { ...mediaConstraints.video, name: `camera-${Date.now()}` };
-	// 	return createLocalVideoTrack(videoOptions).then((videoTrack) => {
-	// 		setLocalVideoTrack(videoTrack);
-	// 		setIsAcquiringLocalTrack(false);
-	// 		return videoTrack;
-	// 	});
-	// }, []);
-
-	// const getLocalAudioTrack = useCallback(() => {
-	// 	setIsAcquiringLocalTrack(true);
-	// 	const audioOptions = { ...mediaConstraints.audio };
-	// 	return createLocalAudioTrack(audioOptions).then((audioTrack) => {
-	// 		setLocalAudioTrack(audioTrack);
-	// 		setIsAcquiringLocalTrack(false);
-	// 		return audioTrack;
-	// 	});
-	// }, []);
 
 	const removeLocalAudioTrack = useCallback(
 		() => {
@@ -72,31 +54,6 @@ export const useLocalMedia = () => {
 		},
 		[ localTracks ],
 	);
-
-	// const getAudioAndVideoTracks = useCallback(
-	// 	() => {
-	// 		setIsAcquiringLocalTrack(true);
-	// 		const options = { audio: { ...mediaConstraints.audio }, video: { ...mediaConstraints.video, name: `camera-${Date.now()}` } };
-
-	// 		return createLocalTracks(options)
-	// 			.then((localTrack) => {
-	// 				const videoTrack = localTrack.find((track) => track.kind === 'video');
-	// 				const audioTrack = localTrack.find((track) => track.kind === 'audio');
-
-	// 				if (videoTrack) {
-	// 					setLocalVideoTrack(videoTrack);
-	// 				}
-
-	// 				if (audioTrack) {
-	// 					setLocalAudioTrack(audioTrack);
-	// 				}
-	// 			})
-	// 			.finally(() => setIsAcquiringLocalTrack(false));
-	// 	},
-	// 	[ localAudioTrack, localVideoTrack, isAcquiringLocalTrack ],
-	// );
-
-	// const localTracks = [ localAudioTrack, localVideoTrack ].filter((track) => track !== undefined);
 
 	return {
 		localTracks,
