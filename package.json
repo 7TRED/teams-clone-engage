@@ -11,6 +11,7 @@
     "@twilio-labs/plugin-rtc": "^0.8.2",
     "@twilio/conversations": "^1.2.0",
     "axios": "^0.21.1",
+    "firebase": "^8.7.0",
     "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

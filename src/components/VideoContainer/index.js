@@ -13,8 +13,6 @@ function VideoContainer (props) {
     const { room } = useRoomContext();
     const [cardWidthAndMargin, setCardWidthAndMargin] = useState({ width: 0, margin: 5 });
     
-    
-
     const localParticipant = room?.localParticipant;
     const participants = useParticipants();
     const containerRef = React.useRef(null);
@@ -42,10 +40,7 @@ function VideoContainer (props) {
         }
         setCardWidthAndMargin({ width: _w - _margin * 2, margin: _margin });
     }
-    
-
-    console.log(cardWidthAndMargin);
-            
+                
     return (
         <div className={'container'} ref={containerRef}>
             <ParticipantCard participant={localParticipant} isLocalParticipant={true} cardWidthAndMargin={cardWidthAndMargin}/>
