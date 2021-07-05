@@ -33,16 +33,16 @@ const PreJoinPage = (props) => {
 	const { localTracks } = useLocalMedia(true);
 	const { getAccessToken, isLoading, roomState, isValidRoom } = useContext(MeetingContext);
 
-	// useEffect(() => {
-	// 	const check = async () => {
-	// 		const res = await isValidRoom(props.match.params.id);
-	// 		if (!res) {
-	// 			history.push('/');
-	// 		}
-	// 	};
+	useEffect(() => {
+		const check = async () => {
+			const res = await isValidRoom(props.match.params.id);
+			if (!res) {
+				history.push('/');
+			}
+		};
 
-	// 	check();
-	// }, []);
+		check();
+	}, []);
 
 	const [ mediaConfigurations, setMediaConfigurations ] = useState({ isAudioMuted: false, isVideoMuted: false, audioDevice: '', videoDevice: '' });
 
