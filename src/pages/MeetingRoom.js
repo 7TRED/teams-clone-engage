@@ -30,9 +30,11 @@ function MeetingRoom (props) {
 	function renderMeeting () {
 		return (
 			<React.Fragment>
-				<Grid container item xs={isChatActive ? 9 : 12} direction="row" className={classes.videoContainer}>
-					<VideoContainer />
-					<MeetingControls isChatActive={isChatActive} handleChatActive={setIsChatActive} />
+				<Grid container item xs={isChatActive ? 9 : 12} direction="row" justify="center " className={classes.videoContainer}>
+					<VideoContainer widthChanged={isChatActive} />
+					<Grid container item xs={12} direction="row" justify="center" alignItems="center">
+						<MeetingControls isChatActive={isChatActive} handleChatActive={setIsChatActive} />
+					</Grid>
 				</Grid>
 
 				{isChatActive ? (
@@ -59,11 +61,15 @@ const useStyles = makeStyles({
 		position        : 'absolute',
 		top             : 0,
 		left            : 0,
+		paddingTop      : '3%',
+		margin          : 0,
 	},
 	videoContainer : {
-		paddingTop : '3%',
-		position   : 'relative',
-		height     : '100%',
+		position : 'relative',
+		height   : '90%',
+	},
+	controlBar     : {
+		height : '10%',
 	},
 	chatContainer  : {
 		backgroundColor : '#f7f7f7',

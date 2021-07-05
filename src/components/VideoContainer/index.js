@@ -1,63 +1,66 @@
-import React, {useEffect, useState} from 'react';
-import { Grid, makeStyles } from '@material-ui/core';
+import React, {useState} from 'react';
 import { useParticipants, useRoomContext } from '../../hooks';
-import Participant from '../Participant';
 import Measure from 'react-measure';
+import {makeStyles, Grid} from '@material-ui/core'
 import ParticipantCard from '../ParticipantCard'
 
 import './styles.css';
 
-function VideoContainer () {
+let _margin = 5;
+let _w = 0;
+
+function VideoContainer (props) {
     const { room } = useRoomContext();
-    const [cardWidthAndMargin, setCardWidthAndMargin] = useState({width:0, margin:0});
+    const [cardWidthAndMargin, setCardWidthAndMargin] = useState({ width: 0, margin: 5 });
     
-    console.log(room);
+    
+
     const localParticipant = room?.localParticipant;
     const participants = useParticipants();
-    console.log(participants);
+    const containerRef = React.useRef(null);
+
+    React.useEffect(() => {
+        calcWidth();
+    }, [participants, props.widthChanged]);
 
     
-    const calcWidth = (contentRect) => {
-        let margin = 5;
-        const offsetWidth = contentRect? contentRect.bounds.width: 1428;
-        const offsetHeight = contentRect? contentRect.bounds.height: 883;
-        console.log(offsetWidth, offsetHeight);
-        const WIDTH = offsetWidth - 2 * margin;
-        const HEIGHT = offsetHeight - 2 * margin;
+    const calcWidth = () => {
+        _margin = 5;
+        const offsetWidth = containerRef.current? containerRef.current.offsetWidth: 1428;
+        const offsetHeight = containerRef.current? containerRef.current.offsetHeight: 883;
+    
+        const WIDTH = offsetWidth - 2 * _margin;
+        const HEIGHT = offsetHeight - 2 * _margin;
 
-        console.log(WIDTH, HEIGHT);
-
-        let w = 0;
+        _w = 0;
         for (let i = 1; i < 5000; i++){
-            w = Area(i, participants.length, WIDTH, HEIGHT, margin);
-            if (w === false) {
-                w = i - 1;
+            _w = Area(i, participants.length+1, WIDTH, HEIGHT, _margin);
+            if (_w === false) {
+                _w = i - 1;
                 break;
             }
         }
-
-        console.log(w);
-        setCardWidthAndMargin({ width: w - margin * 2, margin: margin });
+        setCardWidthAndMargin({ width: _w - _margin * 2, margin: _margin });
     }
     
 
-    return <Measure  bounds onResize={calcWidth}>
-        {({ measureRef }) => {
-            return (
-                <div className={'container'} ref={measureRef}>
-                     <ParticipantCard participant={localParticipant} isLocalParticipant={true} cardWidthAndMargin={cardWidthAndMargin}/>
-                    {
-                        participants.map(participant => {
-                            return (
-                                <ParticipantCard participant={participant} isLocalParticipant={false} key={participant.sid}cardWidthAndMargin={cardWidthAndMargin} />   
-                            )
-                        })
-                    }
-                    
-                </div>
-            )
-        }}
-    </Measure> 
+    console.log(cardWidthAndMargin);
+            
+    return (
+        <div className={'container'} ref={containerRef}>
+            <ParticipantCard participant={localParticipant} isLocalParticipant={true} cardWidthAndMargin={cardWidthAndMargin}/>
+            {
+                participants.map(participant => {
+                    return (
+                        <ParticipantCard participant={participant} isLocalParticipant={false} key={participant.sid}cardWidthAndMargin={cardWidthAndMargin} />   
+                    )
+                })
+            }
+        
+        </div>
+    )
+        
+        
 }
 
 
@@ -66,14 +69,14 @@ function VideoContainer () {
 // function to get the maximum width that can be acquired by video blocks
 function Area (increment, count = 1, WIDTH, HEIGHT, MARGIN = 10) {
 	let i = 0,
-		w = 0;
+		width = 0;
 	let h = increment * (9/16) + MARGIN * 2;
 	while (i < count) {
-		if ((w + increment) > WIDTH) {
-			w = 0;
+		if ((width + increment) > WIDTH) {
+			width = 0;
 			h = h + increment * (9/16) + MARGIN * 2;
 		}
-		w = w + increment + MARGIN * 2;
+		width = width + increment + MARGIN * 2;
 		i++;
 	}
 	if (h > HEIGHT) return false;

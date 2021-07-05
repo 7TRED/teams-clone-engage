@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Grid, makeStyles, Typography, Button } from '@material-ui/core';
 import ReactLoading from 'react-loading';
 import PreJoinForm from '../components/PreJoinForm';
-import VideoTrack from '../components/VideoTrack';
+import PreviewTrack from '../components/PreviewTrack';
 import { useLocalMedia, useAudioDevices, useVideoDevices } from '../hooks';
 import { MeetingContext } from '../context/MeetingContext';
 import history from '../history';
@@ -32,21 +32,19 @@ const PreJoinPage = (props) => {
 	const classes = useStyles();
 	const { localTracks } = useLocalMedia(true);
 	const { getAccessToken, isLoading, roomState, isValidRoom } = useContext(MeetingContext);
-	const audioDevices = useAudioDevices();
-	const videoDevices = useVideoDevices();
 
-	useEffect(() => {
-		const check = async () => {
-			const res = await isValidRoom(props.match.params.id);
-			if (!res) {
-				history.push('/');
-			}
-		};
+	// useEffect(() => {
+	// 	const check = async () => {
+	// 		const res = await isValidRoom(props.match.params.id);
+	// 		if (!res) {
+	// 			history.push('/');
+	// 		}
+	// 	};
 
-		setTimeout(() => check());
-	}, []);
+	// 	check();
+	// }, []);
 
-	const [ mediaConfigurations, setMediaConfigurations ] = useState({ isAudioMuted: false, isVideoMuted: false });
+	const [ mediaConfigurations, setMediaConfigurations ] = useState({ isAudioMuted: false, isVideoMuted: false, audioDevice: '', videoDevice: '' });
 
 	const handleAudio = () => {
 		if (mediaConfigurations.isAudioMuted) {
@@ -104,13 +102,11 @@ const PreJoinPage = (props) => {
 				renderLoader()
 			) : (
 				<Grid container item direction="row" xs={12} className={classes.card} justify="center" alignItems="center">
-					<VideoTrack track={localTracks[1]} mediaConfig={mediaConfigurations} handleVideo={handleVideo} handleAudio={handleAudio} />
+					<PreviewTrack track={localTracks[1]} mediaConfig={mediaConfigurations} handleVideo={handleVideo} handleAudio={handleAudio} />
 
 					<Grid container item direction="row" xs={12} sm={4} lg={3} className={classes.container} justify="space-evenly" alignItems="center">
 						<PreJoinForm
 							roomID={props.match.params.id}
-							audioDevices={audioDevices}
-							videoDevices={videoDevices}
 							mediaConfig={mediaConfigurations}
 							setMediaConfig={setMediaConfigurations}
 							handleSubmit={(userName) => handleJoin(userName)}

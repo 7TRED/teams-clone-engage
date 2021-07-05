@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core';
 
 const Video = (props) => {
 	const videoRef = React.useRef(null);
+	const classes = useStyles();
 
 	useEffect(() => {
 		if (props.track) {
@@ -16,7 +17,7 @@ const Video = (props) => {
 
 	return (
 		<React.Fragment>
-			<video ref={videoRef} onCanPlay={handleCanPlay} playsInline autoPlay />
+			<video ref={videoRef} className={classes.video} onCanPlay={handleCanPlay} playsInline autoPlay />
 		</React.Fragment>
 	);
 };

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Avatar, Typography, makeStyles, Grow } from '@material-ui/core';
+import { Avatar, Typography, makeStyles, Grow, Grid } from '@material-ui/core';
 
 import { useIsTrackEnabled, useIsTrackSwitchedOff, usePublications, useTracks } from '../../hooks';
-import ParticipantTracks from '../ParticipantTracks';
+
 import Video from '../Video';
 import AudioTrack from '../AudioTrack';
 
@@ -11,10 +11,10 @@ import './styles.css';
 function ParticipantCard (props) {
 	const publications = usePublications(props.participant);
 	const { cardWidthAndMargin: dimensions } = props;
-	const filteredPublications = publications.filter(p => p !== undefined);
+	const filteredPublications = React.useMemo(()=>publications.filter(p => p !== undefined),[publications]);
 
-	const audioPublication = filteredPublications.find((p) => p.kind === 'audio');
-	const videoPublication = filteredPublications.find((p) => p.kind === 'video');
+	const audioPublication = React.useMemo(()=>filteredPublications.find((p) => p.kind === 'audio'),[filteredPublications]);
+	const videoPublication = React.useMemo(()=>filteredPublications.find((p) => p.kind === 'video'),[filteredPublications]);
 
 	const videoTrack = useTracks(videoPublication);
 	const isVideoEnabled = useIsTrackEnabled(videoTrack);
@@ -24,14 +24,11 @@ function ParticipantCard (props) {
 	const audioTrack = useTracks(audioPublication);
 	const isAudioEnabled = useIsTrackEnabled(audioTrack);
 
-	console.log(audioTrack, videoTrack);
-	console.log(publications);
-
 	const classes = useStyles();
-
+	console.log("dimension: ", dimensions);
 	return (
 		<div
-			className="video-card"
+			className={'video-card'}
 			style={{
 				width  : `${dimensions.width - dimensions.margin * 2}px`,
 				height : `${dimensions.width * (9 / 16) - dimensions.margin * 2}px`,
@@ -40,12 +37,6 @@ function ParticipantCard (props) {
 		>
 			{isVideoEnabled ? <Video track={videoTrack} />:<Avatar
 				className={classes.avatar}
-				style={{
-					display         : `${!isVideoEnabled ? '' : 'none'}`,
-					backgroundColor : '#666611',
-					width           : '15%',
-					height          : '25%',
-				}}
 			>
 				{props.participant?.identity}
 			</Avatar>}
@@ -71,7 +62,9 @@ const useStyles = makeStyles({
 	avatar : {
 		backgroundColor : '#666611',
 		width           : '15%',
-		height          : '15%',
+		height: '15%',
+		alignSelf: 'center',
+		justifySelf:'center'
 	},
 });
 

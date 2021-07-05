@@ -5,7 +5,7 @@ import { useCardRatio, useOffsets } from '../../hooks';
 import ToggleAudioButton from '../ToggleAudioButton';
 import ToggleVideoButton from '../ToggleVideoButton';
 
-function VideoTrack (props) {
+function PreviewTrack (props) {
 	const videoRef = React.useRef(null);
 	const userAudio = React.useRef(null);
 
@@ -84,4 +84,4 @@ const useStyles = makeStyles({
 	},
 });
 
-export default VideoTrack;
+export default PreviewTrack;
