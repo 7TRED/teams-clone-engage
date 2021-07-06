@@ -15,8 +15,7 @@ function JoinMeetingButton () {
 		// } else {
 		// 	return;
 		// }
-
-		history.push(`/room/${roomID}`);
+		// history.push(`/room/${roomID}`);
 	};
 
 	return (
@@ -27,8 +26,7 @@ function JoinMeetingButton () {
 					flex    : 1,
 				}}
 			>
-				<TextField label="Meeting ID" variant="outlined" onChange={(e) => setRoomID(e.target.value)} value={roomID} />
-				<Button variant="contained" color="primary" size={'large'} onClick={handleOnClick}>
+				<Button variant="contained" color="primary" onClick={handleOnClick}>
 					Join
 				</Button>
 			</div>
