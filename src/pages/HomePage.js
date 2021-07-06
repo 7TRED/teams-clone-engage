@@ -5,6 +5,7 @@ import CreateMeetingButton from '../components/CreateMeetingButton';
 import JoinMeetingButton from '../components/JoinMeetingButton';
 import videoConferencingImage from '../assets/video_conferencing.jpg';
 import { MeetingContext } from '../context/MeetingContext';
+import { AuthContext } from '../context/AuthContext';
 import Loader from '../components/Loader';
 
 const useStyles = makeStyles({
@@ -25,6 +26,9 @@ const useStyles = makeStyles({
 const Homepage = (props) => {
 	const styles = useStyles();
 	const { isLoading, setDefault } = React.useContext(MeetingContext);
+	const { authState } = React.useContext(AuthContext);
+
+	console.log(authState);
 
 	return (
 		<React.Fragment>

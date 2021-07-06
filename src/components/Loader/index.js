@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactLoading from 'react-loading';
+import { CircularProgress } from '@material-ui/core';
 import ReactDOM from 'react-dom';
 
 function Loader (props) {
@@ -17,9 +17,7 @@ function Loader (props) {
 				backgroundColor : '#222',
 			}}
 		>
-			<ReactLoading type="spin" color="#f7f7f7">
-				<h3 style={{ color: '#f7f7f7' }}>Loading</h3>
-			</ReactLoading>
+			<CircularProgress />
 		</div>
 	);
 }

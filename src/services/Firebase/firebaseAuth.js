@@ -7,6 +7,6 @@ export const signin = () => {
 	return auth.signInWithPopup(provider);
 };
 
-export const signOut = () => {
+export const signout = () => {
 	return auth.signOut();
 };
