@@ -7,7 +7,7 @@ function ChatInputBox () {
 	return (
 		<Grid container item direction="row" className={classes.root} justify="center" alignItems="center">
 			<Grid container item xs={11} className={classes.inputBox}>
-				<TextField style={{ width: '100%' }} />
+				<TextField multiline style={{ width: '100%' }} />
 			</Grid>
 			<Grid container item xs={1}>
 				<Button variant="contained" color="primary">

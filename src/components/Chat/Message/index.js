@@ -1,19 +1,26 @@
 import React from 'react';
-import { Grid, makeStyles, Typography } from '@material-ui/core';
+import { Grid, makeStyles, Typography, Avatar } from '@material-ui/core';
+import { AuthContext } from '../../../context/AuthContext';
 
 function Message () {
 	const classes = useStyles();
+	const { authState } = React.useContext(AuthContext);
 	return (
-		<Grid container item direction="column" className={classes.root} justify="space-evenly">
-			<Grid container item className={classes.messageHeader}>
-				<Typography className={classes.username}>UserName</Typography>
-				<Typography className={classes.timestamp} color={'textSecondary'}>
-					12:09
-				</Typography>
-			</Grid>
-			<Grid container item className={classes.message} direction="column">
-				<Grid container item className={classes.messageContent}>
-					<Typography>I am the one</Typography>
+		<Grid container item direction="row" className={classes.rootKaRoot} alignItems="center">
+			<Avatar src={authState.user.photoURL} />
+			<Grid container xs={11} item direction="column" className={classes.root} justify="space-evenly">
+				<Grid container item className={classes.messageHeader}>
+					<Typography className={classes.username}>{authState.user.displayName}</Typography>
+					<Typography className={classes.timestamp} color={'textSecondary'}>
+						12:09
+					</Typography>
+				</Grid>
+				<Grid container item className={classes.message} direction="column">
+					<Grid container item className={classes.messageContent}>
+						<Typography variant="body2" className={classes.messageContent} paragraph color={'textPrimary'}>
+							jfksdjfksjdfksdjkfjfsfhghkdfjhgkjdfhgkjhdfkjghdkhgdfkhgkdhgkdfhgdhkghdfkhgkdfhgkdfhgkdfhgkjdhgkdhgkdhgkdhfgkhdkghdkhgdkhgdkhgkdfhgkdhgkdh
+						</Typography>
+					</Grid>
 				</Grid>
 			</Grid>
 		</Grid>
@@ -32,19 +39,22 @@ const useStyles = makeStyles({
 		marginTop : '0.6em',
 	},
 	messageHeader  : {
-		padding        : '0.1em',
-		flex           : 0.4,
-		justifyContent : 'space-between',
-		borderBottom   : '1px solid #ccc',
+		padding      : '0.1em',
+		flex         : 0.4,
+		borderBottom : '1px solid #ccc',
 	},
 	username       : {
-		color    : '#4d4dff',
-		fontSize : '0.9rem',
+		fontSize    : '0.75rem',
+		fontWeight  : 'bold',
+		marginRight : '1em',
 	},
 	timestamp      : {
-		fontSize : '0.8rem',
+		fontSize : '0.75rem',
 	},
-	messageContent : {},
+	messageContent : {
+		width    : '95%',
+		wordWrap : 'break-word',
+	},
 });
 
 export default Message;
