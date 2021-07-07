@@ -23,10 +23,11 @@ function JoinMeetingButton () {
 			<div
 				style={{
 					display : 'flex',
+					flex    : 1,
 				}}
 			>
 				<Button variant="contained" color="primary" onClick={handleOnClick}>
-					Join
+					Join New Meeting
 				</Button>
 			</div>
 		</React.Fragment>

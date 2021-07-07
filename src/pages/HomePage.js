@@ -5,7 +5,7 @@ import { MeetingContext } from '../context/MeetingContext';
 import { AuthContext } from '../context/AuthContext';
 import Loader from '../components/Loader';
 import CreateMeetingButton from '../components/CreateMeetingButton';
-import JoinMeetingButton from '../components/JoinMeetingButton';
+import JoinMeetingButton from '../components/JoinMeetingButtonForm';
 import ProfileCardWithMenu from '../components/ProfiileCardWithMenu';
 import MeetingList from '../components/MeetingList';
 import Chat from '../components/Chat';
@@ -25,6 +25,7 @@ const useStyles = makeStyles({
 		height       : '93%',
 		background   : '#fdfcfa',
 		borderRadius : '1rem',
+		overflow     : 'hidden',
 	},
 	margin            : {},
 	meetingList       : {
