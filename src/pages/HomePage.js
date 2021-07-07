@@ -75,7 +75,7 @@ const Homepage = (props) => {
 							</Typography>
 						</Grid>
 						<MeetingList />
-						<Grid container item direction="row" className={styles.btnContainer1} justify="space-between" alignItems="center">
+						<Grid container item direction="row" className={styles.btnContainer1} justify="space-evenly" alignItems="center">
 							<div className={styles.margin}>
 								<CreateMeetingButton />
 							</div>

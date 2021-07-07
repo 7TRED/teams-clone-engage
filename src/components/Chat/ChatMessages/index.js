@@ -41,7 +41,7 @@ const useStyles = makeStyles({
 	},
 	paper : {
 		flex          : 0.9,
-		height        : '97%',
+		height        : '100%',
 		overflowX     : 'hidden',
 		overflowY     : 'auto',
 		display       : 'flex',

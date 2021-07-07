@@ -9,7 +9,7 @@ function Chat () {
 	const classes = useStyles();
 	return (
 		<Grid container item className={classes.root}>
-			<Grid container item xs={8} direction="column" className={classes.chatContainer}>
+			<Grid container item xs={8} direction="column" justify="space-evenly" className={classes.chatContainer} alignItems="center">
 				<ChatHeader />
 				<ChatMessages />
 				<ChatInputBox />

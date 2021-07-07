@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, TextField } from '@material-ui/core';
+import { Options } from '@material-ui/icons';
 
 import history from '../../history';
 import { MeetingContext } from '../../context/MeetingContext';
@@ -27,6 +28,9 @@ function JoinMeetingButton () {
 			>
 				<Button variant="contained" color="primary" onClick={handleOnClick}>
 					Join
+				</Button>
+				<Button variant="text" color="primary">
+					Invite
 				</Button>
 			</div>
 		</React.Fragment>
