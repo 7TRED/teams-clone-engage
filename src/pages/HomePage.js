@@ -1,54 +1,63 @@
 import React, { useState } from 'react';
-
-import { Grid, makeStyles, Typography } from '@material-ui/core';
-import { MeetingContext } from '../context/MeetingContext';
+import { Grid, makeStyles, Typography, Button } from '@material-ui/core';
 import { AuthContext } from '../context/AuthContext';
-import Loader from '../components/Loader';
+import { db } from '../services/Firebase';
 import CreateMeetingButton from '../components/CreateMeetingButton';
 import JoinMeetingButton from '../components/JoinMeetingButtonForm';
 import ProfileCardWithMenu from '../components/ProfiileCardWithMenu';
 import MeetingList from '../components/MeetingList';
 import Chat from '../components/Chat';
-import { useParticipantMeetings } from '../hooks/useParticpantMeetings';
-import { getAllParticipantRooms } from '../services/Firebase/firebaseDB';
+import { useParticipantMeetings } from '../hooks';
 
 const Homepage = (props) => {
 	const styles = useStyles();
-	// const { isLoading, setDefault } = React.useContext(MeetingContext)
-	const { authState } = React.useContext(AuthContext);
-	const meetings = useParticipantMeetings();
+	const { authState, logout } = React.useContext(AuthContext);
+	const [ meetings, setMeetings ] = React.useState([]);
 
-	const [ selectedMeeting, setSelectedMeeting ] = useState(meetings && meetings[0]);
-	console.log(selectedMeeting);
-	console.log(meetings);
+	React.useEffect(() => {
+		const callback = (snapshot) => {
+			let rooms = [];
+			snapshot.forEach((res) => {
+				const data = res.data();
+				rooms.push(data);
+			});
+			console.log(rooms);
+			setMeetings(rooms);
+		};
+		const ref = db.collection('users').doc(authState.user.uid).collection('rooms');
+		ref.onSnapshot(callback);
+	}, []);
+
+	const [ selectedMeeting, setSelectedMeeting ] = useState(undefined);
 
 	return (
-		<React.Fragment>
-			<Grid container direction="row" className={styles.root} justify="center" alignItems="center">
-				<Grid container item direction="row" xs={11} justify="center" alignItems="center" className={styles.subContainer}>
-					<Grid container item direction="row" xs={3} className={styles.meetingList}>
-						<Grid container item direction="column" xs={12} className={styles.meetingListHeader} alignItems="center" justify="center">
-							<ProfileCardWithMenu />
-							<Typography color="textPrimary" variant="h6">
-								Meetings
-							</Typography>
-						</Grid>
-						<MeetingList meetings={meetings} selectMeeting={setSelectedMeeting} />
-						<Grid container item direction="row" className={styles.btnContainer1} justify="space-evenly" alignItems="center">
-							<div className={styles.margin}>
-								<CreateMeetingButton />
-							</div>
-							<div className={styles.margin}>
-								<JoinMeetingButton />
-							</div>
-						</Grid>
+		<Grid container direction="row" className={styles.root} justify="center" alignItems="center">
+			<Grid container item direction="row" xs={11} justify="center" alignItems="center" className={styles.subContainer}>
+				<Grid container item direction="row" xs={3} className={styles.meetingList}>
+					<Grid container item direction="column" xs={12} className={styles.meetingListHeader} alignItems="center" justify="center">
+						<ProfileCardWithMenu />
+						<Typography color="textPrimary" variant="h6">
+							Meetings
+						</Typography>
+						<Button color="primary" variant="outlined" onClick={logout}>
+							Logout
+						</Button>
 					</Grid>
-					<Grid container item direction="row" xs={9} className={styles.chatContainer}>
-						<Chat meeting={selectedMeeting} />
+					<MeetingList meetings={meetings} selectMeeting={setSelectedMeeting} />
+					<Grid container item direction="row" className={styles.btnContainer1} justify="space-evenly" alignItems="center">
+						<div className={styles.margin}>
+							<CreateMeetingButton />
+						</div>
+						<div className={styles.margin}>
+							<JoinMeetingButton />
+						</div>
 					</Grid>
 				</Grid>
+				<Grid container item direction="row" xs={9} className={styles.chatContainer}>
+					<Chat meeting={selectedMeeting} />
+				</Grid>
 			</Grid>
-		</React.Fragment>
+		</Grid>
 	);
 };
 

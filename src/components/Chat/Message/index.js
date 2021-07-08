@@ -2,23 +2,34 @@ import React from 'react';
 import { Grid, makeStyles, Typography, Avatar } from '@material-ui/core';
 import { AuthContext } from '../../../context/AuthContext';
 
-function Message () {
+function Message ({ message }) {
 	const classes = useStyles();
-	const { authState } = React.useContext(AuthContext);
+	const [ user, setUser ] = React.useState(undefined);
+
+	React.useEffect(
+		() => {
+			const getUser = async () => {
+				const ref = await message.sentBy.get();
+				setUser(ref.data());
+			};
+			getUser();
+		},
+		[ message ],
+	);
 	return (
 		<Grid container item direction="row" className={classes.rootKaRoot} alignItems="center">
-			<Avatar src={authState.user.photoURL} />
+			<Avatar src={user?.photoURL} />
 			<Grid container xs={11} item direction="column" className={classes.root} justify="space-evenly">
 				<Grid container item className={classes.messageHeader}>
-					<Typography className={classes.username}>{authState.user.displayName}</Typography>
+					<Typography className={classes.username}>{user?.displayName}</Typography>
 					<Typography className={classes.timestamp} color={'textSecondary'}>
-						12:09
+						{message?.sentAt.toString()}
 					</Typography>
 				</Grid>
 				<Grid container item className={classes.message} direction="column">
 					<Grid container item className={classes.messageContent}>
 						<Typography variant="body2" className={classes.messageContent} paragraph color={'textPrimary'}>
-							jfksdjfksjdfksdjkfjfsfhghkdfjhgkjdfhgkjhdfkjghdkhgdfkhgkdhgkdfhgdhkghdfkhgkdfhgkdfhgkdfhgkjdhgkdhgkdhgkdhfgkhdkghdkhgdkhgdkhgkdfhgkdhgkdh
+							{message?.content}
 						</Typography>
 					</Grid>
 				</Grid>

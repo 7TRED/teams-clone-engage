@@ -2,14 +2,14 @@ import React from 'react';
 import { makeStyles, Grid, Typography } from '@material-ui/core';
 import JoinMeetingButton from '../../JoinMeetingButton';
 
-function ChatHeader () {
+function ChatHeader ({ meeting }) {
 	const classes = useStyles();
 	return (
 		<Grid container item direction="row" className={classes.root} justify="space-between" alignItems="center">
 			<Typography className={classes.title} variant="h5">
-				MeetingName
+				{meeting?.room.roomTitle}
 			</Typography>
-			<JoinMeetingButton />
+			<JoinMeetingButton meeting={meeting} />
 		</Grid>
 	);
 }

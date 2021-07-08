@@ -1,19 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, CardContent, CardMedia, Typography, makeStyles } from '@material-ui/core';
 import videoConferencingImage from '../../assets/video_conferencing.jpg';
 
-function MeetingCard () {
+function MeetingCard ({ meeting, onSelect }) {
 	const classes = useStyles();
+	const [meet, setMeet] = React.useState();
+
+	useEffect(() => {
+		const getRoom = async () => {
+			const room = await meeting.room.get();
+			setMeet(room.data());
+		}
+		getRoom();
+	}, [meeting])
+	
+	console.log(meet);
+
 	return (
-		<Card className={classes.root}>
+		<Card className={classes.root} onClick={()=>onSelect(meet)}>
 			<CardMedia className={classes.cover} component="img" src={videoConferencingImage} title="Profile Picture" />
 			<div className={classes.details}>
 				<CardContent className={classes.content}>
 					<Typography className={classes.title} color="primary" variant="subtitle1">
-						Meeting Name
+						{meet?.room.roomTitle}
 					</Typography>
 					<Typography className={classes.subtitle} color="textSecondary" variant="subtitle2">
-						last Message
+						{}
 					</Typography>
 				</CardContent>
 			</div>

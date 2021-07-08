@@ -1,32 +1,31 @@
 import React from 'react';
 import { Grid, makeStyles, Paper } from '@material-ui/core';
 import Message from '../Message';
+import { db } from '../../../services/Firebase';
 
-function ChatMessages () {
+function ChatMessages ({ meeting }) {
 	const classes = useStyles();
 	const messageEl = React.useRef(null);
+	const [ messages, setMessages ] = React.useState([]);
+
+	React.useEffect(() => {
+		const callback = (snapshot) => {
+			let allMessages = [];
+			snapshot.forEach((res) => {
+				allMessages.push(res.data());
+			});
+			setMessages(allMessages);
+		};
+		const ref = db.collection('rooms').doc(meeting?.room.roomID).collection('messages').orderBy('sentAt', 'desc');
+		ref.onSnapshot(callback);
+	}, [meeting]);
+
+	console.log("messages", messages);
 
 	return (
 		<Grid container item direction="row" className={classes.root} justify="center" alignItems="center">
 			<Paper variant="outlined" className={classes.paper} ref={messageEl}>
-				<Message />
-				<Message />
-				<Message />
-				<Message />
-				<Message />
-				<Message />
-				<Message />
-				<Message />
-				<Message />
-				<Message />
-				<Message />
-				<Message />
-				<Message />
-				<Message />
-				<Message />
-				<Message />
-				<Message />
-				<Message />
+				{messages.map((message, idx) => <Message message={message} key={idx} />)}
 			</Paper>
 		</Grid>
 	);

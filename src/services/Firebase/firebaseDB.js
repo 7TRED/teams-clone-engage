@@ -40,7 +40,7 @@ export const addRoom = (room, userID) => {
  */
 
 export const fetchRoom = (roomID) => {
-	const ref = db.collection('rooms').where(`room == ${roomID}`);
+	const ref = db.collection('rooms').where(`room.roomID == ${roomID}`);
 	return ref.get();
 };
 
@@ -54,7 +54,8 @@ export const fetchRoom = (roomID) => {
 export const addRoomToParticipant = (roomID, userID) => {
 	const roomRef = db.collection('rooms').doc(roomID);
 	return db.collection('users').doc(userID).collection('rooms').doc(roomID).set({
-		room : roomRef,
+		room     : roomRef,
+		joinedAt : firebase.firestore.Timestamp.now(),
 	});
 };
 
@@ -68,8 +69,7 @@ export const addRoomToParticipant = (roomID, userID) => {
 export const addParticipantToRoom = (roomID, userID) => {
 	const userRef = db.collection('users').doc(userID);
 	return db.collection('rooms').doc(roomID).collection('participants').doc(userID).set({
-		user     : userRef,
-		joinedAt : firebase.firestore.Timestamp.now(),
+		user : userRef,
 	});
 };
 
@@ -80,19 +80,8 @@ export const addParticipantToRoom = (roomID, userID) => {
  */
 
 export const getAllParticipantRooms = (userID, callback) => {
-	const ref = db.collection('users').doc(userID).collection('rooms');
-	ref.onSnapshot((snapshot) => {
-		let rooms = [];
-		snapshot.forEach((res) => {
-			const data = res.data();
-			console.log(data);
-			data.room.get().then((room) => {
-				rooms.push(room.data());
-			});
-		});
-		console.log(rooms);
-		callback(rooms);
-	});
+	const ref = db.collection('users').doc(userID).collection('rooms').orderBy('joinedAt', 'desc');
+	ref.onSnapshot(callback);
 };
 
 /**
@@ -103,7 +92,7 @@ export const getAllParticipantRooms = (userID, callback) => {
 
 export const getAllRoomParticipants = (roomID, callback) => {
 	const ref = db.collection('rooms').doc(roomID).collection('participants');
-	ref.get().onSnapshot((snapshot) => {
+	ref.onSnapshot((snapshot) => {
 		let rooms = [];
 		snapshot.forEach(async (res) => {
 			rooms.push(await db.collection('users').doc(res.data().uid));
@@ -116,12 +105,17 @@ export const getAllRoomParticipants = (roomID, callback) => {
 /**
  * Function to add a message to a room
  * @param {string} roomID  room ID of the current chat
- * @param {{sentAt: Date, content:string, sentBy:uid}} message message to be sent
+ * @param {{ content:string, sentBy:uid}} message message to be sent
  * @returns {Promise<firebase.firestore.DocumentReference<firebase.firestore.DocumentData>>} reference to the added message doc
  */
 
 export const addMessage = (roomID, message) => {
-	return db.collection('rooms').doc(roomID).collection('messages').add(message);
+	const userRef = db.collection('users').doc(message.sentBy);
+	return db.collection('rooms').doc(roomID).collection('messages').add({
+		sentAt  : firebase.firestore.Timestamp.now(),
+		content : message.content,
+		sentBy  : userRef,
+	});
 };
 
 /**
@@ -131,7 +125,7 @@ export const addMessage = (roomID, message) => {
  */
 export const getAllMessages = (roomID, callback) => {
 	const ref = db.collection('rooms').doc(roomID).collection('messages').orderBy('sentAt', 'desc');
-	ref.get().onSnapshot((snapshot) => {
+	ref.onSnapshot((snapshot) => {
 		let messages = [];
 		snapshot.forEach((doc) => messages.push({ id: doc.id, data: doc.data() }));
 

@@ -5,17 +5,18 @@ import ChatMessages from './ChatMessages';
 import ChatInputBox from './ChatInputBox';
 import ParticipantList from '../ParticipantList';
 
-function Chat () {
+function Chat ({ meeting }) {
 	const classes = useStyles();
+	console.log('chat', meeting);
 	return (
 		<Grid container item className={classes.root}>
 			<Grid container item xs={8} direction="column" justify="space-evenly" className={classes.chatContainer} alignItems="center">
-				<ChatHeader />
-				<ChatMessages />
-				<ChatInputBox />
+				<ChatHeader meeting={meeting} />
+				<ChatMessages meeting={meeting} />
+				<ChatInputBox meeting={meeting} />
 			</Grid>
 			<Grid container item xs={4} className={classes.particpantList} alignItems="center">
-				<ParticipantList />
+				<ParticipantList meeting={meeting} />
 			</Grid>
 		</Grid>
 	);
