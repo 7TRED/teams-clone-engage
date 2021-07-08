@@ -1,9 +1,26 @@
 import React from 'react';
 import { Grid, makeStyles, Typography } from '@material-ui/core';
 import Participant from './Participant';
+import { db } from '../../services/Firebase';
 
-function ParticpantList () {
+function ParticpantList ({ meeting }) {
 	const classes = useStyles();
+	const [ participants, setParticipants ] = React.useState([]);
+
+	React.useEffect(() => {
+		const callback = (snapshot) => {
+			let allParticipants = [];
+			snapshot.forEach(res => {
+				allParticipants.push(res.data());
+			})
+			setParticipants(allParticipants);
+		}
+		const ref = db.collection('rooms').doc(meeting?.room.roomID).collection('participants');
+		ref.onSnapshot(callback);
+	}, [meeting]);
+
+	
+	
 	return (
 		<Grid container item xs={12} direction="column" className={classes.root}>
 			<Grid container item direction="row" className={classes.header} alignItems="flex-end" justify="center">
@@ -15,13 +32,13 @@ function ParticpantList () {
 				<Typography variant="h6" color="textPrimary">
 					Organizer
 				</Typography>
-				<Participant />
+				<Participant participant={{ user: meeting?.owner }}/>
 			</Grid>
 			<Grid container item direction="column" className={classes.attendees}>
 				<Typography variant="h6" color="textPrimary">
 					Attendees
 				</Typography>
-				<Participant />
+				{participants.map((participant,idx) =>participant.user !== meeting.owner && <Participant participant={participant} key={idx}/>)}
 			</Grid>
 		</Grid>
 	);
@@ -41,7 +58,9 @@ const useStyles = makeStyles({
 		flex : 0.1,
 	},
 	attendees : {
-		flex : 1,
+		flex      : 1,
+		overflowX : 'hidden',
+		overflowY : 'auto',
 	},
 });
 
