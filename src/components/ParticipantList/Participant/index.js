@@ -1,15 +1,24 @@
 import React from 'react';
 import { Card, makeStyles, Typography, CardContent, CardMedia } from '@material-ui/core';
-import { AuthContext } from '../../../context/AuthContext';
 
-function Participant () {
-	const { authState } = React.useContext(AuthContext);
+
+
+function Participant ({participant}) {
 	const classes = useStyles();
+	const [user, setUser] = React.useState(null);
+
+	React.useEffect(() => {
+		const getUser = async () => {
+			const ref = await participant?.user?.get();
+			setUser(ref?.data());
+		}
+		getUser();
+	})
 	return (
 		<Card elevation={0} className={classes.root}>
-			<CardMedia component={'img'} className={classes.pic} src={authState.user.photoURL} />
+			<CardMedia component={'img'} className={classes.pic} src={user?.photoURL} />
 			<CardContent>
-				<Typography>{authState.user.displayName}</Typography>
+				<Typography>{user?.displayName}</Typography>
 			</CardContent>
 		</Card>
 	);
