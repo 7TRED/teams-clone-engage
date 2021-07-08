@@ -11,6 +11,7 @@ import { usePublications } from './usePublications';
 import { useTracks } from './useTracks';
 import { useIsTrackEnabled } from './useIsTrackEnabled';
 import { useIsTrackSwitchedOff } from './useIsTrackSwitchedOff';
+import { useParticipantMeetings } from './useParticpantMeetings';
 
 export {
 	useLocalMedia,
@@ -26,4 +27,5 @@ export {
 	useTracks,
 	useIsTrackEnabled,
 	useIsTrackSwitchedOff,
+	useParticipantMeetings,
 };

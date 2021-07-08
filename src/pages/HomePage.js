@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Grid, makeStyles, Typography } from '@material-ui/core';
 import { MeetingContext } from '../context/MeetingContext';
@@ -9,6 +9,50 @@ import JoinMeetingButton from '../components/JoinMeetingButtonForm';
 import ProfileCardWithMenu from '../components/ProfiileCardWithMenu';
 import MeetingList from '../components/MeetingList';
 import Chat from '../components/Chat';
+import { useParticipantMeetings } from '../hooks/useParticpantMeetings';
+import { getAllParticipantRooms } from '../services/Firebase/firebaseDB';
+
+const Homepage = (props) => {
+	const styles = useStyles();
+	// const { isLoading, setDefault } = React.useContext(MeetingContext)
+	const { authState } = React.useContext(AuthContext);
+	const meetings = useParticipantMeetings();
+
+	const [ selectedMeeting, setSelectedMeeting ] = useState(meetings && meetings[0]);
+	console.log(selectedMeeting);
+	console.log(meetings);
+
+	return (
+		<React.Fragment>
+			<Grid container direction="row" className={styles.root} justify="center" alignItems="center">
+				<Grid container item direction="row" xs={11} justify="center" alignItems="center" className={styles.subContainer}>
+					<Grid container item direction="row" xs={3} className={styles.meetingList}>
+						<Grid container item direction="column" xs={12} className={styles.meetingListHeader} alignItems="center" justify="center">
+							<ProfileCardWithMenu />
+							<Typography color="textPrimary" variant="h6">
+								Meetings
+							</Typography>
+						</Grid>
+						<MeetingList meetings={meetings} selectMeeting={setSelectedMeeting} />
+						<Grid container item direction="row" className={styles.btnContainer1} justify="space-evenly" alignItems="center">
+							<div className={styles.margin}>
+								<CreateMeetingButton />
+							</div>
+							<div className={styles.margin}>
+								<JoinMeetingButton />
+							</div>
+						</Grid>
+					</Grid>
+					<Grid container item direction="row" xs={9} className={styles.chatContainer}>
+						<Chat meeting={selectedMeeting} />
+					</Grid>
+				</Grid>
+			</Grid>
+		</React.Fragment>
+	);
+};
+
+export default Homepage;
 
 const useStyles = makeStyles({
 	root              : {
@@ -55,42 +99,3 @@ const useStyles = makeStyles({
 		borderRight : '2px solid #c7c7c7',
 	},
 });
-
-const Homepage = (props) => {
-	const styles = useStyles();
-	const { isLoading, setDefault } = React.useContext(MeetingContext);
-	const { authState } = React.useContext(AuthContext);
-
-	console.log(authState);
-
-	return (
-		<React.Fragment>
-			<Grid container direction="row" className={styles.root} justify="center" alignItems="center">
-				<Grid container item direction="row" xs={11} justify="center" alignItems="center" className={styles.subContainer}>
-					<Grid container item direction="row" xs={3} className={styles.meetingList}>
-						<Grid container item direction="column" xs={12} className={styles.meetingListHeader} alignItems="center" justify="center">
-							<ProfileCardWithMenu />
-							<Typography color="textPrimary" variant="h6">
-								Meetings
-							</Typography>
-						</Grid>
-						<MeetingList />
-						<Grid container item direction="row" className={styles.btnContainer1} justify="space-evenly" alignItems="center">
-							<div className={styles.margin}>
-								<CreateMeetingButton />
-							</div>
-							<div className={styles.margin}>
-								<JoinMeetingButton />
-							</div>
-						</Grid>
-					</Grid>
-					<Grid container item direction="row" xs={9} className={styles.chatContainer}>
-						<Chat />
-					</Grid>
-				</Grid>
-			</Grid>
-		</React.Fragment>
-	);
-};
-
-export default Homepage;

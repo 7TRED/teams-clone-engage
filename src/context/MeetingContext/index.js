@@ -1,7 +1,9 @@
-import { useState, createContext } from 'react';
+import { useState, useContext, createContext } from 'react';
 import api from '../../services/api';
 import history from '../../history';
-
+import { addRoom, addParticipantToRoom, addRoomToParticipant, fetchRoom } from '../../services/Firebase/firebaseDB';
+import { AuthContext } from '../AuthContext';
+import * as uuid from 'uuid';
 /**
  * Meeting Context provides functions to create room using the twilio API.
  * Also, function to generate accessToken which is needed while joining the room.
@@ -27,17 +29,20 @@ export const MeetingContext = createContext(null);
 
 export const MeetingProvider = ({ children }) => {
 	//states
+	const { authState } = useContext(AuthContext);
 	const [ roomState, setRoomState ] = useState(DEFAULT_STATE);
 	const [ isLoading, setIsLoading ] = useState(false);
 
 	//functions
-	const createRoom = async () => {
+	const createRoom = async (roomTitle, roomDescription) => {
 		setIsLoading(true);
 		try {
-			const response = await api.get('/rooms');
-			console.log(response);
-			setRoomState({ ...roomState, roomDetails: response.data, error: undefined });
-			return response.data;
+			const roomID = `${uuid.v4()}`;
+			await addRoom({ roomTitle, roomDescription, roomID: roomID }, authState.user.uid);
+			await addParticipantToRoom(roomID, authState.user.uid);
+			await addRoomToParticipant(roomID, authState.user.uid);
+			setRoomState({ ...roomState, roomDetails: { uniqueName: roomID }, error: undefined });
+			return roomID;
 		} catch (err) {
 			console.log(err);
 			setRoomState({ ...roomState, roomDetails: undefined, error: { type: Errors.ROOM_NOT_CREATED } });
@@ -50,14 +55,11 @@ export const MeetingProvider = ({ children }) => {
 		setIsLoading(true);
 		let result = false;
 		try {
-			const response = await api.get('/room', {
-				params : {
-					room : roomID,
-				},
-			});
-			const room = response.data;
-			if (room.status && room.status === 'in-progress') result = true;
-			else result = false;
+			const data = await fetchRoom(roomID);
+			if (data) {
+				return true;
+			}
+			return false;
 		} catch (err) {
 			result = false;
 		} finally {
