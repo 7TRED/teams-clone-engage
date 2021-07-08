@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid, makeStyles, Typography, Avatar } from '@material-ui/core';
 import { AuthContext } from '../../../context/AuthContext';
+import moment from 'moment';
 
 function Message ({ message }) {
 	const classes = useStyles();
@@ -23,7 +24,7 @@ function Message ({ message }) {
 				<Grid container item className={classes.messageHeader}>
 					<Typography className={classes.username}>{user?.displayName}</Typography>
 					<Typography className={classes.timestamp} color={'textSecondary'}>
-						{message?.sentAt.toString()}
+						{moment(message?.sentAt).format('LT')}
 					</Typography>
 				</Grid>
 				<Grid container item className={classes.message} direction="column">

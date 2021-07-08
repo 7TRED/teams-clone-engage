@@ -112,7 +112,7 @@ export const getAllRoomParticipants = (roomID, callback) => {
 export const addMessage = (roomID, message) => {
 	const userRef = db.collection('users').doc(message.sentBy);
 	return db.collection('rooms').doc(roomID).collection('messages').add({
-		sentAt  : firebase.firestore.Timestamp.now(),
+		sentAt  : message.sentAt,
 		content : message.content,
 		sentBy  : userRef,
 	});

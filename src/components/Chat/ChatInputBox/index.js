@@ -10,7 +10,7 @@ function ChatInputBox ({ meeting }) {
 	const [ message, setMessage ] = React.useState('');
 
 	const handleSend = () => {
-		addMessage(meeting.room.roomID, { content: message, sentBy: authState.user.uid });
+		addMessage(meeting.room.roomID, { sentAt: new Date().toISOString(), content: message, sentBy: authState.user.uid });
 		setMessage('');
 	};
 
