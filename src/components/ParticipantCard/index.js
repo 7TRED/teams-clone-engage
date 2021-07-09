@@ -2,7 +2,7 @@ import React from 'react';
 import { Avatar, Typography, makeStyles, Grow, Grid } from '@material-ui/core';
 
 import { useIsTrackEnabled, useIsTrackSwitchedOff, usePublications, useTracks } from '../../hooks';
-
+import { fetchUser } from '../../services/Firebase/firebaseDB';
 import Video from '../Video';
 import AudioTrack from '../AudioTrack';
 
@@ -10,15 +10,25 @@ import './styles.css';
 
 function ParticipantCard (props) {
 	const publications = usePublications(props.participant);
+	const [user, setUser] = React.useState(undefined);
 	const { cardWidthAndMargin: dimensions } = props;
 	const filteredPublications = React.useMemo(()=>publications.filter(p => p !== undefined),[publications]);
-
 	const audioPublication = React.useMemo(()=>filteredPublications.find((p) => p.kind === 'audio'),[filteredPublications]);
 	const videoPublication = React.useMemo(()=>filteredPublications.find((p) => p.kind === 'video'),[filteredPublications]);
-
 	const videoTrack = useTracks(videoPublication);
 	const isVideoEnabled = useIsTrackEnabled(videoTrack);
 	// const isVideoSwitchedOff = useIsTrackSwitchedOff(videoTrack);
+
+	React.useEffect(() => {
+		const getUser = async () => {
+			const doc = await fetchUser(props.participant?.identity);
+			if (doc.exists) {
+				setUser(doc.data());
+			}
+		}
+
+		getUser();
+	},[props.participant])
 
 	
 	const audioTrack = useTracks(audioPublication);
@@ -27,7 +37,7 @@ function ParticipantCard (props) {
 	const classes = useStyles();
 	console.log("dimension: ", dimensions);
 	return (
-		<div
+		<Grid container item direction="row" justify="center" alignItems="center"
 			className={'video-card'}
 			style={{
 				width  : `${dimensions.width - dimensions.margin * 2}px`,
@@ -35,15 +45,11 @@ function ParticipantCard (props) {
 				margin : `${dimensions.margin}px`,
 			}}
 		>
-			{isVideoEnabled ? <Video track={videoTrack} />:<Avatar
-				className={classes.avatar}
-			>
-				{props.participant?.identity}
-			</Avatar>}
+			{isVideoEnabled ? <Video track={videoTrack} /> : <Avatar className={classes.avatar} src={user?.photoURL}/>}
 
 			{isAudioEnabled ? <AudioTrack track={audioTrack}/>:null}
 			
-		</div>
+		</Grid>
 	);
 }
 
@@ -61,9 +67,8 @@ const useStyles = makeStyles({
 
 	avatar : {
 		backgroundColor : '#666611',
-		width           : '15%',
-		height: '15%',
-		alignSelf: 'center',
+		width           : '14%',
+		height: '25%',
 		justifySelf:'center'
 	},
 });

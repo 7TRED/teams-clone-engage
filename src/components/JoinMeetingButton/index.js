@@ -1,22 +1,21 @@
 import React from 'react';
-import { Button, TextField } from '@material-ui/core';
-import { Options } from '@material-ui/icons';
-
+import { Button} from '@material-ui/core';
 import history from '../../history';
 import { MeetingContext } from '../../context/MeetingContext';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-function JoinMeetingButton () {
-	const [ roomID, setRoomID ] = React.useState('');
+
+function JoinMeetingButton ({ meeting }) {
 	const { isValidRoom } = React.useContext(MeetingContext);
 
 	const handleOnClick = async () => {
-		// const res = await isValidRoom(roomID);
+		// const res = await isValidRoom(meeting?.room.roomID);
 		// if (res) {
-		// 	history.push(`/room/${roomID}`);
+		// 	history.push(`/room/${meeting?.roomID}`);
 		// } else {
 		// 	return;
 		// }
-		// history.push(`/room/${roomID}`);
+		history.push(`/room/${meeting?.room.roomID}`);
 	};
 
 	return (
@@ -29,9 +28,11 @@ function JoinMeetingButton () {
 				<Button variant="contained" color="primary" onClick={handleOnClick}>
 					Join
 				</Button>
-				<Button variant="text" color="primary">
-					Invite
-				</Button>
+				<CopyToClipboard text={meeting?.room.roomID}>
+					<Button color="primary" variant="text">
+						Invite
+					</Button>
+				</CopyToClipboard>
 			</div>
 		</React.Fragment>
 	);

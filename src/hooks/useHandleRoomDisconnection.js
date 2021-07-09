@@ -11,7 +11,6 @@ export function useHandleRoomDisconnection (room) {
 					if (error) {
 						console.log(error);
 					}
-					setDefault();
 					history.replace('/');
 				};
 

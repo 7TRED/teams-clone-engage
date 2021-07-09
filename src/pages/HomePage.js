@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { Grid, makeStyles, Typography, Button } from '@material-ui/core';
 import { AuthContext } from '../context/AuthContext';
-import { db } from '../services/Firebase';
+import { MeetingContext } from '../context/MeetingContext';
 import CreateMeetingButton from '../components/CreateMeetingButton';
 import JoinMeetingButton from '../components/JoinMeetingButtonForm';
 import ProfileCardWithMenu from '../components/ProfiileCardWithMenu';
 import MeetingList from '../components/MeetingList';
-import Chat from '../components/Chat';
-import { useParticipantMeetings } from '../hooks';
+import MeetingSection from '../components/MeetingSection';
+import { getAllParticipantRooms } from '../services/Firebase/firebaseDB';
 
 const Homepage = (props) => {
 	const styles = useStyles();
 	const { authState, logout } = React.useContext(AuthContext);
+	const { roomState } = React.useContext(MeetingContext);
 	const [ meetings, setMeetings ] = React.useState([]);
 
 	React.useEffect(() => {
@@ -21,11 +22,9 @@ const Homepage = (props) => {
 				const data = res.data();
 				rooms.push(data);
 			});
-			console.log(rooms);
 			setMeetings(rooms);
 		};
-		const ref = db.collection('users').doc(authState.user.uid).collection('rooms');
-		ref.onSnapshot(callback);
+		getAllParticipantRooms(authState.user.uid, callback);
 	}, []);
 
 	const [ selectedMeeting, setSelectedMeeting ] = useState(undefined);
@@ -54,7 +53,7 @@ const Homepage = (props) => {
 					</Grid>
 				</Grid>
 				<Grid container item direction="row" xs={9} className={styles.chatContainer}>
-					<Chat meeting={selectedMeeting} />
+					<MeetingSection meeting={roomState.room} />
 				</Grid>
 			</Grid>
 		</Grid>

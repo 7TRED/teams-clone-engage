@@ -19,10 +19,9 @@ export const Errors = {
 };
 
 const DEFAULT_STATE = {
-	roomDetails : undefined,
+	room        : undefined,
 	accessToken : null,
 	error       : undefined,
-	userName    : undefined,
 };
 
 export const MeetingContext = createContext(null);
@@ -41,11 +40,11 @@ export const MeetingProvider = ({ children }) => {
 			await addRoom({ roomTitle, roomDescription, roomID: roomID }, authState.user.uid);
 			await addParticipantToRoom(roomID, authState.user.uid);
 			await addRoomToParticipant(roomID, authState.user.uid);
-			setRoomState({ ...roomState, roomDetails: { uniqueName: roomID }, error: undefined });
+			setRoomState({ ...roomState, room: { roomTitle, roomDescription, roomID }, error: undefined });
 			return roomID;
 		} catch (err) {
 			console.log(err);
-			setRoomState({ ...roomState, roomDetails: undefined, error: { type: Errors.ROOM_NOT_CREATED } });
+			setRoomState({ ...roomState, room: undefined, error: { type: Errors.ROOM_NOT_CREATED } });
 		} finally {
 			setIsLoading(false);
 		}
@@ -55,8 +54,8 @@ export const MeetingProvider = ({ children }) => {
 		setIsLoading(true);
 		let result = false;
 		try {
-			const data = await fetchRoom(roomID);
-			if (data) {
+			const doc = await fetchRoom(roomID);
+			if (doc.exists) {
 				return true;
 			}
 			return false;
@@ -69,15 +68,36 @@ export const MeetingProvider = ({ children }) => {
 		return result;
 	};
 
-	const getAccessToken = async (roomID, identity) => {
+	const joinRoom = async (roomID) => {
+		setIsLoading(true);
+		try {
+			const res = await isValidRoom(roomID);
+			console.log(res);
+			if (res) {
+				await addParticipantToRoom(roomID, authState.user.uid);
+				await addRoomToParticipant(roomID, authState.user.uid);
+				setRoomState({ ...roomState, room: res.data().room, error: undefined });
+			} else {
+				setRoomState({ ...roomState, room: undefined, error: { type: Errors.ROOM_NOT_CREATED } });
+			}
+		} catch (err) {
+			console.log(err);
+			setRoomState({ ...roomState, room: undefined, error: { type: Errors.ROOM_NOT_CREATED } });
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	const getAccessToken = async (roomID) => {
 		try {
 			const response = await api.get('/token', {
 				params : {
-					room : roomID,
+					room     : roomID,
+					identity : authState.user.uid,
 				},
 			});
 
-			setRoomState({ ...roomState, accessToken: response.data.token, error: undefined, userName: identity });
+			setRoomState({ ...roomState, accessToken: response.data.token, error: undefined });
 			return response.data.token;
 		} catch (err) {
 			console.log(err);
@@ -92,5 +112,15 @@ export const MeetingProvider = ({ children }) => {
 		setIsLoading(false);
 	};
 
-	return <MeetingContext.Provider value={{ roomState, isLoading, createRoom, isValidRoom, getAccessToken, setDefault }}>{children}</MeetingContext.Provider>;
+	const selectMeeting = (room) => {
+		setIsLoading(true);
+		setRoomState({ ...roomState, room });
+		setIsLoading(false);
+	};
+
+	return (
+		<MeetingContext.Provider value={{ roomState, isLoading, createRoom, isValidRoom, getAccessToken, setDefault, joinRoom, selectMeeting }}>
+			{children}
+		</MeetingContext.Provider>
+	);
 };

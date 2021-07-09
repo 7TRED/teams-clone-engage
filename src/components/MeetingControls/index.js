@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, makeStyles } from '@material-ui/core';
-import { Mic, MicOff, Videocam, VideocamOff, PresentToAll, StopScreenShareSharp, CallEnd, ChatBubble } from '@material-ui/icons';
+import { Mic, MicOff, Videocam, VideocamOff, PresentToAll, StopScreenShareSharp, Group, CallEnd, ChatBubble } from '@material-ui/icons';
 import { useRoomContext } from '../../hooks';
 
 function MeetingControls (props) {
@@ -40,11 +40,19 @@ function MeetingControls (props) {
 		if (props.isChatActive) {
 			props.handleChatActive(false);
 		} else {
+			props.handleParticipantListActive(false);
 			props.handleChatActive(true);
 		}
 	}
 
-	function onScreenButtonClick () {}
+	function onParticipantButtonClick () {
+		if (props.isParticipantListActive) {
+			props.handleParticipantListActive(false);
+		} else {
+			props.handleChatActive(false);
+			props.handleParticipantListActive(true);
+		}
+	}
 
 	return (
 		<div className={classes.container}>
@@ -54,10 +62,10 @@ function MeetingControls (props) {
 			<Button variant="outlined" className={meetingState.isVideoMuted ? classes.inactive : classes.root} onClick={onVideoButtonClick}>
 				{meetingState.isVideoMuted ? <VideocamOff /> : <Videocam />}
 			</Button>
-			<Button variant="outlined" className={meetingState.isScreenSharing ? classes.inactive : classes.root} onClick={onScreenButtonClick}>
-				{meetingState.displayisScreenSharing ? <StopScreenShareSharp /> : <PresentToAll />}
+			<Button variant="outlined" className={props.isParticipantListActive ? classes.inactive : classes.root} onClick={onParticipantButtonClick}>
+				<Group />
 			</Button>
-			<Button variant="outlined" className={meetingState.isChatActive ? classes.inactive : classes.root} onClick={onChatButtonClick}>
+			<Button variant="outlined" className={props.isChatActive ? classes.inactive : classes.root} onClick={onChatButtonClick}>
 				<ChatBubble />
 			</Button>
 			<Button variant="contained" className={classes.callEnd} color="secondary" onClick={onCallEnd}>

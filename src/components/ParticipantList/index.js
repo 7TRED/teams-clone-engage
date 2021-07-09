@@ -2,6 +2,7 @@ import React from 'react';
 import { Grid, makeStyles, Typography } from '@material-ui/core';
 import Participant from './Participant';
 import { db } from '../../services/Firebase';
+import { getAllRoomParticipants } from '../../services/Firebase/firebaseDB';
 
 function ParticpantList ({ meeting }) {
 	const classes = useStyles();
@@ -15,8 +16,7 @@ function ParticpantList ({ meeting }) {
 			})
 			setParticipants(allParticipants);
 		}
-		const ref = db.collection('rooms').doc(meeting?.room.roomID).collection('participants');
-		ref.onSnapshot(callback);
+		getAllRoomParticipants(meeting?.room.roomID, callback);
 	}, [meeting]);
 
 	

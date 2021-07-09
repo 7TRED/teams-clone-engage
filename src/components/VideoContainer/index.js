@@ -18,11 +18,11 @@ function VideoContainer (props) {
     const containerRef = React.useRef(null);
 
     React.useEffect(() => {
-        calcWidth();
+        calcWidth(10);
     }, [participants, props.widthChanged]);
 
     
-    const calcWidth = () => {
+    const calcWidth = (contentRect) => {
         _margin = 5;
         const offsetWidth = containerRef.current? containerRef.current.offsetWidth: 1428;
         const offsetHeight = containerRef.current? containerRef.current.offsetHeight: 883;
@@ -42,17 +42,20 @@ function VideoContainer (props) {
     }
                 
     return (
-        <div className={'container'} ref={containerRef}>
-            <ParticipantCard participant={localParticipant} isLocalParticipant={true} cardWidthAndMargin={cardWidthAndMargin}/>
-            {
-                participants.map(participant => {
-                    return (
-                        <ParticipantCard participant={participant} isLocalParticipant={false} key={participant.sid}cardWidthAndMargin={cardWidthAndMargin} />   
-                    )
-                })
-            }
+        <Measure bounds onResize={calcWidth}>
+            {(measureRef) => (
+                <div className={'container'} ref={containerRef}>
+                    <ParticipantCard participant={localParticipant} isLocalParticipant={true} cardWidthAndMargin={cardWidthAndMargin} />
+                    {
+                        participants.map(participant => {
+                            return (
+                                <ParticipantCard participant={participant} isLocalParticipant={false} key={participant.sid} cardWidthAndMargin={cardWidthAndMargin} />
+                            )
+                        })
+                    }
         
-        </div>
+                </div>)}
+        </Measure>
     )
         
         

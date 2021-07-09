@@ -36,7 +36,7 @@ const PreJoinPage = (props) => {
 	useEffect(() => {
 		const check = async () => {
 			const res = await isValidRoom(props.match.params.id);
-			if (!res) {
+			if (res.exists) {
 				history.push('/');
 			}
 		};
@@ -66,8 +66,8 @@ const PreJoinPage = (props) => {
 		}
 	};
 
-	const handleJoin = (userName) => {
-		getAccessToken(props.match.params.id, userName).then((token) => {
+	const handleJoin = () => {
+		getAccessToken(props.match.params.id).then((token) => {
 			if (token) {
 				history.push(`/inroom/${props.match.params.id}`);
 			}

@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import { Card, CardContent, CardMedia, Typography, makeStyles } from '@material-ui/core';
 import videoConferencingImage from '../../assets/video_conferencing.jpg';
+import {MeetingContext} from '../../context/MeetingContext'
 
 function MeetingCard ({ meeting, onSelect }) {
 	const classes = useStyles();
 	const [meet, setMeet] = React.useState();
+	const { selectMeeting } = React.useContext(MeetingContext);
 
 	useEffect(() => {
 		const getRoom = async () => {
@@ -17,7 +19,7 @@ function MeetingCard ({ meeting, onSelect }) {
 	console.log(meet);
 
 	return (
-		<Card className={classes.root} onClick={()=>onSelect(meet)}>
+		<Card className={classes.root} onClick={()=>selectMeeting(meet)}>
 			<CardMedia className={classes.cover} component="img" src={videoConferencingImage} title="Profile Picture" />
 			<div className={classes.details}>
 				<CardContent className={classes.content}>

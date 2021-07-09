@@ -1,12 +1,12 @@
 import React from 'react';
-import { Button, TextField, Dialog, DialogContent, DialogContentText, DialogTitle, DialogActions } from '@material-ui/core';
+import { Button, TextField, Dialog, DialogContent, DialogContentText, DialogTitle, DialogActions, CircularProgress } from '@material-ui/core';
 
 import history from '../../history';
 import { MeetingContext } from '../../context/MeetingContext';
 
 function JoinMeetingButton () {
 	const [ roomID, setRoomID ] = React.useState('');
-	const { isValidRoom } = React.useContext(MeetingContext);
+	const { joinRoom, isLoading } = React.useContext(MeetingContext);
 	const [ open, setOpen ] = React.useState(false);
 
 	const handleClickOpen = () => {
@@ -21,13 +21,8 @@ function JoinMeetingButton () {
 	};
 
 	const handleOnClick = async () => {
-		// const res = await isValidRoom(roomID);
-		// if (res) {
-		// 	history.push(`/room/${roomID}`);
-		// } else {
-		// 	return;
-		// }
-		// history.push(`/room/${roomID}`);
+		await joinRoom(roomID);
+		setOpen(false);
 	};
 
 	return (
@@ -39,14 +34,22 @@ function JoinMeetingButton () {
 				<DialogTitle id="form-dialog-title">Join New Meeting</DialogTitle>
 				<DialogContent>
 					<DialogContentText>Please enter the meeting ID</DialogContentText>
-					<TextField margin="dense" id="name" label="Meeting ID" placeholder="Enter meeting ID" fullWidth />
+					<TextField
+						margin="dense"
+						id="name"
+						label="Meeting ID"
+						placeholder="Enter meeting ID"
+						fullWidth
+						value={roomID}
+						onChange={(e) => setRoomID(e.target.value)}
+					/>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleClose} color="primary">
 						Cancel
 					</Button>
-					<Button onClick={handleClose} color="primary">
-						Join
+					<Button onClick={handleOnClick} color="primary" disabled={!roomID}>
+						Join {isLoading && <CircularProgress />}
 					</Button>
 				</DialogActions>
 			</Dialog>

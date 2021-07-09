@@ -3,14 +3,9 @@ import { makeStyles } from '@material-ui/core';
 import MeetingCard from '../MeetingCard';
 import './styles.css';
 
-import { AuthContext } from '../../context/AuthContext';
-let rooms = [];
 function MeetingList ({ meetings, selectMeeting }) {
 	const classes = useStyles();
-	const { authState } = React.useContext(AuthContext);
 
-	console.log(meetings);
-	console.log(meetings.length);
 	return (
 		<div className={classes.scrollContainer}>{meetings.map((meeting, idx) => <MeetingCard meeting={meeting} key={idx} onSelect={selectMeeting} />)}</div>
 	);

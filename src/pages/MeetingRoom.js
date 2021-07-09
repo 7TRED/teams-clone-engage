@@ -4,6 +4,8 @@ import MeetingControls from '../components/MeetingControls';
 import ReactLoading from 'react-loading';
 import { useLocalMedia } from '../hooks';
 import { MeetingContext } from '../context/MeetingContext';
+import Chat from '../components/Chat';
+import ParticipantList from '../components/ParticipantList';
 
 import { RoomContext } from '../context/RoomContext';
 import VideoContainer from '../components/VideoContainer';
@@ -13,6 +15,7 @@ function MeetingRoom (props) {
 	const { roomState } = useContext(MeetingContext);
 	const { connect, isConnecting } = useContext(RoomContext);
 	const [ isChatActive, setIsChatActive ] = useState(false);
+	const [ isParticipantListActive, setParticipantListActive ] = useState(false);
 
 	useEffect(() => {
 		connect(roomState.accessToken, { name: props.match.params.id });
@@ -30,18 +33,28 @@ function MeetingRoom (props) {
 	function renderMeeting () {
 		return (
 			<React.Fragment>
-				<Grid container item xs={isChatActive ? 9 : 12} direction="row" justify="center " className={classes.videoContainer}>
-					<VideoContainer widthChanged={isChatActive} />
+				<Grid container item xs={isChatActive || isParticipantListActive ? 9 : 12} direction="row" justify="center " className={classes.videoContainer}>
+					<VideoContainer widthChanged={isChatActive && isParticipantListActive} />
 					<Grid container item xs={12} direction="row" justify="center" alignItems="center">
-						<MeetingControls isChatActive={isChatActive} handleChatActive={setIsChatActive} />
+						<MeetingControls
+							isChatActive={isChatActive}
+							isParticipantListActive={isParticipantListActive}
+							handleParticipantListActive={setParticipantListActive}
+							handleChatActive={setIsChatActive}
+						/>
 					</Grid>
 				</Grid>
 
-				{isChatActive ? (
-					<Grid container item direction="row" xs={3} className={classes.chatContainer}>
-						chat
+				{isChatActive && (
+					<Grid container item xs={3} direction="column" justify="space-evenly" className={classes.chatContainer} alignItems="center">
+						<Chat meeting={roomState.room} />
 					</Grid>
-				) : null}
+				)}
+				{isParticipantListActive && (
+					<Grid container item xs={3} direction="column" justify="space-evenly" className={classes.chatContainer} alignItems="center">
+						<ParticipantList meeting={roomState.room} />
+					</Grid>
+				)}
 			</React.Fragment>
 		);
 	}

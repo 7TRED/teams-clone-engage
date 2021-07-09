@@ -18,6 +18,17 @@ export const addUser = (user) => {
 };
 
 /**
+ * Function to fetch User
+ * @param {string} userID Id of the user to be fetched
+ * @returns {Promise<firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>>} 
+ */
+
+export const fetchUser = (userID) => {
+	const ref = db.collection('users').doc(userID);
+	return ref.get();
+};
+
+/**
  * Function to add newly created user to the database
  * @param {{roomTitle: string, roomDescription:string, roomID:string}} room room Details
  * @param {string} userID  uid of the user who created the room
@@ -40,7 +51,7 @@ export const addRoom = (room, userID) => {
  */
 
 export const fetchRoom = (roomID) => {
-	const ref = db.collection('rooms').where(`room.roomID == ${roomID}`);
+	const ref = db.collection('rooms').doc(roomID);
 	return ref.get();
 };
 
@@ -55,7 +66,7 @@ export const addRoomToParticipant = (roomID, userID) => {
 	const roomRef = db.collection('rooms').doc(roomID);
 	return db.collection('users').doc(userID).collection('rooms').doc(roomID).set({
 		room     : roomRef,
-		joinedAt : firebase.firestore.Timestamp.now(),
+		joinedAt : new Date().toISOString(),
 	});
 };
 
@@ -92,14 +103,7 @@ export const getAllParticipantRooms = (userID, callback) => {
 
 export const getAllRoomParticipants = (roomID, callback) => {
 	const ref = db.collection('rooms').doc(roomID).collection('participants');
-	ref.onSnapshot((snapshot) => {
-		let rooms = [];
-		snapshot.forEach(async (res) => {
-			rooms.push(await db.collection('users').doc(res.data().uid));
-		});
-
-		callback(rooms);
-	});
+	ref.onSnapshot(callback);
 };
 
 /**
@@ -125,10 +129,5 @@ export const addMessage = (roomID, message) => {
  */
 export const getAllMessages = (roomID, callback) => {
 	const ref = db.collection('rooms').doc(roomID).collection('messages').orderBy('sentAt', 'desc');
-	ref.onSnapshot((snapshot) => {
-		let messages = [];
-		snapshot.forEach((doc) => messages.push({ id: doc.id, data: doc.data() }));
-
-		callback(messages);
-	});
+	ref.onSnapshot(callback);
 };
