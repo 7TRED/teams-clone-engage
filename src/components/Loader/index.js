@@ -1,25 +1,22 @@
 import React from 'react';
-import { CircularProgress } from '@material-ui/core';
-import ReactDOM from 'react-dom';
+import { CircularProgress, Backdrop, makeStyles } from '@material-ui/core';
 
 function Loader (props) {
+	const classes = useStyles();
 	return (
-		<div
-			style={{
-				position        : 'absolute',
-				top             : 0,
-				left            : 0,
-				width           : '100%',
-				height          : '100vh',
-				display         : 'flex',
-				justifyContent  : 'center',
-				alignItems      : 'center',
-				backgroundColor : '#222',
-			}}
-		>
-			<CircularProgress />
+		<div>
+			<Backdrop className={classes.backdrop} open={props.open}>
+				<CircularProgress color="inherit" />
+			</Backdrop>
 		</div>
 	);
 }
+
+const useStyles = makeStyles({
+	backdrop : {
+		zIndex : 1000,
+		color  : '#fff',
+	},
+});
 
 export default Loader;

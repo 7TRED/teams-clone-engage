@@ -5,7 +5,7 @@ import './styles.css';
 
 function MeetingList ({ meetings, selectMeeting }) {
 	const classes = useStyles();
-
+	React.useEffect(() => {});
 	return (
 		<div className={classes.scrollContainer}>{meetings.map((meeting, idx) => <MeetingCard meeting={meeting} key={idx} onSelect={selectMeeting} />)}</div>
 	);

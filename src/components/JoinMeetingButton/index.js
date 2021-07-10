@@ -15,8 +15,11 @@ function JoinMeetingButton ({ meeting }) {
 		// } else {
 		// 	return;
 		// }
+		
 		history.push(`/room/${meeting?.room.roomID}`);
 	};
+
+	console.log("join", meeting);
 
 	return (
 		<React.Fragment>
@@ -28,7 +31,7 @@ function JoinMeetingButton ({ meeting }) {
 				<Button variant="contained" color="primary" onClick={handleOnClick}>
 					Join
 				</Button>
-				<CopyToClipboard text={meeting?.room.roomID}>
+				<CopyToClipboard text={meeting?.room?.roomID}>
 					<Button color="primary" variant="text">
 						Invite
 					</Button>

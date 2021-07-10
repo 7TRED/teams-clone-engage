@@ -15,14 +15,15 @@ function App () {
 	const { restoreToken, isLoading, authState } = React.useContext(AuthContext);
 
 	React.useEffect(() => {
-		const getToken = async () => {
-			await restoreToken();
-		};
-		getToken();
+		restoreToken();
 	}, []);
 
 	if (isLoading) {
-		return <Loader />;
+		return (
+			<div style={{ width: '100vw', height: '100vh' }}>
+				<Loader open={true} />
+			</div>
+		);
 	}
 
 	return (
@@ -32,7 +33,7 @@ function App () {
 
 				{!authState.authToken ? (
 					<Switch>
-						<Route location={{ pathname: '/' }} exact component={LandingPage} />
+						<Route path="/" exact component={LandingPage} />
 					</Switch>
 				) : (
 					<Switch>

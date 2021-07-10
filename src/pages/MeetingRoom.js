@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Grid, makeStyles } from '@material-ui/core';
 import MeetingControls from '../components/MeetingControls';
 import ReactLoading from 'react-loading';
-import { useLocalMedia } from '../hooks';
 import { MeetingContext } from '../context/MeetingContext';
 import Chat from '../components/Chat';
 import ParticipantList from '../components/ParticipantList';
@@ -12,14 +11,24 @@ import VideoContainer from '../components/VideoContainer';
 
 function MeetingRoom (props) {
 	const classes = useStyles();
-	const { roomState } = useContext(MeetingContext);
+	const { roomState, isValidRoom } = useContext(MeetingContext);
+	const [ room, setRoom ] = useState(undefined);
 	const { connect, isConnecting } = useContext(RoomContext);
 	const [ isChatActive, setIsChatActive ] = useState(false);
 	const [ isParticipantListActive, setParticipantListActive ] = useState(false);
 
 	useEffect(() => {
-		connect(roomState.accessToken, { name: props.match.params.id });
+		const ConnectToRoom = async () => {
+			const res = await isValidRoom(props.match.params.id);
+			if (res.exists) {
+				connect(roomState.accessToken, { name: props.match.params.id });
+				setRoom(res.data());
+			}
+		};
+		ConnectToRoom();
 	}, []);
+
+	console.log(room);
 
 	function renderLoader () {
 		return (
@@ -29,6 +38,9 @@ function MeetingRoom (props) {
 			</div>
 		);
 	}
+
+	const ListOfParticipants = React.useMemo(() => <ParticipantList meeting={{ room: room }} />, [ room ]);
+	const ChatRoom = React.useMemo(() => <Chat meeting={{ room: room }} />, [ room ]);
 
 	function renderMeeting () {
 		return (
@@ -47,12 +59,12 @@ function MeetingRoom (props) {
 
 				{isChatActive && (
 					<Grid container item xs={3} direction="column" justify="space-evenly" className={classes.chatContainer} alignItems="center">
-						<Chat meeting={roomState.room} />
+						{ChatRoom}
 					</Grid>
 				)}
 				{isParticipantListActive && (
 					<Grid container item xs={3} direction="column" justify="space-evenly" className={classes.chatContainer} alignItems="center">
-						<ParticipantList meeting={roomState.room} />
+						{ListOfParticipants}
 					</Grid>
 				)}
 			</React.Fragment>

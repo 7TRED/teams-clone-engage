@@ -1,6 +1,5 @@
 import firebase from 'firebase';
 import { db } from '../Firebase';
-import { Room } from 'twilio-video';
 
 /**
  * Function to add user to the database
@@ -35,12 +34,11 @@ export const fetchUser = (userID) => {
  * @returns {Promise<void>}
  */
 
-export const addRoom = (room, userID) => {
-	const userRef = db.collection('users').doc(userID);
+export const addRoom = (room, user) => {
 	return db.collection('rooms').doc(room.roomID).set({
-		room      : room,
+		...room,
 		createdAt : firebase.firestore.Timestamp.now(),
-		owner     : userRef,
+		owner     : { ...user },
 	});
 };
 
@@ -62,10 +60,9 @@ export const fetchRoom = (roomID) => {
  * @returns {Promise<void>}
  */
 
-export const addRoomToParticipant = (roomID, userID) => {
-	const roomRef = db.collection('rooms').doc(roomID);
-	return db.collection('users').doc(userID).collection('rooms').doc(roomID).set({
-		room     : roomRef,
+export const addRoomToParticipant = (room, userID) => {
+	return db.collection('users').doc(userID).collection('rooms').doc(room.roomID).set({
+		room     : { ...room },
 		joinedAt : new Date().toISOString(),
 	});
 };
@@ -77,10 +74,9 @@ export const addRoomToParticipant = (roomID, userID) => {
  * @returns {Promise<void>}
  */
 
-export const addParticipantToRoom = (roomID, userID) => {
-	const userRef = db.collection('users').doc(userID);
-	return db.collection('rooms').doc(roomID).collection('participants').doc(userID).set({
-		user : userRef,
+export const addParticipantToRoom = (roomID, user) => {
+	return db.collection('rooms').doc(roomID).collection('participants').doc(user.uid).set({
+		user : { ...user },
 	});
 };
 
@@ -89,8 +85,10 @@ export const addParticipantToRoom = (roomID, userID) => {
  * @param {string} userID uid of a user whose room list is required
  * @param {function([])} callback callback to get back the result
  */
-
+let count = 1;
 export const getAllParticipantRooms = (userID, callback) => {
+	count = count + 1;
+	console.log('rooms', count);
 	const ref = db.collection('users').doc(userID).collection('rooms').orderBy('joinedAt', 'desc');
 	ref.onSnapshot(callback);
 };
@@ -101,7 +99,10 @@ export const getAllParticipantRooms = (userID, callback) => {
  * @param {function([])} callback callback to get back the result
  */
 
+let pcount = 1;
 export const getAllRoomParticipants = (roomID, callback) => {
+	count = count + 1;
+	console.log('p', count);
 	const ref = db.collection('rooms').doc(roomID).collection('participants');
 	ref.onSnapshot(callback);
 };
@@ -114,11 +115,10 @@ export const getAllRoomParticipants = (roomID, callback) => {
  */
 
 export const addMessage = (roomID, message) => {
-	const userRef = db.collection('users').doc(message.sentBy);
 	return db.collection('rooms').doc(roomID).collection('messages').add({
 		sentAt  : message.sentAt,
 		content : message.content,
-		sentBy  : userRef,
+		sentBy  : { ...message.sentBy },
 	});
 };
 

@@ -36,7 +36,8 @@ const PreJoinPage = (props) => {
 	useEffect(() => {
 		const check = async () => {
 			const res = await isValidRoom(props.match.params.id);
-			if (res.exists) {
+			console.log(res);
+			if (!res.exists) {
 				history.push('/');
 			}
 		};

@@ -7,6 +7,7 @@ import ParticipantList from '../ParticipantList';
 
 function Chat ({ meeting }) {
 	const classes = useStyles();
+	console.log('chat', meeting);
 	return (
 		<Grid container item xs={12} direction="column" justify="space-evenly" className={classes.chatContainer} alignItems="center">
 			<ChatHeader meeting={meeting} />
@@ -30,4 +31,4 @@ const useStyles = makeStyles({
 	},
 });
 
-export default Chat;
+export default React.memo(Chat);

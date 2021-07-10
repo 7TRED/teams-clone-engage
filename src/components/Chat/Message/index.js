@@ -1,28 +1,16 @@
 import React from 'react';
 import { Grid, makeStyles, Typography, Avatar } from '@material-ui/core';
-import { AuthContext } from '../../../context/AuthContext';
 import moment from 'moment';
 
 function Message ({ message }) {
 	const classes = useStyles();
-	const [ user, setUser ] = React.useState(undefined);
 
-	React.useEffect(
-		() => {
-			const getUser = async () => {
-				const ref = await message.sentBy.get();
-				setUser(ref.data());
-			};
-			getUser();
-		},
-		[ message ],
-	);
 	return (
 		<Grid container item direction="row" className={classes.rootKaRoot} alignItems="center">
-			<Avatar src={user?.photoURL} />
-			<Grid container xs={11} item direction="column" className={classes.root} justify="space-evenly">
+			<Grid container xs={1} direction="row" justify="center" className={classes.avatar}><Avatar src={message?.sentBy.photoURL} /></Grid>
+			<Grid container xs={10} item direction="column" className={classes.root} justify="space-evenly">
 				<Grid container item className={classes.messageHeader}>
-					<Typography className={classes.username}>{user?.displayName}</Typography>
+					<Typography className={classes.username}>{message?.sentBy.displayName}</Typography>
 					<Typography className={classes.timestamp} color={'textSecondary'}>
 						{moment(message?.sentAt).format('LT')}
 					</Typography>
@@ -67,6 +55,9 @@ const useStyles = makeStyles({
 		width    : '95%',
 		wordWrap : 'break-word',
 	},
+	avatar: {
+		height: '100%'
+	}
 });
 
 export default Message;

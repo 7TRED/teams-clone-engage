@@ -10,14 +10,14 @@ function ChatInputBox ({ meeting }) {
 	const [ message, setMessage ] = React.useState('');
 
 	const handleSend = () => {
-		addMessage(meeting.room.roomID, { sentAt: new Date().toISOString(), content: message, sentBy: authState.user.uid });
+		addMessage(meeting.room.roomID, { sentAt: new Date().toISOString(), content: message, sentBy: { ...authState.user } });
 		setMessage('');
 	};
 
 	return (
 		<Grid container item direction="row" className={classes.root} justify="center" alignItems="center">
 			<Grid container item xs={11} className={classes.inputBox}>
-				<TextField multiline fullWidth placeholder="Type a Message" value={message} onChange={(e) => setMessage(e.target.value)} />
+				<TextField fullWidth placeholder="Type a Message" value={message} onChange={(e) => setMessage(e.target.value)} />
 			</Grid>
 			<Grid container item xs={1}>
 				<Button variant="contained" color="primary" disabled={!message} onClick={handleSend}>

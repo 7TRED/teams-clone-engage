@@ -7,7 +7,7 @@ function ChatHeader ({ meeting }) {
 	return (
 		<Grid container item direction="row" className={classes.root} justify="space-between" alignItems="center">
 			<Typography className={classes.title} variant="h5">
-				{meeting?.room.roomTitle}
+				{meeting?.room?.roomTitle}
 			</Typography>
 			<JoinMeetingButton meeting={meeting} />
 		</Grid>

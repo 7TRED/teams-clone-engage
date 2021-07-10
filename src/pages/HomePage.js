@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Grid, makeStyles, Typography, Button } from '@material-ui/core';
 import { AuthContext } from '../context/AuthContext';
-import { MeetingContext } from '../context/MeetingContext';
 import CreateMeetingButton from '../components/CreateMeetingButton';
 import JoinMeetingButton from '../components/JoinMeetingButtonForm';
 import ProfileCardWithMenu from '../components/ProfiileCardWithMenu';
@@ -12,7 +11,6 @@ import { getAllParticipantRooms } from '../services/Firebase/firebaseDB';
 const Homepage = (props) => {
 	const styles = useStyles();
 	const { authState, logout } = React.useContext(AuthContext);
-	const { roomState } = React.useContext(MeetingContext);
 	const [ meetings, setMeetings ] = React.useState([]);
 
 	React.useEffect(() => {
@@ -24,6 +22,7 @@ const Homepage = (props) => {
 			});
 			setMeetings(rooms);
 		};
+		console.log('meetings', meetings);
 		getAllParticipantRooms(authState.user.uid, callback);
 	}, []);
 
@@ -42,7 +41,7 @@ const Homepage = (props) => {
 							Logout
 						</Button>
 					</Grid>
-					<MeetingList meetings={meetings} selectMeeting={setSelectedMeeting} />
+					{React.useMemo(() => <MeetingList meetings={meetings} selectMeeting={setSelectedMeeting} />, [ meetings ])}
 					<Grid container item direction="row" className={styles.btnContainer1} justify="space-evenly" alignItems="center">
 						<div className={styles.margin}>
 							<CreateMeetingButton />
@@ -53,7 +52,7 @@ const Homepage = (props) => {
 					</Grid>
 				</Grid>
 				<Grid container item direction="row" xs={9} className={styles.chatContainer}>
-					<MeetingSection meeting={roomState.room} />
+					{React.useMemo(() => <MeetingSection meeting={selectedMeeting} />, [ meetings, selectedMeeting ])}
 				</Grid>
 			</Grid>
 		</Grid>

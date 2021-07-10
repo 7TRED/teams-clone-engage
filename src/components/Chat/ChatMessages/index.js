@@ -18,7 +18,7 @@ function ChatMessages ({ meeting }) {
 				});
 				setMessages(allMessages);
 			};
-			getAllMessages(meeting?.room.roomID,callback);
+			const listener = getAllMessages(meeting?.room?.roomID, callback);
 		},
 		[ meeting ],
 	);
@@ -53,4 +53,4 @@ const useStyles = makeStyles({
 	},
 });
 
-export default ChatMessages;
+export default React.memo(ChatMessages);

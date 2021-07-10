@@ -16,10 +16,11 @@ function ParticpantList ({ meeting }) {
 			})
 			setParticipants(allParticipants);
 		}
-		getAllRoomParticipants(meeting?.room.roomID, callback);
+		getAllRoomParticipants(meeting?.room?.roomID, callback);
 	}, [meeting]);
 
-	
+	console.log(participants)
+	console.log("participant" ,meeting)
 	
 	return (
 		<Grid container item xs={12} direction="column" className={classes.root}>
@@ -32,7 +33,7 @@ function ParticpantList ({ meeting }) {
 				<Typography variant="h6" color="textPrimary">
 					Organizer
 				</Typography>
-				<Participant participant={{ user: meeting?.owner }}/>
+				<Participant participant={{ user: meeting?.room?.owner }} isOwner/>
 			</Grid>
 			<Grid container item direction="column" className={classes.attendees}>
 				<Typography variant="h6" color="textPrimary">
@@ -64,4 +65,4 @@ const useStyles = makeStyles({
 	},
 });
 
-export default ParticpantList;
+export default React.memo(ParticpantList);

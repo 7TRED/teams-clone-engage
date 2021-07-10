@@ -2,17 +2,25 @@ import React from 'react';
 import { Grid, makeStyles } from '@material-ui/core';
 import Chat from '../Chat';
 import ParticipantList from '../ParticipantList';
+import { MeetingContext } from '../../context/MeetingContext';
+import PlaceHolderScreen from '../PlaceHolderScreen';
 
 function MeetingSection ({ meeting }) {
 	const classes = useStyles();
 	return (
 		<Grid container item direction="row" className={classes.root}>
-			<Grid container xs={8} item className={classes.chatContainer}>
-				<Chat meeting={meeting} />
-			</Grid>
-			<Grid container xs={4} item direction="row" className={classes.participantsList}>
-				<ParticipantList meeting={meeting} />
-			</Grid>
+			{meeting ? (
+				<React.Fragment>
+					<Grid container xs={8} item className={classes.chatContainer}>
+						<Chat meeting={meeting} />
+					</Grid>
+					<Grid container xs={4} item direction="row" className={classes.participantsList}>
+						<ParticipantList meeting={meeting} />
+					</Grid>
+				</React.Fragment>
+			) : (
+				<PlaceHolderScreen />
+			)}
 		</Grid>
 	);
 }
@@ -31,4 +39,4 @@ const useStyles = makeStyles({
 	},
 });
 
-export default MeetingSection;
+export default React.memo(MeetingSection);

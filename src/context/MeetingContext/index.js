@@ -37,10 +37,10 @@ export const MeetingProvider = ({ children }) => {
 		setIsLoading(true);
 		try {
 			const roomID = `${uuid.v4()}`;
-			await addRoom({ roomTitle, roomDescription, roomID: roomID }, authState.user.uid);
-			await addParticipantToRoom(roomID, authState.user.uid);
-			await addRoomToParticipant(roomID, authState.user.uid);
-			setRoomState({ ...roomState, room: { roomTitle, roomDescription, roomID }, error: undefined });
+			await addRoom({ roomTitle, roomDescription, roomID: roomID }, authState.user);
+			await addParticipantToRoom(roomID, authState.user);
+			await addRoomToParticipant({ roomTitle, roomDescription, roomID: roomID, owner: authState.user }, authState.user.uid);
+			setRoomState({ ...roomState, room: { roomTitle, roomDescription, roomID, owner: authState.user }, error: undefined });
 			return roomID;
 		} catch (err) {
 			console.log(err);
@@ -52,31 +52,27 @@ export const MeetingProvider = ({ children }) => {
 
 	const isValidRoom = async (roomID) => {
 		setIsLoading(true);
-		let result = false;
 		try {
 			const doc = await fetchRoom(roomID);
 			if (doc.exists) {
-				return true;
+				return doc;
 			}
 			return false;
 		} catch (err) {
-			result = false;
+			return false;
 		} finally {
 			setIsLoading(false);
 		}
-
-		return result;
 	};
 
 	const joinRoom = async (roomID) => {
 		setIsLoading(true);
 		try {
 			const res = await isValidRoom(roomID);
-			console.log(res);
 			if (res) {
-				await addParticipantToRoom(roomID, authState.user.uid);
-				await addRoomToParticipant(roomID, authState.user.uid);
-				setRoomState({ ...roomState, room: res.data().room, error: undefined });
+				await addParticipantToRoom(roomID, authState.user);
+				await addRoomToParticipant(res.data(), authState.user.uid);
+				setRoomState({ ...roomState, room: res.data(), error: undefined });
 			} else {
 				setRoomState({ ...roomState, room: undefined, error: { type: Errors.ROOM_NOT_CREATED } });
 			}

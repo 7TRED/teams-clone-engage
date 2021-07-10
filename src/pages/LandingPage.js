@@ -4,6 +4,7 @@ import { Grid, makeStyles, Typography, CircularProgress, Button } from '@materia
 import videoConferencingImage from '../assets/video_conferencing.jpg';
 import { AuthContext } from '../context/AuthContext';
 import history from '../history';
+import Loader from '../components/Loader';
 
 const useStyles = makeStyles({
 	root         : {
@@ -49,8 +50,8 @@ const LandingPage = (props) => {
 							Meet, chat, call and collab all at one place.
 						</Typography>
 						<div className={styles.margin}>
-							<Button variant="contained" color="primary" onClick={handleLogin}>
-								Sign-in with Google {isLoading ? renderLoader() : null}
+							<Button variant="outlined" color="primary" onClick={handleLogin}>
+								Sign-in with Google {isLoading ? <Loader open={true} /> : null}
 							</Button>
 						</div>
 					</Grid>
