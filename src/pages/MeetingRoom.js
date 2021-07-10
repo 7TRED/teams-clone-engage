@@ -46,7 +46,7 @@ function MeetingRoom (props) {
 		return (
 			<React.Fragment>
 				<Grid container item xs={isChatActive || isParticipantListActive ? 9 : 12} direction="row" justify="center " className={classes.videoContainer}>
-					<VideoContainer widthChanged={isChatActive && isParticipantListActive} />
+					<VideoContainer widthChanged={isChatActive || isParticipantListActive} />
 					<Grid container item xs={12} direction="row" justify="center" alignItems="center">
 						<MeetingControls
 							isChatActive={isChatActive}

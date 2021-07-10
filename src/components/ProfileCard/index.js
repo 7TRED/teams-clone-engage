@@ -1,12 +1,12 @@
 import React from 'react';
-import { Card, makeStyles, CardMedia, CardContent, Typography } from '@material-ui/core';
+import { Card, makeStyles, CardMedia, CardContent, Typography, Avatar } from '@material-ui/core';
 import { AuthContext } from '../../context/AuthContext';
 function ProfileCard () {
 	const classes = useStyles();
 	const { authState } = React.useContext(AuthContext);
 	return (
 		<Card className={classes.root}>
-			<CardMedia className={classes.cover} component="img" src={`${authState.user.photoURL}`} title="Profile Picture" />
+			<Avatar src={`${authState.user.photoURL}`} />
 			<div className={classes.details}>
 				<CardContent className={classes.content}>
 					<Typography className={classes.title} variant="subtitle1">
@@ -26,8 +26,8 @@ const useStyles = makeStyles((theme) => ({
 		display        : 'flex',
 		justifyContent : 'center',
 		alignItems     : 'center',
-		height         : '3.5em',
-		paddingLeft    : '0.2em',
+		height         : '3.5rem',
+		paddingLeft    : '0.2rem',
 		background     : 'transparent',
 		boxShadow      : 'none',
 	},
@@ -45,9 +45,9 @@ const useStyles = makeStyles((theme) => ({
 	},
 	content  : {},
 	cover    : {
-		width        : 50,
-		height       : 50,
-		borderRadius : 50,
+		width        : '50%',
+		height       : '50%',
+		borderRadius : '50%',
 	},
 	controls : {
 		display       : 'flex',

@@ -10,31 +10,41 @@ const useStyles = makeStyles({
 	root         : {
 		margin : 0,
 		height : '90vh',
-		flex   : 1,
+		width  : '100%',
 	},
 	subContainer : {
 		height : '100%',
 	},
 	margin       : {
-		marginTop    : '1em',
-		marginBottom : '1em',
+		marginTop    : '10%',
+		marginBottom : '10%',
+	},
+	title        : {
+		fontSize : '5rem',
+	},
+	subtitle     : {
+		fontSize : '2rem',
 	},
 });
 
 const LandingPage = (props) => {
 	const styles = useStyles();
-	const { isLoading, login } = React.useContext(AuthContext);
+	const { isLoading, login, restoreToken } = React.useContext(AuthContext);
 
 	const handleLogin = async () => {
 		await login();
 		history.push('/');
 	};
 
-	function renderLoader () {
+	React.useEffect(() => {
+		restoreToken();
+	}, []);
+
+	if (isLoading) {
 		return (
-			<CircularProgress color="secondary" size="small">
-				Loading
-			</CircularProgress>
+			<div style={{ width: '100vw', height: '100vh' }}>
+				<Loader open={true} />
+			</div>
 		);
 	}
 
@@ -43,10 +53,10 @@ const LandingPage = (props) => {
 			<Grid container direction="row" className={styles.root}>
 				<Grid container item direction="row" xs={4} justify="center" alignItems="center" className={styles.subContainer}>
 					<Grid container item direction="column" xs={10} spacing={10} justify="center" alignContent="center">
-						<Typography variant="h2" color="primary">
+						<Typography variant="h2" color="primary" className={styles.title}>
 							Teams
 						</Typography>
-						<Typography variant="h5" color="initial">
+						<Typography variant="h5" color="initial" className={styles.subtitle}>
 							Meet, chat, call and collab all at one place.
 						</Typography>
 						<div className={styles.margin}>

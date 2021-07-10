@@ -1,29 +1,48 @@
 import React, { useEffect } from 'react';
-import { Card, CardContent, CardMedia, Typography, makeStyles } from '@material-ui/core';
+import { Card, Typography, makeStyles, CardActionArea, Avatar, CardHeader, Menu, MenuItem , IconButton} from '@material-ui/core';
+import { Group , MoreVert} from '@material-ui/icons';
 import videoConferencingImage from '../../assets/video_conferencing.jpg';
 import {MeetingContext} from '../../context/MeetingContext'
 
 function MeetingCard ({ meeting, onSelect }) {
 	const classes = useStyles();
 	const { selectMeeting } = React.useContext(MeetingContext);
+	const [anchorEl, setAnchorEl] = React.useState(null);
 
+	const handleOnClick = (e) => {
+		setAnchorEl(e.currentTarget)
+	}
+
+	const handleClose = () => {
+		setAnchorEl(null);
+	}
 	
 	
 	console.log("card",meeting);
 
 	return (
-		<Card className={classes.root} onClick={()=>onSelect(meeting)}>
-			<CardMedia className={classes.cover} component="img" src={videoConferencingImage} title="Profile Picture" />
-			<div className={classes.details}>
-				<CardContent className={classes.content}>
-					<Typography className={classes.title} color="primary" variant="subtitle1">
+		<Card className={classes.root} onClick={() => onSelect(meeting)}>
+			<CardActionArea>
+			<CardHeader
+					avatar={<Avatar src={videoConferencingImage}><Group /></Avatar>}
+				title={
+					<Typography variant="subtitle1" className={classes.title}>
 						{meeting?.room.roomTitle}
 					</Typography>
-					<Typography className={classes.subtitle} color="textSecondary" variant="subtitle2">
-						{}
-					</Typography>
-				</CardContent>
-			</div>
+				}
+				// action={
+				// 	<React.Fragment>
+				// 		<IconButton aria-label="settings" onClick={handleOnClick}>
+				// 			<MoreVert />
+				// 		</IconButton>
+				// 		<Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
+				// 			<MenuItem onClick={handleClose}>Logout</MenuItem>
+				// 		</Menu>
+				// 	</React.Fragment>
+				// }
+				className={classes.header}
+			/>
+			</CardActionArea>
 		</Card>
 	);
 }
@@ -33,9 +52,6 @@ const useStyles = makeStyles((theme) => ({
 		display      : 'flex',
 		width        : '100%',
 		alignItems   : 'center',
-		height       : '5em',
-		paddingLeft  : '0.2em',
-		margin       : '0.2em',
 		boxShadow    : 'none',
 		background   : 'transparent',
 		borderBottom : '1px solid #ccc',
@@ -45,15 +61,8 @@ const useStyles = makeStyles((theme) => ({
 		justifyContent : 'center',
 		alignItems     : 'center',
 	},
-	content : {
-		display       : 'flex',
-		flexDirection : 'column',
-	},
-	cover   : {
-		width        : 60,
-		height       : 60,
-		borderRadius : 50,
-	},
+	
+	
 }));
 
 export default MeetingCard;

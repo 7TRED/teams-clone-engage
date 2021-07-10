@@ -7,7 +7,7 @@ const Header = () => {
 	const { authState } = React.useContext(AuthContext);
 	const classes = useStyles();
 	return (
-		<AppBar position={'fixed'}>
+		<AppBar position="relative">
 			<Toolbar>
 				<Typography variant="h6" color="inherit" className={classes.title}>
 					Microsoft Teams

@@ -42,20 +42,18 @@ function VideoContainer (props) {
     }
                 
     return (
-        <Measure bounds onResize={calcWidth}>
-            {(measureRef) => (
-                <div className={'container'} ref={containerRef}>
-                    <ParticipantCard participant={localParticipant} isLocalParticipant={true} cardWidthAndMargin={cardWidthAndMargin} />
-                    {
-                        participants.map(participant => {
-                            return (
-                                <ParticipantCard participant={participant} isLocalParticipant={false} key={participant.sid} cardWidthAndMargin={cardWidthAndMargin} />
-                            )
-                        })
-                    }
         
-                </div>)}
-        </Measure>
+        <div className={'container'} ref={containerRef}>
+            <ParticipantCard participant={localParticipant} isLocalParticipant={true} cardWidthAndMargin={cardWidthAndMargin} />
+            {
+                participants.map(participant => {
+                    return (
+                        <ParticipantCard participant={participant} isLocalParticipant={false} key={participant.sid} cardWidthAndMargin={cardWidthAndMargin} />
+                    )
+                })
+            }
+
+        </div>
     )
         
         

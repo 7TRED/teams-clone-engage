@@ -13,19 +13,6 @@ import LandingPage from './pages/LandingPage';
 
 function App () {
 	const { restoreToken, isLoading, authState } = React.useContext(AuthContext);
-
-	React.useEffect(() => {
-		restoreToken();
-	}, []);
-
-	if (isLoading) {
-		return (
-			<div style={{ width: '100vw', height: '100vh' }}>
-				<Loader open={true} />
-			</div>
-		);
-	}
-
 	return (
 		<Router history={history}>
 			<React.Fragment>

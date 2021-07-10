@@ -1,22 +1,50 @@
 import React from 'react';
-import { Card, makeStyles, CardMedia, CardContent, Typography } from '@material-ui/core';
+import { Card, makeStyles, Avatar, CardHeader, IconButton, Typography, Menu, MenuItem } from '@material-ui/core';
+import history from '../../history';
 import { AuthContext } from '../../context/AuthContext';
+import { MoreVert } from '@material-ui/icons';
+
 function ProfileCardWithMenu () {
 	const classes = useStyles();
-	const { authState } = React.useContext(AuthContext);
+	const { authState, logout } = React.useContext(AuthContext);
+	const [ anchorEl, setAnchorEl ] = React.useState(null);
+
+	const handleLogout = async () => {
+		setAnchorEl(null);
+		await logout();
+		history.push('/');
+	};
+
+	const handleOnClick = (e) => {
+		setAnchorEl(e.currentTarget);
+	};
+
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
+
 	return (
 		<Card className={classes.root}>
-			<CardMedia className={classes.cover} component="img" src={`${authState.user.photoURL}`} title="Profile Picture" />
-			<div className={classes.details}>
-				<CardContent className={classes.content}>
-					<Typography className={classes.title} variant="subtitle1" color="primary">
+			<CardHeader
+				avatar={<Avatar src={authState.user.photoURL}>{authState.user.displayName.substring(0, 2)}</Avatar>}
+				title={
+					<Typography variant="subtitle1" className={classes.title}>
 						{authState.user.displayName}
 					</Typography>
-					<Typography className={classes.subtitle} color="textSecondary" variant="body2">
-						{authState.user.email}
-					</Typography>
-				</CardContent>
-			</div>
+				}
+				subheader={authState.user.email}
+				action={
+					<React.Fragment>
+						<IconButton aria-label="settings" onClick={handleOnClick}>
+							<MoreVert />
+						</IconButton>
+						<Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
+							<MenuItem onClick={handleLogout}>Logout</MenuItem>
+						</Menu>
+					</React.Fragment>
+				}
+				className={classes.header}
+			/>
 		</Card>
 	);
 }
@@ -47,6 +75,9 @@ const useStyles = makeStyles((theme) => ({
 		width        : 60,
 		height       : 60,
 		borderRadius : 50,
+	},
+	header  : {
+		width : '100%',
 	},
 }));
 
