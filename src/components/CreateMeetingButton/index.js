@@ -34,7 +34,7 @@ function CreateMeetingButton (props) {
 
 	return (
 		<div>
-			<Button variant="contained" color="primary" onClick={handleClickOpen}>
+			<Button variant={props.variant ? props.variant : 'contained'} color="primary" onClick={handleClickOpen}>
 				Create Meeting
 			</Button>
 			<Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
