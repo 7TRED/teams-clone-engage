@@ -11,17 +11,19 @@ import * as uuid from 'uuid';
 
 // Errors
 
-export const Errors = {
-	ROOM_NOT_CREATED : 1,
-	INVALID_TOKEN    : 2,
-	ROOM_COMPLETED   : 3,
-	ROOM_NOT_FOUND   : 4,
+export const LOGS = {
+	ROOM_NOT_CREATED : 'Failed to create the room. Please check your network connection.',
+	INVALID_TOKEN    : 'Oops!! There seems to be a problem with your network connection',
+	TOKEN_GENERATED  : 'token generated successfully',
+	ROOM_NOT_FOUND   : 'Plese enter a valid room ID',
+	ROOM_CREATED     : 'Yoooo hooo !! Room Created',
+	ROOM_JOINED      : 'Yaayyy!! Successfully joined the room.',
 };
 
 const DEFAULT_STATE = {
 	room        : undefined,
 	accessToken : null,
-	error       : undefined,
+	log         : undefined,
 };
 
 export const MeetingContext = createContext(null);
@@ -40,14 +42,18 @@ export const MeetingProvider = ({ children }) => {
 			await addRoom({ roomTitle, roomDescription, roomID: roomID }, authState.user);
 			await addParticipantToRoom(roomID, authState.user);
 			await addRoomToParticipant({ roomTitle, roomDescription, roomID: roomID, owner: authState.user }, authState.user.uid);
-			setRoomState({ ...roomState, room: { roomTitle, roomDescription, roomID, owner: authState.user }, error: undefined });
-			return roomID;
+			setRoomState({
+				...roomState,
+				room : { roomTitle, roomDescription, roomID, owner: authState.user },
+				log  : { severity: 'success', message: LOGS.ROOM_CREATED },
+			});
+			return true;
 		} catch (err) {
-			console.log(err);
-			setRoomState({ ...roomState, room: undefined, error: { type: Errors.ROOM_NOT_CREATED } });
+			setRoomState({ ...roomState, room: undefined, log: { severity: 'error', message: LOGS.ROOM_NOT_CREATED } });
 		} finally {
 			setIsLoading(false);
 		}
+		return false;
 	};
 
 	const isValidRoom = async (roomID) => {
@@ -72,13 +78,13 @@ export const MeetingProvider = ({ children }) => {
 			if (res) {
 				await addParticipantToRoom(roomID, authState.user);
 				await addRoomToParticipant(res.data(), authState.user.uid);
-				setRoomState({ ...roomState, room: res.data(), error: undefined });
+				setRoomState({ ...roomState, room: res.data(), log: { severity: 'success', message: LOGS.ROOM_JOINED } });
 			} else {
-				setRoomState({ ...roomState, room: undefined, error: { type: Errors.ROOM_NOT_CREATED } });
+				setRoomState({ ...roomState, room: undefined, log: { severity: 'error', message: LOGS.ROOM_NOT_FOUND } });
 			}
 		} catch (err) {
 			console.log(err);
-			setRoomState({ ...roomState, room: undefined, error: { type: Errors.ROOM_NOT_CREATED } });
+			setRoomState({ ...roomState, room: undefined, log: { severity: 'error', message: LOGS.INVALID_TOKEN } });
 		} finally {
 			setIsLoading(false);
 		}
@@ -93,11 +99,11 @@ export const MeetingProvider = ({ children }) => {
 				},
 			});
 
-			setRoomState({ ...roomState, accessToken: response.data.token, error: undefined });
+			setRoomState({ ...roomState, accessToken: response.data.token, log: { severity: 'success', message: LOGS.TOKEN_GENERATED } });
 			return response.data.token;
 		} catch (err) {
 			console.log(err);
-			setRoomState({ ...roomState, accessToken: null, error: { type: Errors.INVALID_TOKEN } });
+			setRoomState({ ...roomState, accessToken: null, log: { severity: 'error', message: LOGS.INVALID_TOKEN } });
 		}
 	};
 

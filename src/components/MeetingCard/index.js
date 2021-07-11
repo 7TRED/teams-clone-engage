@@ -1,27 +1,17 @@
 import React, { useEffect } from 'react';
-import { Card, Typography, makeStyles, CardActionArea, Avatar, CardHeader, Menu, MenuItem , IconButton} from '@material-ui/core';
+import { Card, Typography, makeStyles, CardActionArea, Avatar, CardHeader, Menu, MenuItem , IconButton, Badge} from '@material-ui/core';
 import { Group , MoreVert} from '@material-ui/icons';
 import videoConferencingImage from '../../assets/video_conferencing.jpg';
-import {MeetingContext} from '../../context/MeetingContext'
+import { MeetingContext } from '../../context/MeetingContext'
+import { getAllMessages } from '../../services/Firebase/firebaseDB';
 
 function MeetingCard ({ meeting, onSelect }) {
 	const classes = useStyles();
-	const { selectMeeting } = React.useContext(MeetingContext);
-	const [anchorEl, setAnchorEl] = React.useState(null);
-
-	const handleOnClick = (e) => {
-		setAnchorEl(e.currentTarget)
-	}
-
-	const handleClose = () => {
-		setAnchorEl(null);
-	}
-	
 	
 	console.log("card",meeting);
 
 	return (
-		<Card className={classes.root} onClick={() => onSelect(meeting)}>
+		<Card className={classes.root} onClick={()=>onSelect(meeting)}>
 			<CardActionArea>
 			<CardHeader
 					avatar={<Avatar src={videoConferencingImage}><Group /></Avatar>}
@@ -30,16 +20,6 @@ function MeetingCard ({ meeting, onSelect }) {
 						{meeting?.room.roomTitle}
 					</Typography>
 				}
-				// action={
-				// 	<React.Fragment>
-				// 		<IconButton aria-label="settings" onClick={handleOnClick}>
-				// 			<MoreVert />
-				// 		</IconButton>
-				// 		<Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
-				// 			<MenuItem onClick={handleClose}>Logout</MenuItem>
-				// 		</Menu>
-				// 	</React.Fragment>
-				// }
 				className={classes.header}
 			/>
 			</CardActionArea>
@@ -52,8 +32,8 @@ const useStyles = makeStyles((theme) => ({
 		display      : 'flex',
 		width        : '100%',
 		alignItems   : 'center',
-		boxShadow    : 'none',
-		background   : 'transparent',
+		boxShadow: 'none',
+		background:'#f9f9f9',
 		borderBottom : '1px solid #ccc',
 	},
 	details : {

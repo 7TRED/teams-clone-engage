@@ -34,14 +34,10 @@ const Homepage = (props) => {
 				<Grid container item direction="row" xs={3} className={styles.meetingList}>
 					<Grid container item className={styles.meetingListHeader}>
 						<ProfileCardWithMenu />
-						<Typography color="textPrimary" variant="h6" style={{ width: '100%', textAlign: 'center' }}>
-							Meetings
-						</Typography>
 					</Grid>
 					{React.useMemo(() => <MeetingList meetings={meetings} selectMeeting={setSelectedMeeting} />, [ meetings ])}
 					<Grid container item direction="row" className={styles.btnContainer1} justify="space-evenly" alignItems="center">
 						<CreateMeetingButton />
-
 						<JoinMeetingButton />
 					</Grid>
 				</Grid>
@@ -67,7 +63,7 @@ const useStyles = makeStyles({
 	},
 	subContainer      : {
 		height     : '100%',
-		background : '#fdfcfa',
+		background : '#efeff3',
 		overflow   : 'hidden',
 	},
 	margin            : {},

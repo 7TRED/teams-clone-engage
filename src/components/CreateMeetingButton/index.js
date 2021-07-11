@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { Button, Dialog, DialogContent, DialogContentText, DialogActions, DialogTitle, TextField, makeStyles, CircularProgress } from '@material-ui/core';
 import { MeetingContext, Errors } from '../../context/MeetingContext';
-import { set } from 'lodash';
+import LogMessage from '../SnackBar';
 
 function CreateMeetingButton (props) {
-	const { isLoading, createRoom } = React.useContext(MeetingContext);
+	const { isLoading, createRoom , roomState} = React.useContext(MeetingContext);
 	const classes = useStyles();
 	const [ title, setTitle ] = useState('');
 	const [ description, setDescription ] = useState('');
-	const [ open, setOpen ] = React.useState(false);
+	const [open, setOpen] = React.useState(false);
+	const [isLogOpen, setIsLogOpen] = React.useState(false);
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -23,18 +24,28 @@ function CreateMeetingButton (props) {
 		setOpen(false);
 	};
 
+	const onLogClose = (_) => {
+		setIsLogOpen(false);
+	}
+
 	const handleOnClickCreate = async () => {
 		try {
-			const roomDetails = await createRoom(title, description);
+			const res = await createRoom(title, description);
+			setTitle('');
+			setDescription('');
+			setIsLogOpen(true);
 			setOpen(false);
 		} catch (err) {
 			console.log(err);
 		}
 	};
 
+	console.log(isLogOpen);
+
+
 	return (
 		<div>
-			<Button variant={props.variant ? props.variant : 'contained'} color="primary" onClick={handleClickOpen}>
+			<Button variant={props.variant ? props.variant : 'contained'} className={classes.createBtn} color="primary" onClick={handleClickOpen}>
 				Create Meeting
 			</Button>
 			<Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -63,6 +74,7 @@ function CreateMeetingButton (props) {
 					</Button>
 				</DialogActions>
 			</Dialog>
+			{isLogOpen && <LogMessage open={isLogOpen} severity={roomState.log?.severity} message={roomState.log?.message} onClose={onLogClose} duration={5000} />}
 		</div>
 	);
 }
@@ -70,8 +82,9 @@ function CreateMeetingButton (props) {
 const useStyles = makeStyles({
 	description : {
 		width  : '100%',
-		height : '5em',
+		height : '5rem',
 	},
+	createBtn   : {},
 });
 
 export default CreateMeetingButton;

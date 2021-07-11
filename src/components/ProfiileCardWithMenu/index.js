@@ -50,33 +50,21 @@ function ProfileCardWithMenu () {
 }
 
 const useStyles = makeStyles((theme) => ({
-	root    : {
+	root   : {
 		display     : 'flex',
 		width       : '100%',
 		alignItems  : 'center',
-		height      : '5em',
-		paddingLeft : '0.2em',
+		height      : '100%',
+		paddingLeft : '0.2rem',
 		background  : 'transparent',
 		boxShadow   : 'none',
 	},
-	title   : {
+	title  : {
 		color      : '#4d4dff',
 		fontWeight : '500',
-		fontSize   : '1.3em',
+		fontSize   : '1.3rem',
 	},
-	details : {
-		display        : 'flex',
-		flexDirection  : 'column',
-		justifyContent : 'center',
-		alignItems     : 'center',
-	},
-	content : {},
-	cover   : {
-		width        : 60,
-		height       : 60,
-		borderRadius : 50,
-	},
-	header  : {
+	header : {
 		width : '100%',
 	},
 }));

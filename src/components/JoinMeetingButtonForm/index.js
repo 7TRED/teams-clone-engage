@@ -1,17 +1,21 @@
 import React from 'react';
 import { Button, TextField, Dialog, DialogContent, DialogContentText, DialogTitle, DialogActions, CircularProgress } from '@material-ui/core';
-
-import history from '../../history';
 import { MeetingContext } from '../../context/MeetingContext';
+import LogMessage from '../SnackBar';
 
 function JoinMeetingButton () {
 	const [ roomID, setRoomID ] = React.useState('');
-	const { joinRoom, isLoading } = React.useContext(MeetingContext);
-	const [ open, setOpen ] = React.useState(false);
+	const { joinRoom, isLoading, roomState } = React.useContext(MeetingContext);
+	const [open, setOpen] = React.useState(false);
+	const [isLogOpen, setLogOpen] = React.useState(false);
 
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
+
+	const onLogClose = () => {
+		setLogOpen(false);
+	}
 
 	const handleClose = (_, reason) => {
 		if (reason === 'backdropClick') {
@@ -23,6 +27,7 @@ function JoinMeetingButton () {
 	const handleOnClick = async () => {
 		await joinRoom(roomID);
 		setOpen(false);
+		setLogOpen(true);
 	};
 
 	return (
@@ -53,6 +58,7 @@ function JoinMeetingButton () {
 					</Button>
 				</DialogActions>
 			</Dialog>
+			<LogMessage open={isLogOpen} severity={roomState.log?.severity} message={roomState.log?.message} onClose={onLogClose}/>
 		</div>
 	);
 }

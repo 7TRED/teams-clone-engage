@@ -85,12 +85,10 @@ export const addParticipantToRoom = (roomID, user) => {
  * @param {string} userID uid of a user whose room list is required
  * @param {function([])} callback callback to get back the result
  */
-let count = 1;
+
 export const getAllParticipantRooms = (userID, callback) => {
-	count = count + 1;
-	console.log('rooms', count);
 	const ref = db.collection('users').doc(userID).collection('rooms').orderBy('joinedAt', 'desc');
-	ref.onSnapshot(callback);
+	return ref.onSnapshot(callback);
 };
 
 /**
@@ -99,12 +97,9 @@ export const getAllParticipantRooms = (userID, callback) => {
  * @param {function([])} callback callback to get back the result
  */
 
-let pcount = 1;
 export const getAllRoomParticipants = (roomID, callback) => {
-	count = count + 1;
-	console.log('p', count);
 	const ref = db.collection('rooms').doc(roomID).collection('participants');
-	ref.onSnapshot(callback);
+	return ref.onSnapshot(callback);
 };
 
 /**
@@ -129,5 +124,5 @@ export const addMessage = (roomID, message) => {
  */
 export const getAllMessages = (roomID, callback) => {
 	const ref = db.collection('rooms').doc(roomID).collection('messages').orderBy('sentAt', 'desc');
-	ref.onSnapshot(callback);
+	return ref.onSnapshot(callback);
 };
