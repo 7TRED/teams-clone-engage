@@ -7,7 +7,7 @@ function Message ({ message }) {
 
 	return (
 		<Grid container item direction="row" className={classes.rootKaRoot} alignItems="center">
-			<Grid container xs={1} direction="row" justify="center" className={classes.avatar}><Avatar src={message?.sentBy.photoURL} /></Grid>
+			<Grid container xs={1} direction="row" justify="center"alignItems="center" className={classes.avatar}><Avatar src={message?.sentBy.photoURL} /></Grid>
 			<Grid container xs={10} item direction="column" className={classes.root} justify="space-evenly">
 				<Grid container item className={classes.messageHeader}>
 					<Typography className={classes.username}>{message?.sentBy.displayName}</Typography>
@@ -29,7 +29,7 @@ function Message ({ message }) {
 
 const useStyles = makeStyles({
 	root           : {
-		background   : '#f4f4f4',
+		background   : '#fff',
 		padding      : '0.7em',
 		borderRadius : 5,
 		margin       : '0.2em',
@@ -57,6 +57,9 @@ const useStyles = makeStyles({
 	},
 	avatar: {
 		height: '100%'
+	},
+	rootKaRoot: {
+		width:'90%'
 	}
 });
 

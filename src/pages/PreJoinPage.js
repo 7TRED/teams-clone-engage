@@ -1,17 +1,32 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Grid, makeStyles, Typography, Button } from '@material-ui/core';
+import { Grid, makeStyles, Typography, Button , Avatar} from '@material-ui/core';
 import ReactLoading from 'react-loading';
-import PreJoinForm from '../components/PreJoinForm';
 import PreviewTrack from '../components/PreviewTrack';
-import { useLocalMedia, useAudioDevices, useVideoDevices } from '../hooks';
+import { useLocalMedia} from '../hooks';
 import { MeetingContext } from '../context/MeetingContext';
+
 import history from '../history';
+import LogMessage from '../components/SnackBar';
+
 
 const useStyles = makeStyles({
 	card      : {
 		height   : '60%',
 		width    : '60%',
 		position : 'relative',
+	},
+
+	mainContainer: {
+		display         : 'flex',
+		flex            : 1,
+		backgroundColor : '#222',
+		height          : '100vh',
+		width           : '100vw',
+		justifyContent  : 'center',
+		alignItems      : 'center',
+		position        : 'absolute',
+		top             : 0,
+		left            : 0,
 	},
 
 	container : {
@@ -26,12 +41,19 @@ const useStyles = makeStyles({
 	video     : {
 		backgroundColor : '#222',
 	},
+	avatar: {
+		heigth: '30%',
+		width:'14%'
+	}
 });
 
 const PreJoinPage = (props) => {
 	const classes = useStyles();
-	const { localTracks } = useLocalMedia(true);
+	
+	const { localTracks, isAcquiringLocalTrack, localTrackLog } = useLocalMedia(true);
 	const { getAccessToken, isLoading, roomState, isValidRoom } = useContext(MeetingContext);
+	const [isLogOpen, setIsLogOpen] = React.useState(false);
+	const [mediaConfigurations, setMediaConfigurations] = useState({ isAudioMuted: false, isVideoMuted: false, audioDevice: '', videoDevice: '' });
 
 	useEffect(() => {
 		const check = async () => {
@@ -45,8 +67,11 @@ const PreJoinPage = (props) => {
 		check();
 	}, []);
 
-	const [ mediaConfigurations, setMediaConfigurations ] = useState({ isAudioMuted: false, isVideoMuted: false, audioDevice: '', videoDevice: '' });
-
+	const onLogClose = () => {
+		setIsLogOpen(false);
+	}
+	
+	
 	const handleAudio = () => {
 		if (mediaConfigurations.isAudioMuted) {
 			localTracks[0].enable();
@@ -78,7 +103,7 @@ const PreJoinPage = (props) => {
 	function renderLoader () {
 		return (
 			<div>
-				<ReactLoading type={'spin'} color="#f7f7f7" />
+				<ReactLoading type={'spinningBubbles'} color="#f7f7f7" />
 				<h3 style={{ color: '#f7f7f7' }}>Loading</h3>
 			</div>
 		);
@@ -86,34 +111,23 @@ const PreJoinPage = (props) => {
 
 	return (
 		<div
-			style={{
-				display         : 'flex',
-				flex            : 1,
-				backgroundColor : '#222',
-				height          : '100vh',
-				width           : '100vw',
-				justifyContent  : 'center',
-				alignItems      : 'center',
-				position        : 'absolute',
-				top             : 0,
-				left            : 0,
-			}}
+			className={classes.mainContainer}
 		>
-			{isLoading ? (
+			{isLoading || isAcquiringLocalTrack ? (
 				renderLoader()
 			) : (
 				<Grid container item direction="row" xs={12} className={classes.card} justify="center" alignItems="center">
-					<PreviewTrack track={localTracks[1]} mediaConfig={mediaConfigurations} handleVideo={handleVideo} handleAudio={handleAudio} />
+						 <PreviewTrack track={localTracks[1]} mediaConfig={mediaConfigurations} handleVideo={handleVideo} handleAudio={handleAudio} />
+
 
 					<Grid container item direction="row" xs={12} sm={4} lg={3} className={classes.container} justify="space-evenly" alignItems="center">
-						<PreJoinForm
-							roomID={props.match.params.id}
-							mediaConfig={mediaConfigurations}
-							setMediaConfig={setMediaConfigurations}
-							handleSubmit={(userName) => handleJoin(userName)}
-						/>
+						<Button variant="contained" color="primary" onClick={handleJoin} disabled={localTrackLog?.severity === 'error'}>
+							Join
+						</Button>
 					</Grid>
+					<LogMessage open={Boolean(localTrackLog)} severity={localTrackLog?.severity} message={localTrackLog?.message}/>
 				</Grid>
+					
 			)}
 		</div>
 	);

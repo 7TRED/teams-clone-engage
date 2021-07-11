@@ -27,7 +27,7 @@ function ChatMessages ({ meeting }) {
 
 	return (
 		<Grid container item direction="row" className={classes.root} justify="center" alignItems="center">
-			<Paper variant="outlined" className={classes.paper} ref={messageEl}>
+			<Paper elevation={0} className={classes.paper} ref={messageEl}>
 				{messages.map((message, idx) => <Message message={message} key={idx} />)}
 			</Paper>
 		</Grid>
@@ -36,13 +36,13 @@ function ChatMessages ({ meeting }) {
 
 const useStyles = makeStyles({
 	root  : {
-		width      : '100%',
+		width      : '95%',
 		height     : '75%',
 		overflow   : 'hidden',
 		background : 'transparent',
 	},
 	paper : {
-		flex          : 0.9,
+		width: '100%',
 		height        : '100%',
 		overflowX     : 'hidden',
 		overflowY     : 'auto',

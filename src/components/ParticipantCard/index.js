@@ -5,6 +5,7 @@ import { useIsTrackEnabled, useIsTrackSwitchedOff, usePublications, useTracks } 
 import { fetchUser } from '../../services/Firebase/firebaseDB';
 import Video from '../Video';
 import AudioTrack from '../AudioTrack';
+import VideoCloseCard from '../VideoCloseCard';
 
 import './styles.css';
 
@@ -45,7 +46,7 @@ function ParticipantCard (props) {
 				margin : `${dimensions.margin}px`,
 			}}
 		>
-			{isVideoEnabled ? <Video track={videoTrack} /> : <Avatar className={classes.avatar} src={user?.photoURL}/>}
+			{isVideoEnabled ? <Video track={videoTrack} /> : <VideoCloseCard src={user?.photoURL} isAudioMuted={!isAudioEnabled} displayName={user?.displayName} size={'8rem'}/>}
 
 			{isAudioEnabled ? <AudioTrack track={audioTrack}/>:null}
 			

@@ -8,7 +8,7 @@ export function useRoom () {
 
 	const connect = useCallback((token, options) => {
 		setIsConnecting(true);
-		return roomConnect(token, { ...options, ...MEDIA_CONSTRAINTS }).then(
+		return roomConnect(token, { ...options }).then(
 			(newRoom) => {
 				setRoom(newRoom);
 				console.log(newRoom);

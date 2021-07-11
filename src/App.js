@@ -20,7 +20,7 @@ function App () {
 
 				{!authState.authToken ? (
 					<Switch>
-						<Route path="/" exact component={LandingPage} />
+						<Route path="/" component={LandingPage} />
 					</Switch>
 				) : (
 					<Switch>

@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
 import { useParticipants, useRoomContext } from '../../hooks';
-import Measure from 'react-measure';
-import {makeStyles, Grid} from '@material-ui/core'
 import ParticipantCard from '../ParticipantCard'
 
 import './styles.css';
@@ -18,11 +16,11 @@ function VideoContainer (props) {
     const containerRef = React.useRef(null);
 
     React.useEffect(() => {
-        calcWidth(10);
+        calcWidth();
     }, [participants, props.widthChanged]);
 
     
-    const calcWidth = (contentRect) => {
+    const calcWidth = () => {
         _margin = 5;
         const offsetWidth = containerRef.current? containerRef.current.offsetWidth: 1428;
         const offsetHeight = containerRef.current? containerRef.current.offsetHeight: 883;
@@ -40,7 +38,7 @@ function VideoContainer (props) {
         }
         setCardWidthAndMargin({ width: _w - _margin * 2, margin: _margin });
     }
-                
+
     return (
         
         <div className={'container'} ref={containerRef}>

@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core';
 import Measure from 'react-measure';
 import { useCardRatio, useOffsets } from '../../hooks';
 import ToggleAudioButton from '../ToggleAudioButton';
 import ToggleVideoButton from '../ToggleVideoButton';
+import VideoCloseCard from '../VideoCloseCard';
+import {AuthContext} from '../../context/AuthContext';
 
 function PreviewTrack (props) {
 	const videoRef = React.useRef(null);
 	const userAudio = React.useRef(null);
-
+	const { authState } = useContext(AuthContext);
 	const [ container, setContainer ] = useState({ height: 0, width: 0 });
 	const [ aspectRatio, calculateRatio ] = useCardRatio(1.7777778);
-
 	const offsets = useOffsets(videoRef.current && videoRef.current.videoWidth, videoRef.current && videoRef.current.videoHeight, container.width, container.height);
-
 	const classes = useStyles();
 
 	React.useEffect(
@@ -23,10 +23,8 @@ function PreviewTrack (props) {
 				props.track?.attach(videoRef.current)
 			}
 		},
-		[ props.track ],
+		[ props.track, props.mediaConfig ],
 	);
-
-
 
 	function handleResize (contentRect) {
 		setContainer({
@@ -35,7 +33,6 @@ function PreviewTrack (props) {
 		});
 	}
 
-	console.log(props.track);
 	function handleCanPlay () {
 		calculateRatio(videoRef.current.videoHeight, videoRef.current.videoWidth);
 		videoRef.current.play();
@@ -45,7 +42,10 @@ function PreviewTrack (props) {
 		<Measure bounds onResize={handleResize}>
 			{({ measureRef }) => (
 				<div ref={measureRef} className={classes.videoContainer} style={{ height: `${container.height}px` }}>
-					<video ref={videoRef} onCanPlay={handleCanPlay} style={{ top: `-${offsets.y}px`, left: `-${offsets.x}px` }} autoPlay playsInline className={classes.video} />
+					{!props.mediaConfig.isVideoMuted ? <video ref={videoRef} onCanPlay={handleCanPlay} style={{ top: `-${offsets.y}px`, left: `-${offsets.x}px` }} autoPlay playsInline className={classes.video} /> :
+						(
+							<VideoCloseCard src={authState.user.photoURL} isAudioMuted={props.mediaConfig.isAudioMuted} displayName={authState.user.displayName} size={'7rem'} />
+					)}
 					<div className={classes.btnContainer}>
 						<div className={classes.btn}>
 							<ToggleAudioButton mediaConfig={props.mediaConfig} handleClick={props.handleAudio} />
@@ -63,7 +63,11 @@ const useStyles = makeStyles({
 		borderRadius    : '1em',
 		backgroundColor : '#222',
 		overflow        : 'hidden',
-		position        : 'relative',
+		position: 'relative',
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+		width: '40%'
 	},
 	video          : {
 		width  : '100%',
