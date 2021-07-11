@@ -1,7 +1,7 @@
 import React from 'react';
-import { Avatar, Typography, makeStyles, Grow, Grid } from '@material-ui/core';
+import {makeStyles, Grid } from '@material-ui/core';
 
-import { useIsTrackEnabled, useIsTrackSwitchedOff, usePublications, useTracks } from '../../hooks';
+import { useIsTrackEnabled, usePublications, useTracks } from '../../hooks';
 import { fetchUser } from '../../services/Firebase/firebaseDB';
 import Video from '../Video';
 import AudioTrack from '../AudioTrack';
@@ -18,7 +18,9 @@ function ParticipantCard (props) {
 	const videoPublication = React.useMemo(()=>filteredPublications.find((p) => p.kind === 'video'),[filteredPublications]);
 	const videoTrack = useTracks(videoPublication);
 	const isVideoEnabled = useIsTrackEnabled(videoTrack);
-	// const isVideoSwitchedOff = useIsTrackSwitchedOff(videoTrack);
+
+	const audioTrack = useTracks(audioPublication);
+	const isAudioEnabled = useIsTrackEnabled(audioTrack);
 
 	React.useEffect(() => {
 		const getUser = async () => {
@@ -32,10 +34,8 @@ function ParticipantCard (props) {
 	},[props.participant])
 
 	
-	const audioTrack = useTracks(audioPublication);
-	const isAudioEnabled = useIsTrackEnabled(audioTrack);
+	
 
-	const classes = useStyles();
 	console.log("dimension: ", dimensions);
 	return (
 		<Grid container item direction="row" justify="center" alignItems="center"
@@ -54,24 +54,6 @@ function ParticipantCard (props) {
 	);
 }
 
-const useStyles = makeStyles({
-	card   : {
-		position      : 'relative',
-		verticalAlign : 'middle',
-		alignSelf     : 'center',
-		borderRadius  : '10px',
-		overflow      : 'hidden',
-		display       : 'flex',
-		boxShadow     : '0px, 12px, 22px, rgba(0,0,0,0.4)',
-		background    : '#222',
-	},
 
-	avatar : {
-		backgroundColor : '#666611',
-		width           : '14%',
-		height: '25%',
-		justifySelf:'center'
-	},
-});
 
 export default ParticipantCard;

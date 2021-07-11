@@ -9,43 +9,7 @@ import history from '../history';
 import LogMessage from '../components/SnackBar';
 
 
-const useStyles = makeStyles({
-	card      : {
-		height   : '60%',
-		width    : '60%',
-		position : 'relative',
-	},
 
-	mainContainer: {
-		display         : 'flex',
-		flex            : 1,
-		backgroundColor : '#222',
-		height          : '100vh',
-		width           : '100vw',
-		justifyContent  : 'center',
-		alignItems      : 'center',
-		position        : 'absolute',
-		top             : 0,
-		left            : 0,
-	},
-
-	container : {
-		borderWidth  : '1px',
-		borderColor  : 'rgba(2,2,180,0.2)',
-		borderStyle  : 'solid',
-		borderRadius : '0.4em',
-		margin       : '2em',
-		height       : '75%',
-	},
-
-	video     : {
-		backgroundColor : '#222',
-	},
-	avatar: {
-		heigth: '30%',
-		width:'14%'
-	}
-});
 
 const PreJoinPage = (props) => {
 	const classes = useStyles();
@@ -118,12 +82,11 @@ const PreJoinPage = (props) => {
 			) : (
 				<Grid container item direction="row" xs={12} className={classes.card} justify="center" alignItems="center">
 						 <PreviewTrack track={localTracks[1]} mediaConfig={mediaConfigurations} handleVideo={handleVideo} handleAudio={handleAudio} />
-
-
-					<Grid container item direction="row" xs={12} sm={4} lg={3} className={classes.container} justify="space-evenly" alignItems="center">
-						<Button variant="contained" color="primary" onClick={handleJoin} disabled={localTrackLog?.severity === 'error'}>
-							Join
-						</Button>
+						<Grid container item direction="column" xs={12} sm={4} lg={3} className={classes.container} justify="center" alignItems="center">
+							<Typography variant="h4" color="white" className={classes.hint}>Are you ready to Join?</Typography>
+							<Button variant="contained" color="primary" size={"large"} className={classes.join}onClick={handleJoin} disabled={localTrackLog?.severity === 'error'}>
+								Join
+							</Button>
 					</Grid>
 					<LogMessage open={Boolean(localTrackLog)} severity={localTrackLog?.severity} message={localTrackLog?.message}/>
 				</Grid>
@@ -132,5 +95,39 @@ const PreJoinPage = (props) => {
 		</div>
 	);
 };
+
+
+const useStyles = makeStyles({
+	card      : {
+		height   : '60%',
+		width    : '60%',
+		position : 'relative',
+	},
+
+	mainContainer: {
+		display         : 'flex',
+		flex            : 1,
+		backgroundColor : '#222',
+		height          : '100vh',
+		width           : '100vw',
+		justifyContent  : 'center',
+		alignItems      : 'center',
+		position        : 'absolute',
+		top             : 0,
+		left            : 0,
+	},
+
+	container : {
+		height       : '50%',
+	},
+
+	video     : {
+		backgroundColor : '#222',
+	},
+	hint: {
+		color: 'white',
+		margin: '7%'
+	}
+});
 
 export default PreJoinPage;
