@@ -33,7 +33,6 @@ export const MeetingProvider = ({ children }) => {
 	const { authState } = useContext(AuthContext);
 	const [ roomState, setRoomState ] = useState(DEFAULT_STATE);
 	const [ isLoading, setIsLoading ] = useState(false);
-	const [ mediaSettings, setMediaSettings ] = useState({ isAudioMuted: false, isVideoMuted: false });
 
 	//functions
 	const createRoom = async (roomTitle, roomDescription) => {
@@ -80,12 +79,14 @@ export const MeetingProvider = ({ children }) => {
 				await addParticipantToRoom(roomID, authState.user);
 				await addRoomToParticipant(res.data(), authState.user.uid);
 				setRoomState({ ...roomState, room: res.data(), log: { severity: 'success', message: LOGS.ROOM_JOINED } });
+				return true;
 			} else {
 				setRoomState({ ...roomState, room: undefined, log: { severity: 'error', message: LOGS.ROOM_NOT_FOUND } });
+				return false;
 			}
 		} catch (err) {
-			console.log(err);
 			setRoomState({ ...roomState, room: undefined, log: { severity: 'error', message: LOGS.INVALID_TOKEN } });
+			return false;
 		} finally {
 			setIsLoading(false);
 		}
@@ -122,9 +123,7 @@ export const MeetingProvider = ({ children }) => {
 	};
 
 	return (
-		<MeetingContext.Provider
-			value={{ roomState, isLoading, createRoom, isValidRoom, getAccessToken, setDefault, joinRoom, selectMeeting, mediaSettings, setMediaSettings }}
-		>
+		<MeetingContext.Provider value={{ roomState, isLoading, createRoom, isValidRoom, getAccessToken, setDefault, joinRoom, selectMeeting }}>
 			{children}
 		</MeetingContext.Provider>
 	);

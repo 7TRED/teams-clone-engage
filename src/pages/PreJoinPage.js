@@ -7,6 +7,7 @@ import { MeetingContext } from '../context/MeetingContext';
 import { RoomContext } from '../context/RoomContext';
 import history from '../history';
 import LogMessage from '../components/SnackBar';
+import Loader from '../components/Loader';
 
 
 
@@ -14,7 +15,7 @@ import LogMessage from '../components/SnackBar';
 const PreJoinPage = (props) => {
 	const classes = useStyles();
 	const { localTracks, isAcquiringLocalTrack, localTrackLog } = useLocalMedia(true);
-	const { getAccessToken, isLoading, isValidRoom, setMediaSettings } = useContext(MeetingContext);
+	const { getAccessToken, isLoading, isValidRoom } = useContext(MeetingContext);
 	const [mediaConfigurations, setMediaConfigurations] = useState({ isAudioMuted: false, isVideoMuted: false, audioDevice: '', videoDevice: '' });
 
 	useEffect(() => {
@@ -27,31 +28,36 @@ const PreJoinPage = (props) => {
 		};
 
 		check();
-		return () => {
-			setMediaSettings(prevState => ({...prevState, isAudioMuted:mediaConfigurations.isAudioMuted, isVideoMuted:mediaConfigurations.isVideoMuted}))
-		}
+		
 	}, []);
 
-
+	useEffect(() => {
+		return () => {
+			window.mediaSettings = {
+				isAudioMuted: mediaConfigurations.isAudioMuted,
+				isVideoMuted:mediaConfigurations.isVideoMuted
+			}
+		}
+	})
 	
 
 	
 	const handleAudio = () => {
 		if (mediaConfigurations.isAudioMuted) {
-			localTracks[0].enable();
+			localTracks[0]?.enable();
 			setMediaConfigurations({ ...mediaConfigurations, isAudioMuted: false });
 		} else {
-			localTracks[0].disable();
+			localTracks[0]?.disable();
 			setMediaConfigurations({ ...mediaConfigurations, isAudioMuted: true });
 		}
 	};
 
 	const handleVideo = () => {
 		if (mediaConfigurations.isVideoMuted) {
-			localTracks[1].enable();
+			localTracks[1]?.enable();
 			setMediaConfigurations({ ...mediaConfigurations, isVideoMuted: false });
 		} else {
-			localTracks[1].disable();
+			localTracks[1]?.disable();
 			setMediaConfigurations({ ...mediaConfigurations, isVideoMuted: true });
 		}
 	};
@@ -59,17 +65,14 @@ const PreJoinPage = (props) => {
 	const handleJoin = () => {
 		getAccessToken(props.match.params.id).then((token) => {
 			if (token) {
-				history.push(`/inroom/${props.match.params.id}`);
+				history.push(`/inroomload/${props.match.params.id}`);
 			}
 		});
 	};
 
 	function renderLoader () {
 		return (
-			<div>
-				<ReactLoading type={'spinningBubbles'} color="#f7f7f7" />
-				<h3 style={{ color: '#f7f7f7' }}>Loading</h3>
-			</div>
+			<Loader open />
 		);
 	}
 

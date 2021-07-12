@@ -7,21 +7,21 @@ export function useRoom () {
 	const [ isConnecting, setIsConnecting ] = useState(false);
 	const [ connectLog, setConnectLog ] = useState({});
 
-	const connect = useCallback((token, options, mediaSettings) => {
+	const connect = useCallback(async (token, options) => {
 		setIsConnecting(true);
-		return roomConnect(token, { ...options, ...MEDIA_CONSTRAINTS }).then(
-			(newRoom) => {
+		return roomConnect(token, { ...options, ...MEDIA_CONSTRAINTS })
+			.then((newRoom) => {
 				setRoom(newRoom);
 				console.log(newRoom);
 				const disconnect = () => newRoom.disconnect();
 
-				if (mediaSettings.isAudioMuted) {
+				if (window.mediaSettings.isAudioMuted) {
 					newRoom.localParticipant.audioTracks.forEach((trackPublication) => {
 						trackPublication.track.disable();
 					});
 				}
 
-				if (mediaSettings.isVideoMuted) {
+				if (window.mediaSettings.isVideoMuted) {
 					newRoom.localParticipant.videoTracks.forEach((trackPublication) => {
 						trackPublication.track.disable();
 					});
@@ -40,15 +40,17 @@ export function useRoom () {
 				window.addEventListener('beforeunload', disconnect);
 
 				setIsConnecting(false);
-			},
-			(error) => {
+				return true;
+			})
+			.catch((error) => {
+				console.log(error.name);
 				setConnectLog({ severity: 'error', message: CONNECT_ERRORS[error.name] });
 				setIsConnecting(false);
-			},
-		);
+				return false;
+			});
 	}, []);
 
-	return { room, isConnecting, connect };
+	return { room, isConnecting, connect, connectLog };
 }
 
 const CONNECT_ERRORS = {
@@ -56,4 +58,7 @@ const CONNECT_ERRORS = {
 	SignalingServerBusy              : 'Please try to join again after sometime',
 	RoomMaxParticipantsExceededError : 'Maximum number of participants reached, please contact the meeting organizer',
 	MediaConnectionError             : 'Please ensure that you have a stable internet connection and try again',
+	NotAllowedError                  : 'Please provide permission to camera and microphone to join the meeting.After allowing Permission refresh the page.',
+	NotFoundError                    : 'Please provide permission to camer and microphone and please make sure there is atleast one input device connected.',
+	NotReadableError                 : 'Please close all other applications acquiring the input devices and refresh or restart the browser.',
 };

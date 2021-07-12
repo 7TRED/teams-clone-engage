@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import { Button, makeStyles } from '@material-ui/core';
 import { Mic, MicOff, Videocam, VideocamOff, PresentToAll, StopScreenShareSharp, Group, CallEnd, ChatBubble } from '@material-ui/icons';
 import { useRoomContext } from '../../hooks';
-import { MeetingContext } from '../../context/MeetingContext';
+
 
 function MeetingControls (props) {
 	const classes = useStyles();
 	const { room } = useRoomContext();
-	const { mediaSettings } = React.useContext(MeetingContext);
 	const [ meetingState, setMeetingState ] = useState({
-		isAudioMuted     : mediaSettings?.isAudioMuted,
-		isVideoMuted     : mediaSettings?.isVideoMuted,
+		isAudioMuted     : window.mediaSettings?.isAudioMuted,
+		isVideoMuted     : window.mediaSettings?.isVideoMuted,
 		isScreenSharing  : false,
 		showParticipants : false,
 	});

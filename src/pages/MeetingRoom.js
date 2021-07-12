@@ -1,42 +1,37 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Grid, makeStyles } from '@material-ui/core';
 import MeetingControls from '../components/MeetingControls';
-import ReactLoading from 'react-loading';
+import Loader from '../components/Loader';
 import { MeetingContext } from '../context/MeetingContext';
 import Chat from '../components/Chat';
 import ParticipantList from '../components/ParticipantList';
-
-import { RoomContext } from '../context/RoomContext';
+import history from '../history';
 import VideoContainer from '../components/VideoContainer';
 
 function MeetingRoom (props) {
 	const classes = useStyles();
-	const { roomState, isValidRoom, mediaSettings } = useContext(MeetingContext);
+	const { roomState, isValidRoom } = useContext(MeetingContext);
 	const [ room, setRoom ] = useState(undefined);
-	const { connect, isConnecting } = useContext(RoomContext);
 	const [ isChatActive, setIsChatActive ] = useState(false);
 	const [ isParticipantListActive, setParticipantListActive ] = useState(false);
+	const [ isLoading, setIsLoading ] = useState(true);
 
 	useEffect(() => {
 		const ConnectToRoom = async () => {
 			const res = await isValidRoom(props.match.params.id);
-			if (res.exists) {
-				await connect(roomState.accessToken, { name: props.match.params.id }, mediaSettings);
+			if (res.exists && roomState.accessToken) {
 				setRoom(res.data());
+			} else {
+				history.replace(`/inroomload/${props.match.params.id}`);
 			}
+			setIsLoading(false);
 		};
+		setIsLoading(true);
 		ConnectToRoom();
 	}, []);
 
-	console.log(room);
-
 	function renderLoader () {
-		return (
-			<div>
-				<ReactLoading type={'spinningBubbles'} color="#fff" />
-				<div>Loading</div>
-			</div>
-		);
+		return <Loader open />;
 	}
 
 	const ListOfParticipants = React.useMemo(() => <ParticipantList meeting={{ room: room }} />, [ room ]);
@@ -48,14 +43,12 @@ function MeetingRoom (props) {
 				<Grid container item xs={isChatActive || isParticipantListActive ? 9 : 12} direction="row" justify="center " className={classes.videoContainer}>
 					<VideoContainer widthChanged={isChatActive || isParticipantListActive} />
 					<Grid container item xs={12} direction="row" justify="center" alignItems="center">
-						{!isConnecting && (
-							<MeetingControls
-								isChatActive={isChatActive}
-								isParticipantListActive={isParticipantListActive}
-								handleParticipantListActive={setParticipantListActive}
-								handleChatActive={setIsChatActive}
-							/>
-						)}
+						<MeetingControls
+							isChatActive={isChatActive}
+							isParticipantListActive={isParticipantListActive}
+							handleParticipantListActive={setParticipantListActive}
+							handleChatActive={setIsChatActive}
+						/>
 					</Grid>
 				</Grid>
 
@@ -75,7 +68,7 @@ function MeetingRoom (props) {
 
 	return (
 		<Grid container item direction="row" className={classes.mainContainer} justify="center" alignItems="center">
-			{isConnecting ? renderLoader() : renderMeeting()}
+			{isLoading ? renderLoader() : renderMeeting()}
 		</Grid>
 	);
 }

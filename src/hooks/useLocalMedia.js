@@ -33,7 +33,7 @@ export const useLocalMedia = (wantLocalTrack) => {
 				}
 			};
 		},
-		[ localTracks, wantLocalTrack ],
+		[ localTracks, wantLocalTrack, navigator.permissions ],
 	);
 
 	return {
