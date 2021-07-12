@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Button, makeStyles } from '@material-ui/core';
 import { Mic, MicOff, Videocam, VideocamOff, PresentToAll, StopScreenShareSharp, Group, CallEnd, ChatBubble } from '@material-ui/icons';
 import { useRoomContext } from '../../hooks';
-
+import { createLocalVideoTrack, LocalVideoTrack } from 'twilio-video';
+import MEDIA_CONSTRAINTS from "../../constants/MediaConstraints";
 
 function MeetingControls (props) {
 	const classes = useStyles();
@@ -42,6 +43,29 @@ function MeetingControls (props) {
 		room.disconnect();
 	}
 
+	async function onScreenSharingClick() {
+		room?.localParticipant?.videoTracks.forEach((trackPublication) => {
+			trackPublication.track.stop();
+			trackPublication.unpublish();
+		})
+		if (meetingState.isScreenSharing) {
+			const track = await createLocalVideoTrack({ ...MEDIA_CONSTRAINTS.video })
+			await room.localParticipant.publishTrack(track);
+			if (meetingState.isVideoMuted) {
+				console.log("video", meetingState.isVideoMuted);
+				room.localParticipant.videoTracks.forEach((trackPublication) => {
+					trackPublication.track.disable();
+				})
+			}
+			setMeetingState({ ...meetingState, isScreenSharing: false });
+		}
+		else {
+			const stream = await navigator.mediaDevices.getDisplayMedia();
+			room.localParticipant.publishTrack(new LocalVideoTrack(stream.getTracks()[0]));
+			setMeetingState({ ...meetingState, isScreenSharing: true });
+		}
+	}
+
 	function onChatButtonClick () {
 		if (props.isChatActive) {
 			props.handleChatActive(false);
@@ -67,6 +91,9 @@ function MeetingControls (props) {
 			</Button>
 			<Button variant="outlined" className={meetingState.isVideoMuted ? classes.inactive : classes.root} onClick={onVideoButtonClick}>
 				{meetingState.isVideoMuted ? <VideocamOff /> : <Videocam />}
+			</Button>
+			<Button variant="outlined" className={!meetingState.isScreenSharing ? classes.root : classes.inactive} onClick={onScreenSharingClick}>
+				{!meetingState.isScreenSharing ? <PresentToAll /> : <StopScreenShareSharp />}
 			</Button>
 			<Button variant="outlined" className={props.isParticipantListActive ? classes.inactive : classes.root} onClick={onParticipantButtonClick}>
 				<Group />

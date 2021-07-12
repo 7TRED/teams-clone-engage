@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { createLocalTracks } from 'twilio-video';
+import { createLocalTracks, createLocalVideoTrack, LocalVideoTrack } from 'twilio-video';
 import MEDIA_CONSTRAINTS from '../constants/MediaConstraints';
 
 export const useLocalMedia = (wantLocalTrack) => {
@@ -36,10 +36,21 @@ export const useLocalMedia = (wantLocalTrack) => {
 		[ localTracks, wantLocalTrack, navigator.permissions ],
 	);
 
+	const createVideoTrack = async () => {
+		return createLocalVideoTrack({ ...MEDIA_CONSTRAINTS.video });
+	};
+
+	const createLocalScreenTrack = async () => {
+		const stream = await navigator.mediaDevices.getDisplayMedia();
+		return new LocalVideoTrack(stream.getTracks[0]);
+	};
+
 	return {
 		localTracks,
 		isAcquiringLocalTrack,
 		localTrackLog,
+		createVideoTrack,
+		createLocalScreenTrack,
 	};
 };
 

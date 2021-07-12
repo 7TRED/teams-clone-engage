@@ -7,12 +7,12 @@ const Header = () => {
 	const { authState } = React.useContext(AuthContext);
 	const classes = useStyles();
 	return (
-		<AppBar position="relative">
+		<AppBar position="">
 			<Toolbar>
 				<Typography variant="h6" color="inherit" className={classes.title}>
 					Microsoft Teams
 				</Typography>
-				{authState.authToken && <ProfileCard />}
+				{/* {authState.authToken && <ProfileCard />} */}
 			</Toolbar>
 		</AppBar>
 	);

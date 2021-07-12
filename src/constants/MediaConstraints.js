@@ -6,7 +6,7 @@ const mediaConstraints = {
 
 	video : {
 		resizeMode  : 'crop-and-scale',
-		aspectRatio : { ideal: 1.77778 },
+		aspectRatio : 1.777778,
 		facingMode  : 'environment',
 	},
 };

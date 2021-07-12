@@ -57,7 +57,7 @@ const useStyles = makeStyles({
 		// top        : 0,
 		// left       : 0,
 		margin     : 0,
-		height     : '93%',
+		height     : '92%',
 		width      : '100%',
 		background : '#222',
 	},

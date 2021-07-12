@@ -5,10 +5,11 @@
 	align-items: center;
 	justify-content: center;
 	vertical-align: middle;
-	position: absolute;
+	/* position: absolute;
 	left: 0px;
 	bottom: 0px;
 	top: 0px;
-	right: 0px;
+	right: 0px; */
+	height: 90%;
 	flex: 1;
 }

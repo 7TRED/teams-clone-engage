@@ -16,27 +16,30 @@ function App () {
 	const [ isfetchingToken, setIsFetchingToken ] = React.useState(true);
 
 	React.useEffect(() => {
-		const fetchToken = async () => {
+		setIsFetchingToken(true);
+		setTimeout(async () => {
 			await restoreToken();
 			setIsFetchingToken(false);
-		};
-		// setIsFetchingToken(true);
-		fetchToken();
+		}, 1000);
 	}, []);
+
+	if (isfetchingToken) {
+		return <Loader open />;
+	}
 
 	return (
 		<Router history={history}>
 			<Header />
 			<Switch>
-				{authState.authToken ? (
+				{!authState.authToken ? (
+					!isLoading && <Route path="/" exact component={LandingPage} />
+				) : (
 					<React.Fragment>
 						<Route path="/" exact component={HomePage} />
 						<Route path="/room/:id" exact component={PreJoinPage} />
 						<Route path="/inroomload/:id" exact component={InRoomLoadPage} />
 						<Route path="/inroom/:id" exact component={MeetingRoom} />
 					</React.Fragment>
-				) : (
-					!isLoading && <Route path="/" exact component={LandingPage} />
 				)}
 			</Switch>
 		</Router>
