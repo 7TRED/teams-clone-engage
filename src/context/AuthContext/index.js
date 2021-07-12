@@ -32,7 +32,11 @@ export const AuthProvider = ({ children }) => {
 				photoURL    : user.photoURL,
 			});
 			const authToken = await user.getIdToken();
-			setAuthState((prevState) => ({ ...prevState, user: { uid: user.uid, displayName: user.displayName, email: user.email, photoURL: user.photoURL }, authToken }));
+			setAuthState((prevState) => ({
+				...prevState,
+				user      : { uid: user.uid, displayName: user.displayName, email: user.email, photoURL: user.photoURL },
+				authToken,
+			}));
 		} catch (err) {
 			setAuthState((prevState) => ({ ...prevState, error: { type: err } }));
 		} finally {
@@ -58,7 +62,11 @@ export const AuthProvider = ({ children }) => {
 			auth.onAuthStateChanged(async (user) => {
 				if (user) {
 					const authToken = await user.getIdToken();
-					setAuthState((prevState) => ({ ...prevState, user: { uid: user.uid, displayName: user.displayName, email: user.email, photoURL: user.photoURL }, authToken }));
+					setAuthState({
+						...authState,
+						user      : { uid: user.uid, displayName: user.displayName, email: user.email, photoURL: user.photoURL },
+						authToken,
+					});
 				} else {
 					setAuthState((prevState) => ({ ...INITIAL_AUTH_STATE }));
 				}

@@ -29,24 +29,14 @@ const useStyles = makeStyles({
 
 const LandingPage = (props) => {
 	const styles = useStyles();
-	const { isLoading, login, restoreToken } = React.useContext(AuthContext);
-	const [ isfetchingToken, setIsFetchingToken ] = React.useState(true);
+	const { isLoading, login } = React.useContext(AuthContext);
 
 	const handleLogin = async () => {
 		await login();
 		history.replace('/');
 	};
 
-	React.useEffect(() => {
-		const fetchToken = async () => {
-			await restoreToken();
-			setIsFetchingToken(false);
-		};
-		setIsFetchingToken(true);
-		fetchToken();
-	}, []);
-
-	if (isLoading || isfetchingToken) {
+	if (isLoading) {
 		return <Loader open />;
 	}
 

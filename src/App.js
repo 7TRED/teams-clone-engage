@@ -2,8 +2,6 @@ import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import history from './history';
 import { AuthContext } from './context/AuthContext';
-import { CircularProgress } from '@material-ui/core';
-import Loader from './components/Loader';
 
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
@@ -11,27 +9,36 @@ import PreJoinPage from './pages/PreJoinPage';
 import MeetingRoom from './pages/MeetingRoom';
 import LandingPage from './pages/LandingPage';
 import InRoomLoadPage from './pages/InRoomLoadPage';
+import Loader from './components/Loader';
 
 function App () {
-	const { authState } = React.useContext(AuthContext);
+	const { authState, isLoading, restoreToken } = React.useContext(AuthContext);
+	const [ isfetchingToken, setIsFetchingToken ] = React.useState(true);
+
+	React.useEffect(() => {
+		const fetchToken = async () => {
+			await restoreToken();
+			setIsFetchingToken(false);
+		};
+		// setIsFetchingToken(true);
+		fetchToken();
+	}, []);
+
 	return (
 		<Router history={history}>
-			<React.Fragment>
-				<Header />
-
-				{!authState.authToken ? (
-					<Switch>
-						<Route path="/" component={LandingPage} />
-					</Switch>
-				) : (
-					<Switch>
+			<Header />
+			<Switch>
+				{authState.authToken ? (
+					<React.Fragment>
 						<Route path="/" exact component={HomePage} />
 						<Route path="/room/:id" exact component={PreJoinPage} />
 						<Route path="/inroomload/:id" exact component={InRoomLoadPage} />
 						<Route path="/inroom/:id" exact component={MeetingRoom} />
-					</Switch>
+					</React.Fragment>
+				) : (
+					!isLoading && <Route path="/" exact component={LandingPage} />
 				)}
-			</React.Fragment>
+			</Switch>
 		</Router>
 	);
 }
