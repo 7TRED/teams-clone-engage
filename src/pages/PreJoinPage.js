@@ -4,7 +4,7 @@ import ReactLoading from 'react-loading';
 import PreviewTrack from '../components/PreviewTrack';
 import { useLocalMedia} from '../hooks';
 import { MeetingContext } from '../context/MeetingContext';
-
+import { RoomContext } from '../context/RoomContext';
 import history from '../history';
 import LogMessage from '../components/SnackBar';
 
@@ -13,10 +13,8 @@ import LogMessage from '../components/SnackBar';
 
 const PreJoinPage = (props) => {
 	const classes = useStyles();
-	
 	const { localTracks, isAcquiringLocalTrack, localTrackLog } = useLocalMedia(true);
-	const { getAccessToken, isLoading, roomState, isValidRoom } = useContext(MeetingContext);
-	const [isLogOpen, setIsLogOpen] = React.useState(false);
+	const { getAccessToken, isLoading, isValidRoom, setMediaSettings } = useContext(MeetingContext);
 	const [mediaConfigurations, setMediaConfigurations] = useState({ isAudioMuted: false, isVideoMuted: false, audioDevice: '', videoDevice: '' });
 
 	useEffect(() => {
@@ -29,12 +27,14 @@ const PreJoinPage = (props) => {
 		};
 
 		check();
+		return () => {
+			setMediaSettings(prevState => ({...prevState, isAudioMuted:mediaConfigurations.isAudioMuted, isVideoMuted:mediaConfigurations.isVideoMuted}))
+		}
 	}, []);
 
-	const onLogClose = () => {
-		setIsLogOpen(false);
-	}
+
 	
+
 	
 	const handleAudio = () => {
 		if (mediaConfigurations.isAudioMuted) {

@@ -6,28 +6,6 @@ export const useLocalMedia = (wantLocalTrack) => {
 	const [ localTracks, setLocalTrack ] = useState([]);
 	const [ isAcquiringLocalTrack, setIsAcquiringLocalTrack ] = useState(false);
 	const [ localTrackLog, setLocalTrackLog ] = useState({});
-	const [ isVideoPermissionChanged, setIsVideoPermissionChanged ] = useState(false);
-	const [ isAudioPermissionChanged, setIsAudioPermissionChanged ] = useState(false);
-
-	useEffect(() => {
-		const checkPermission = async () => {
-			const status = await navigator.permissions.query({ name: 'camera' });
-			status.onchange = function () {
-				setIsVideoPermissionChanged((prev) => !prev);
-			};
-		};
-		checkPermission();
-	}, []);
-
-	useEffect(() => {
-		const checkPermission = async () => {
-			const status = await navigator.permissions.query({ name: 'microphone' });
-			status.onchange = function () {
-				setIsAudioPermissionChanged((prev) => !prev);
-			};
-		};
-		checkPermission();
-	}, []);
 
 	useEffect(
 		() => {
@@ -45,18 +23,17 @@ export const useLocalMedia = (wantLocalTrack) => {
 			if (!localTracks.length && wantLocalTrack) {
 				setIsAcquiringLocalTrack(true);
 				getMedia();
-			} else {
-				// cleanup function to stop the localTrack when the component unmounts
-				return () => {
-					if (localTracks.length > 0) {
-						localTracks.forEach((track) => {
-							track.stop();
-						});
-					}
-				};
 			}
+			// cleanup function to stop the localTrack when the component unmounts
+			return () => {
+				if (localTracks.length > 0) {
+					localTracks.forEach((track) => {
+						track.stop();
+					});
+				}
+			};
 		},
-		[ localTracks, wantLocalTrack, isAudioPermissionChanged, isVideoPermissionChanged ],
+		[ localTracks, wantLocalTrack ],
 	);
 
 	return {

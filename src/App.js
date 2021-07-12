@@ -10,6 +10,7 @@ import HomePage from './pages/HomePage';
 import PreJoinPage from './pages/PreJoinPage';
 import MeetingRoom from './pages/MeetingRoom';
 import LandingPage from './pages/LandingPage';
+import InRoomLoadPage from './pages/InRoomLoadPage';
 
 function App () {
 	const { restoreToken, isLoading, authState } = React.useContext(AuthContext);
@@ -26,6 +27,7 @@ function App () {
 					<Switch>
 						<Route path="/" exact component={HomePage} />
 						<Route path="/room/:id" exact component={PreJoinPage} />
+						<Route path="/inroomload/:id" exact component={InRoomLoadPage} />
 						<Route path="/inroom/:id" exact component={MeetingRoom} />
 					</Switch>
 				)}

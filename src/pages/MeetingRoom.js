@@ -11,7 +11,7 @@ import VideoContainer from '../components/VideoContainer';
 
 function MeetingRoom (props) {
 	const classes = useStyles();
-	const { roomState, isValidRoom } = useContext(MeetingContext);
+	const { roomState, isValidRoom, mediaSettings } = useContext(MeetingContext);
 	const [ room, setRoom ] = useState(undefined);
 	const { connect, isConnecting } = useContext(RoomContext);
 	const [ isChatActive, setIsChatActive ] = useState(false);
@@ -21,7 +21,7 @@ function MeetingRoom (props) {
 		const ConnectToRoom = async () => {
 			const res = await isValidRoom(props.match.params.id);
 			if (res.exists) {
-				connect(roomState.accessToken, { name: props.match.params.id });
+				await connect(roomState.accessToken, { name: props.match.params.id }, mediaSettings);
 				setRoom(res.data());
 			}
 		};
@@ -48,12 +48,14 @@ function MeetingRoom (props) {
 				<Grid container item xs={isChatActive || isParticipantListActive ? 9 : 12} direction="row" justify="center " className={classes.videoContainer}>
 					<VideoContainer widthChanged={isChatActive || isParticipantListActive} />
 					<Grid container item xs={12} direction="row" justify="center" alignItems="center">
-						<MeetingControls
-							isChatActive={isChatActive}
-							isParticipantListActive={isParticipantListActive}
-							handleParticipantListActive={setParticipantListActive}
-							handleChatActive={setIsChatActive}
-						/>
+						{!isConnecting && (
+							<MeetingControls
+								isChatActive={isChatActive}
+								isParticipantListActive={isParticipantListActive}
+								handleParticipantListActive={setParticipantListActive}
+								handleChatActive={setIsChatActive}
+							/>
+						)}
 					</Grid>
 				</Grid>
 

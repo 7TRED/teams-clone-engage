@@ -33,6 +33,7 @@ export const MeetingProvider = ({ children }) => {
 	const { authState } = useContext(AuthContext);
 	const [ roomState, setRoomState ] = useState(DEFAULT_STATE);
 	const [ isLoading, setIsLoading ] = useState(false);
+	const [ mediaSettings, setMediaSettings ] = useState({ isAudioMuted: false, isVideoMuted: false });
 
 	//functions
 	const createRoom = async (roomTitle, roomDescription) => {
@@ -121,7 +122,9 @@ export const MeetingProvider = ({ children }) => {
 	};
 
 	return (
-		<MeetingContext.Provider value={{ roomState, isLoading, createRoom, isValidRoom, getAccessToken, setDefault, joinRoom, selectMeeting }}>
+		<MeetingContext.Provider
+			value={{ roomState, isLoading, createRoom, isValidRoom, getAccessToken, setDefault, joinRoom, selectMeeting, mediaSettings, setMediaSettings }}
+		>
 			{children}
 		</MeetingContext.Provider>
 	);
