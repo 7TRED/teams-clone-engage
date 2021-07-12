@@ -50,7 +50,7 @@ function InRoomLoadPage (props) {
 			Boolean(connectLog)) ? (
 				<React.Fragment>
 					<Typography className={classes.message} variant="h5">
-						{connectLog?.message? connectLog.message:'Permission denied!!'}
+						{connectLog?.message? connectLog.message:'Please click the rejoin button to join the meeting.'}
 					</Typography>
 					<Grid container className={classes.btnContainer} item direction="row" justify="space-evenly" alignItems="center">
 						<Button variant="outlined" color="inherit" onClick={onRejoinClick}>
@@ -72,7 +72,7 @@ const useStyles = makeStyles({
 		color:'white'
 	},
 	message: {
-		color: 'white',
+		color: '#f6f6f6',
 		width: '60%',
 		textAlign:'center'
 	},

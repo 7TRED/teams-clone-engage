@@ -30,22 +30,24 @@ const useStyles = makeStyles({
 const LandingPage = (props) => {
 	const styles = useStyles();
 	const { isLoading, login, restoreToken } = React.useContext(AuthContext);
+	const [ isfetchingToken, setIsFetchingToken ] = React.useState(true);
 
 	const handleLogin = async () => {
 		await login();
-		history.push('/');
+		history.replace('/');
 	};
 
 	React.useEffect(() => {
-		restoreToken();
+		const fetchToken = async () => {
+			await restoreToken();
+			setIsFetchingToken(false);
+		};
+		setIsFetchingToken(true);
+		fetchToken();
 	}, []);
 
-	if (isLoading) {
-		return (
-			<div style={{ width: '100vw', height: '100vh' }}>
-				<Loader open={true} />
-			</div>
-		);
+	if (isLoading || isfetchingToken) {
+		return <Loader open />;
 	}
 
 	return (

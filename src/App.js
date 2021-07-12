@@ -13,7 +13,7 @@ import LandingPage from './pages/LandingPage';
 import InRoomLoadPage from './pages/InRoomLoadPage';
 
 function App () {
-	const { restoreToken, isLoading, authState } = React.useContext(AuthContext);
+	const { authState } = React.useContext(AuthContext);
 	return (
 		<Router history={history}>
 			<React.Fragment>
