@@ -57,7 +57,7 @@ export default Homepage;
 const useStyles = makeStyles({
 	root              : {
 		margin     : 0,
-		height     : '93%',
+		height     : '92%',
 		width      : '100%',
 		background : '#222',
 	},

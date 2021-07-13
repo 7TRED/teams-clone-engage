@@ -42,7 +42,7 @@ function MeetingControls (props) {
 		room.disconnect();
 	}
 
-	
+
 	
 	function onChatButtonClick () {
 		if (props.isChatActive) {
@@ -70,7 +70,6 @@ function MeetingControls (props) {
 			<Button variant="outlined" className={meetingState.isVideoMuted ? classes.inactive : classes.root} onClick={onVideoButtonClick}>
 				{meetingState.isVideoMuted ? <VideocamOff /> : <Videocam />}
 			</Button>
-			
 			<Button variant="outlined" className={props.isParticipantListActive ? classes.inactive : classes.root} onClick={onParticipantButtonClick}>
 				<Group />
 			</Button>
@@ -93,7 +92,7 @@ const useStyles = makeStyles({
 		borderColor  : 'white',
 		color        : 'white',
 		height       : 60,
-		margin       : '0.4rem',
+		margin       : '0.4em',
 	},
 
 	inactive  : {
@@ -104,13 +103,13 @@ const useStyles = makeStyles({
 		borderColor  : 'red',
 		color        : 'red',
 		height       : 60,
-		margin       : '0.4rem',
+		margin       : '0.4em',
 	},
 
 	callEnd   : {
 		height       : 60,
 		borderRadius : 1000,
-		margin       : '0.4rem',
+		margin       : '0.4em',
 	},
 
 	container : {

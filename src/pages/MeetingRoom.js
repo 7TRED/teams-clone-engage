@@ -76,24 +76,20 @@ function MeetingRoom (props) {
 const useStyles = makeStyles({
 	mainContainer  : {
 		flex            : 1,
-		height          : '100vh',
+		height          : '95vh',
 		backgroundColor : '#272727',
-		position        : 'absolute',
-		top             : 0,
-		left            : 0,
-		margin          : 0,
 	},
 	videoContainer : {
 		position : 'relative',
-		height   : '90%',
+		height   : '100%',
 	},
 	controlBar     : {
 		height : '10%',
 	},
 	chatContainer  : {
 		backgroundColor : '#f7f7f7',
-		transition      : 'all 0.7s 0.2s',
-		height          : '100%',
+		transition      : 'all  0.2s',
+		height          : '97%',
 	},
 });
 

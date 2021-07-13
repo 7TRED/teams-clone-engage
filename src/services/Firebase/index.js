@@ -3,12 +3,12 @@ import 'firebase/auth';
 import 'firebase/firestore';
 
 const firebaseConfig = {
-	apiKey            : 'AIzaSyAvIzhgFzdaM71pDi0gusM_JJVD3pGJ00Y',
-	authDomain        : 'teams-clone-c6129.firebaseapp.com',
-	projectId         : 'teams-clone-c6129',
-	storageBucket     : 'teams-clone-c6129.appspot.com',
-	messagingSenderId : '635387790793',
-	appId             : '1:635387790793:web:c27861f846e42def1cd418',
+	apiKey            : process.env.REACT_APP_FIREBASE_API_KEY,
+	authDomain        : process.env.REACT_APP_AUTH_DOMAIN,
+	projectId         : process.env.REACT_APP_PROJECT_ID,
+	storageBucket     : process.env.REACT_APP_STORAGE_BUCKET,
+	messagingSenderId : process.env.REACT_APP_MESSAGE_SENDER_ID,
+	appId             : process.env.REACT_APP_APP_ID,
 };
 
 let app;

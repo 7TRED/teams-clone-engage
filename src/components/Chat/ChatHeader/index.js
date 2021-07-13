@@ -24,8 +24,8 @@ const useStyles = makeStyles({
 		width        : '100%',
 		height       : '10%',
 		borderBottom : '1px solid #ddd',
-		paddingLeft  : '2em',
-		paddingRight : '2em',
+		paddingLeft  : '2rem',
+		paddingRight : '2rem',
 	},
 	title: {
 		fontWeight:'bold'

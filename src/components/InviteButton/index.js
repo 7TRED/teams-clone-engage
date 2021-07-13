@@ -8,7 +8,7 @@ function InviteButton ({ meeting }) {
 	const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 	const [copied, setCopied] = React.useState(false);
-	const linkToBeShared = `teams-clone-c6129.web.app//room/${meeting?.room.roomID}`
+	const linkToBeShared = `https://teams-clone-c6129.web.app/room/${meeting?.room.roomID}`
 
 	const handleClickOpen = () => {
 		setOpen(true);

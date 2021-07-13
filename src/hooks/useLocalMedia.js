@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { createLocalTracks } from 'twilio-video';
 import MEDIA_CONSTRAINTS from '../constants/MediaConstraints';
-import { LocalAudioTrack, LocalVideoTrack } from 'twilio-video';
 
 /**
  * Returns the Local Participants LocalTracks and a log.
