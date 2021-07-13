@@ -5,7 +5,7 @@ export const RoomContext = createContext(null);
 
 export function RoomProvider ({ children }) {
 	const { room, isConnecting, connect, connectLog } = useRoom();
-	useHandleRoomDisconnection(room);
+	const [ disconnectLog ] = useHandleRoomDisconnection(room);
 
-	return <RoomContext.Provider value={{ isConnecting, room, connect, connectLog }}>{children}</RoomContext.Provider>;
+	return <RoomContext.Provider value={{ isConnecting, room, connect, connectLog, disconnectLog }}>{children}</RoomContext.Provider>;
 }

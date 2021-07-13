@@ -1,7 +1,13 @@
 import { useState, useContext, createContext } from 'react';
 import api from '../../services/api';
-import history from '../../history';
-import { addRoom, addParticipantToRoom, addRoomToParticipant, fetchRoom } from '../../services/Firebase/firebaseDB';
+import {
+	addRoom,
+	addParticipantToRoom,
+	addRoomToParticipant,
+	fetchRoom,
+	removeRoomFromParticipant,
+	removeParticipantFromRoom,
+} from '../../services/Firebase/firebaseDB';
 import { AuthContext } from '../AuthContext';
 import * as uuid from 'uuid';
 /**
@@ -12,12 +18,14 @@ import * as uuid from 'uuid';
 // Errors
 
 export const LOGS = {
-	ROOM_NOT_CREATED : 'Failed to create the room. Please check your network connection.',
-	INVALID_TOKEN    : 'Oops!! There seems to be a problem with your network connection',
-	TOKEN_GENERATED  : 'token generated successfully',
-	ROOM_NOT_FOUND   : 'Plese enter a valid room ID',
-	ROOM_CREATED     : 'Yoooo hooo !! Room Created',
-	ROOM_JOINED      : 'Yaayyy!! Successfully joined the room.',
+	ROOM_NOT_CREATED   : 'Failed to create the room. Please check your network connection.',
+	INVALID_TOKEN      : 'Oops!! There seems to be a problem with your network connection',
+	TOKEN_GENERATED    : 'token generated successfully',
+	ROOM_NOT_FOUND     : 'Plese enter a valid room ID',
+	ROOM_CREATED       : 'Yoooo hooo !! Room Created',
+	ROOM_JOINED        : 'Yaayyy!! Successfully joined the room.',
+	LEFT_ROOM          : 'You have left the meeting',
+	LEAVING_ROOM_ERROR : 'There was some problem leavin the the meeting please try again after some time.',
 };
 
 const DEFAULT_STATE = {
@@ -63,7 +71,6 @@ export const MeetingProvider = ({ children }) => {
 			if (doc.exists) {
 				return doc;
 			}
-			return false;
 		} catch (err) {
 			return false;
 		} finally {
@@ -73,23 +80,44 @@ export const MeetingProvider = ({ children }) => {
 
 	const joinRoom = async (roomID) => {
 		setIsLoading(true);
+		let result = false;
 		try {
 			const res = await isValidRoom(roomID);
 			if (res) {
 				await addParticipantToRoom(roomID, authState.user);
 				await addRoomToParticipant(res.data(), authState.user.uid);
 				setRoomState({ ...roomState, room: res.data(), log: { severity: 'success', message: LOGS.ROOM_JOINED } });
-				return true;
+				result = true;
 			} else {
 				setRoomState({ ...roomState, room: undefined, log: { severity: 'error', message: LOGS.ROOM_NOT_FOUND } });
-				return false;
+				result = false;
 			}
 		} catch (err) {
 			setRoomState({ ...roomState, room: undefined, log: { severity: 'error', message: LOGS.INVALID_TOKEN } });
-			return false;
+			result = false;
 		} finally {
 			setIsLoading(false);
 		}
+
+		return result;
+	};
+
+	const leaveRoom = async (roomID) => {
+		setIsLoading(true);
+		let result = false;
+		try {
+			await removeRoomFromParticipant(roomID, authState.user.uid);
+			await removeParticipantFromRoom(roomID, authState.user.uid);
+			setRoomState({ ...roomState, room: undefined, log: { severity: 'success', message: LOGS.LEFT_ROOM } });
+			result = true;
+		} catch (err) {
+			setRoomState({ ...roomState, room: undefined, log: { severity: 'error', message: LOGS.LEAVING_ROOM_ERROR } });
+			result = false;
+		} finally {
+			setIsLoading(false);
+		}
+
+		return result;
 	};
 
 	const getAccessToken = async (roomID) => {
@@ -112,7 +140,6 @@ export const MeetingProvider = ({ children }) => {
 	const setDefault = () => {
 		setIsLoading(true);
 		setRoomState(DEFAULT_STATE);
-		console.log('setDefault');
 		setIsLoading(false);
 	};
 
@@ -123,7 +150,7 @@ export const MeetingProvider = ({ children }) => {
 	};
 
 	return (
-		<MeetingContext.Provider value={{ roomState, isLoading, createRoom, isValidRoom, getAccessToken, setDefault, joinRoom, selectMeeting }}>
+		<MeetingContext.Provider value={{ roomState, isLoading, createRoom, isValidRoom, getAccessToken, setDefault, joinRoom, selectMeeting, leaveRoom }}>
 			{children}
 		</MeetingContext.Provider>
 	);

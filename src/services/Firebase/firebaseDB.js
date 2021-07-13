@@ -67,6 +67,10 @@ export const addRoomToParticipant = (room, userID) => {
 	});
 };
 
+export const removeRoomFromParticipant = (roomID, userID) => {
+	return db.collection('users').doc(userID).collection('rooms').doc(roomID).delete();
+};
+
 /**
  * Function to add participants to a room
  * @param {string} roomID  sid of twilio-video room
@@ -78,6 +82,10 @@ export const addParticipantToRoom = (roomID, user) => {
 	return db.collection('rooms').doc(roomID).collection('participants').doc(user.uid).set({
 		user : { ...user },
 	});
+};
+
+export const removeParticipantFromRoom = (roomID, userID) => {
+	return db.collection('rooms').doc(roomID).collection('participants').doc(userID).delete();
 };
 
 /**
@@ -120,7 +128,8 @@ export const addMessage = (roomID, message) => {
 /**
  * Function to get all the messages of a room
  * @param {string} roomID room ID whose message is needed 
- * @param {function([])} callback to retrieve the list of messages 
+ * @param {function(firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>)} callback to retrieve the list of messages 
+ * @returns {()=>void}
  */
 export const getAllMessages = (roomID, callback) => {
 	const ref = db.collection('rooms').doc(roomID).collection('messages').orderBy('sentAt', 'desc');

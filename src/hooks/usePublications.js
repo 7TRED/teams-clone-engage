@@ -12,7 +12,7 @@ export const usePublications = (participant) => {
 			};
 
 			const publicationRemoved = (publication) => {
-				setPublications(publications.forEach((p) => p !== publication));
+				setPublications(publications.filter((p) => p !== publication));
 			};
 
 			participant?.on('trackPublished', publicationAdded);

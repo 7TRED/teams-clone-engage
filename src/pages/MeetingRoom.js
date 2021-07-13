@@ -35,7 +35,7 @@ function MeetingRoom (props) {
 	}
 
 	const ListOfParticipants = React.useMemo(() => <ParticipantList meeting={{ room: room }} />, [ room ]);
-	const ChatRoom = React.useMemo(() => <Chat meeting={{ room: room }} />, [ room ]);
+	const ChatRoom = React.useMemo(() => <Chat meeting={{ room: room }} inMeeting />, [ room ]);
 
 	function renderMeeting () {
 		return (
@@ -81,7 +81,6 @@ const useStyles = makeStyles({
 		position        : 'absolute',
 		top             : 0,
 		left            : 0,
-		paddingTop      : '3%',
 		margin          : 0,
 	},
 	videoContainer : {
