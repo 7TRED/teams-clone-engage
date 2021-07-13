@@ -10,6 +10,7 @@ import MeetingRoom from './pages/MeetingRoom';
 import LandingPage from './pages/LandingPage';
 import InRoomLoadPage from './pages/InRoomLoadPage';
 import Loader from './components/Loader';
+import OnDisconnectPage from './pages/OnDisconnectPage';
 
 function App () {
 	const { authState, isLoading, restoreToken } = React.useContext(AuthContext);
@@ -39,6 +40,7 @@ function App () {
 						<Route path="/room/:id" exact component={PreJoinPage} />
 						<Route path="/inroomload/:id" exact component={InRoomLoadPage} />
 						<Route path="/inroom/:id" exact component={MeetingRoom} />
+						<Route path="/outroom/:id" exact component={OnDisconnectPage} />
 					</React.Fragment>
 				)}
 			</Switch>

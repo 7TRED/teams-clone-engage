@@ -1,7 +1,7 @@
 import React from 'react';
 import {makeStyles, Grid } from '@material-ui/core';
 
-import { useIsTrackEnabled, usePublications, useTracks } from '../../hooks';
+import { useIsTrackEnabled, usePublications, useTracks, useIsTrackSwitchedOff } from '../../hooks';
 import { fetchUser } from '../../services/Firebase/firebaseDB';
 import Video from '../Video';
 import AudioTrack from '../AudioTrack';
@@ -13,15 +13,17 @@ function ParticipantCard (props) {
 	const publications = usePublications(props.participant);
 	const [user, setUser] = React.useState(undefined);
 	const { cardWidthAndMargin: dimensions } = props;
-	const filteredPublications = React.useMemo(()=>publications.filter(p => p !== undefined),[publications]);
-	const audioPublication = React.useMemo(()=>filteredPublications.find((p) => p.kind === 'audio'),[filteredPublications]);
-	const videoPublication = React.useMemo(()=>filteredPublications.find((p) => p.kind === 'video'),[filteredPublications]);
+	const filteredPublications = React.useMemo(()=>publications?.filter(p => p !== undefined),[publications]);
+	const audioPublication = filteredPublications?.find((p) => p.kind === 'audio');
+	const videoPublication = React.useMemo(()=>filteredPublications?.find((p) => p.kind === 'video'),[filteredPublications]);
 	const videoTrack = useTracks(videoPublication);
 	const isVideoEnabled = useIsTrackEnabled(videoTrack);
 
 	const audioTrack = useTracks(audioPublication);
+	console.log(audioTrack);
 	const isAudioEnabled = useIsTrackEnabled(audioTrack);
-
+	console.log(useIsTrackSwitchedOff(audioTrack))
+	console.log("Audio", isAudioEnabled);
 	React.useEffect(() => {
 		const getUser = async () => {
 			const doc = await fetchUser(props.participant?.identity);

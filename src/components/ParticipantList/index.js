@@ -29,16 +29,7 @@ function ParticpantList ({ meeting }) {
 					Participants
 				</Typography>
 			</Grid>
-			<Grid container item direction="column" className={classes.organizer}>
-				<Typography variant="h6" color="textPrimary">
-					Organizer
-				</Typography>
-				<Participant participant={{ user: meeting?.room?.owner }} isOwner/>
-			</Grid>
 			<Grid container item direction="column" className={classes.attendees}>
-				<Typography variant="h6" color="textPrimary">
-					Attendees
-				</Typography>
 				{participants.map((participant,idx) =>participant.user !== meeting.owner && <Participant participant={participant} key={idx}/>)}
 			</Grid>
 		</Grid>
@@ -48,20 +39,19 @@ function ParticpantList ({ meeting }) {
 const useStyles = makeStyles({
 	root      : {
 		height      : '98%',
-		paddingLeft : '1em',
 	},
 	header    : {
 		flex          : 0.1,
 		borderBottom  : '2px solid #eee',
-		paddingBottom : '1em',
+		paddingBottom: '1rem',
+		borderBottom:'1px solid #ccc'
 	},
-	organizer : {
-		flex : 0.1,
-	},
+	
 	attendees : {
-		flex      : 1,
+		height:'70%',
 		overflowX : 'hidden',
-		overflowY : 'auto',
+		overflowY: 'auto',
+		margin:'1rem'
 	},
 });
 

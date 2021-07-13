@@ -6,37 +6,15 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 
 function JoinMeetingButton ({ meeting }) {
-	const { isValidRoom } = React.useContext(MeetingContext);
-
-	const handleOnClick = async () => {
-		// const res = await isValidRoom(meeting?.room.roomID);
-		// if (res) {
-		// 	history.push(`/room/${meeting?.roomID}`);
-		// } else {
-		// 	return;
-		// }
-		
+	const handleOnClick = async () => {		
 		history.push(`/room/${meeting?.room.roomID}`);
 	};
 
-	console.log("join", meeting);
-
 	return (
 		<React.Fragment>
-			<div
-				style={{
-					display : 'flex',
-				}}
-			>
-				<Button variant="contained" color="primary" onClick={handleOnClick}>
+				<Button variant="contained" color="primary" onClick={handleOnClick} style={{margin:'10px'}}>
 					Join
 				</Button>
-				<CopyToClipboard text={meeting?.room?.roomID}>
-					<Button color="primary" variant="text">
-						Invite
-					</Button>
-				</CopyToClipboard>
-			</div>
 		</React.Fragment>
 	);
 }

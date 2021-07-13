@@ -5,12 +5,12 @@ import ChatMessages from './ChatMessages';
 import ChatInputBox from './ChatInputBox';
 import ParticipantList from '../ParticipantList';
 
-function Chat ({ meeting }) {
+function Chat ({ meeting, inMeeting }) {
 	const classes = useStyles();
 	console.log('chat', meeting);
 	return (
 		<Grid container item xs={12} direction="column" justify="space-evenly" className={classes.chatContainer} alignItems="center">
-			<ChatHeader meeting={meeting} />
+			<ChatHeader meeting={meeting} inMeeting={inMeeting} />
 			<ChatMessages meeting={meeting} />
 			<ChatInputBox meeting={meeting} />
 		</Grid>
