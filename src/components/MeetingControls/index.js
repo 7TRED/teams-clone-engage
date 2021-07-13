@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, makeStyles } from '@material-ui/core';
-import { Mic, MicOff, Videocam, VideocamOff,Group, CallEnd, ChatBubble } from '@material-ui/icons';
+import { Mic, MicOff, Videocam, VideocamOff, Group, CallEnd, ChatBubble } from '@material-ui/icons';
 import { useRoomContext } from '../../hooks';
 
 
@@ -42,6 +42,8 @@ function MeetingControls (props) {
 		room.disconnect();
 	}
 
+	
+	
 	function onChatButtonClick () {
 		if (props.isChatActive) {
 			props.handleChatActive(false);
@@ -68,6 +70,7 @@ function MeetingControls (props) {
 			<Button variant="outlined" className={meetingState.isVideoMuted ? classes.inactive : classes.root} onClick={onVideoButtonClick}>
 				{meetingState.isVideoMuted ? <VideocamOff /> : <Videocam />}
 			</Button>
+			
 			<Button variant="outlined" className={props.isParticipantListActive ? classes.inactive : classes.root} onClick={onParticipantButtonClick}>
 				<Group />
 			</Button>
@@ -90,7 +93,7 @@ const useStyles = makeStyles({
 		borderColor  : 'white',
 		color        : 'white',
 		height       : 60,
-		margin       : '0.4em',
+		margin       : '0.4rem',
 	},
 
 	inactive  : {
@@ -101,13 +104,13 @@ const useStyles = makeStyles({
 		borderColor  : 'red',
 		color        : 'red',
 		height       : 60,
-		margin       : '0.4em',
+		margin       : '0.4rem',
 	},
 
 	callEnd   : {
 		height       : 60,
 		borderRadius : 1000,
-		margin       : '0.4em',
+		margin       : '0.4rem',
 	},
 
 	container : {

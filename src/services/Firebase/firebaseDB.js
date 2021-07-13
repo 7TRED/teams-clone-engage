@@ -67,6 +67,13 @@ export const addRoomToParticipant = (room, userID) => {
 	});
 };
 
+/**
+ * Removes the specified room from the participant's rooms list
+ * @param {string} roomID 
+ * @param {string} userID 
+ * @returns {Promise<void>}
+ */
+
 export const removeRoomFromParticipant = (roomID, userID) => {
 	return db.collection('users').doc(userID).collection('rooms').doc(roomID).delete();
 };
@@ -83,6 +90,13 @@ export const addParticipantToRoom = (roomID, user) => {
 		user : { ...user },
 	});
 };
+
+/**
+ * Removes a specified participant from the room
+ * @param {string} roomID 
+ * @param {string} userID 
+ * @returns {Promise<void>}
+ */
 
 export const removeParticipantFromRoom = (roomID, userID) => {
 	return db.collection('rooms').doc(roomID).collection('participants').doc(userID).delete();

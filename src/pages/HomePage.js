@@ -8,6 +8,10 @@ import MeetingList from '../components/MeetingList';
 import MeetingSection from '../components/MeetingSection';
 import { getAllParticipantRooms } from '../services/Firebase/firebaseDB';
 
+/**
+ * This page is where all the meetings and their chat will be displayed
+ */
+
 const Homepage = () => {
 	const styles = useStyles();
 	const { authState } = React.useContext(AuthContext);
@@ -53,7 +57,7 @@ export default Homepage;
 const useStyles = makeStyles({
 	root              : {
 		margin     : 0,
-		height     : '92%',
+		height     : '93%',
 		width      : '100%',
 		background : '#222',
 	},

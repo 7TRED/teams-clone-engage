@@ -17,7 +17,6 @@ function OnDisconnectPage (props) {
 		setDefault();
 		history.replace('/')
 	}
-
 	return (
 		<Grid container item direction="column" justify="center" alignItems="center" className={classes.root}>
 			{Boolean(disconnectLog) ? (

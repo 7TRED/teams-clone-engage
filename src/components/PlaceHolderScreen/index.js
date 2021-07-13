@@ -7,7 +7,7 @@ function PlaceHolderScreen () {
 	const classes = useStyles();
 	return (
 		<Grid container item direction="column" justify="center" alignItems="center" className={classes.root}>
-			<Typography multiline variant="h4" color="primary" className={classes.text}>
+			<Typography variant="h4" color="primary" className={classes.text}>
 				Welcome to Teamspace.<br /> <br />Here you can create teams, collab, chat and organize meets with your team members.
 			</Typography>
 			<Grid container xs={4} item direction="row" justify="space-evenly" alignItems="center" className={classes.btnContainer}>

@@ -1,32 +1,10 @@
 import React from 'react';
-
-import { Grid, makeStyles, Typography, Button, Avatar } from '@material-ui/core';
+import { Grid, makeStyles, Typography, Button } from '@material-ui/core';
 import videoConferencingImage from '../assets/video_conferencing.jpg';
 import { AuthContext } from '../context/AuthContext';
 import history from '../history';
 import Loader from '../components/Loader';
 import googleLogo from '../assets/btn_google_light_normal_ios.svg';
-
-const useStyles = makeStyles({
-	root         : {
-		margin : 0,
-		height : '90vh',
-		width  : '100%',
-	},
-	subContainer : {
-		height : '100%',
-	},
-	margin       : {
-		marginTop    : '10%',
-		marginBottom : '10%',
-	},
-	title        : {
-		fontSize : '5rem',
-	},
-	subtitle     : {
-		fontSize : '2rem',
-	},
-});
 
 const LandingPage = (props) => {
 	const styles = useStyles();
@@ -68,3 +46,24 @@ const LandingPage = (props) => {
 };
 
 export default LandingPage;
+
+const useStyles = makeStyles({
+	root         : {
+		margin : 0,
+		height : '90vh',
+		width  : '100%',
+	},
+	subContainer : {
+		height : '100%',
+	},
+	margin       : {
+		marginTop    : '10%',
+		marginBottom : '10%',
+	},
+	title        : {
+		fontSize : '5rem',
+	},
+	subtitle     : {
+		fontSize : '2rem',
+	},
+});

@@ -5,6 +5,11 @@ import { RoomContext } from '../context/RoomContext';
 import { MeetingContext } from '../context/MeetingContext';
 import Loader from '../components/Loader';
 
+/** 
+ * This page connects the participant to a meeting.If connection is successfull
+ * it redirects the user to MeetingRoom else displays an error message.
+ */
+
 function InRoomLoadPage (props) {
 	const { connect, connectLog } = useContext(RoomContext);
 	const { roomState, joinRoom } = useContext(MeetingContext);
