@@ -3,6 +3,10 @@ import { Button, TextField, Dialog, DialogContent, DialogContentText, DialogTitl
 import { MeetingContext } from '../../context/MeetingContext';
 import LogMessage from '../SnackBar';
 
+/**
+ * This button opens a dialog box where you can enter the meeting ID to join a meeting
+ */
+
 function JoinMeetingButton () {
 	const [ roomID, setRoomID ] = React.useState('');
 	const { joinRoom, isLoading, roomState } = React.useContext(MeetingContext);

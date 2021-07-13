@@ -3,6 +3,7 @@ import { Grid, makeStyles, Typography } from '@material-ui/core';
 import Participant from './Participant';
 import { db } from '../../services/Firebase';
 import { getAllRoomParticipants } from '../../services/Firebase/firebaseDB';
+import InviteButton from '../InviteButton';
 
 function ParticpantList ({ meeting }) {
 	const classes = useStyles();
@@ -19,8 +20,6 @@ function ParticpantList ({ meeting }) {
 		getAllRoomParticipants(meeting?.room?.roomID, callback);
 	}, [meeting]);
 
-	console.log(participants)
-	console.log("participant" ,meeting)
 	
 	return (
 		<Grid container item xs={12} direction="column" className={classes.root}>
@@ -32,6 +31,7 @@ function ParticpantList ({ meeting }) {
 			<Grid container item direction="column" className={classes.attendees}>
 				{participants.map((participant,idx) =>participant.user !== meeting.owner && <Participant participant={participant} key={idx}/>)}
 			</Grid>
+			<InviteButton meeting={meeting}/>
 		</Grid>
 	);
 }
@@ -41,8 +41,7 @@ const useStyles = makeStyles({
 		height      : '98%',
 	},
 	header    : {
-		flex          : 0.1,
-		borderBottom  : '2px solid #eee',
+		height          : '13%',
 		paddingBottom: '1rem',
 		borderBottom:'1px solid #ccc'
 	},

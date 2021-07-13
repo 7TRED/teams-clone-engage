@@ -1,7 +1,6 @@
 import React from 'react';
 import { Grid, makeStyles, Paper } from '@material-ui/core';
 import Message from '../Message';
-import { db } from '../../../services/Firebase';
 import { getAllMessages } from '../../../services/Firebase/firebaseDB';
 
 function ChatMessages ({ meeting }) {
@@ -19,11 +18,11 @@ function ChatMessages ({ meeting }) {
 				setMessages(allMessages);
 			};
 			const listener = getAllMessages(meeting?.room?.roomID, callback);
+			// unsubsribe from the snaphsot listener
+			return listener;
 		},
 		[ meeting ],
 	);
-
-	console.log('messages', messages);
 
 	return (
 		<Grid container item direction="row" className={classes.root} justify="center" alignItems="center">

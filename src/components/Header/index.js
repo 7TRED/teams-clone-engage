@@ -1,18 +1,18 @@
 import React from 'react';
 import { AppBar, Typography, makeStyles, Toolbar } from '@material-ui/core';
-import ProfileCard from '../ProfileCard';
-import { AuthContext } from '../../context/AuthContext';
+
+/*
+ * This is a header component which will be visible on top of every page
+ */
 
 const Header = () => {
-	const { authState } = React.useContext(AuthContext);
 	const classes = useStyles();
 	return (
 		<AppBar position="">
 			<Toolbar>
 				<Typography variant="h6" color="inherit" className={classes.title}>
-					Microsoft Teams
+					Teamspace
 				</Typography>
-				{/* {authState.authToken && <ProfileCard />} */}
 			</Toolbar>
 		</AppBar>
 	);

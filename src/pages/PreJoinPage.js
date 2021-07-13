@@ -22,7 +22,7 @@ const PreJoinPage = (props) => {
 		const check = async () => {
 			const res = await isValidRoom(props.match.params.id);
 			console.log(res);
-			if (!res.exists) {
+			if (!res?.exists) {
 				history.push('/');
 			}
 		};

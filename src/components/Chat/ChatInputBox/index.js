@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, makeStyles, TextField, Button, IconButton } from '@material-ui/core';
+import { Grid, makeStyles, TextField, Button } from '@material-ui/core';
 import { SendSharp } from '@material-ui/icons';
 import { addMessage } from '../../../services/Firebase/firebaseDB';
 import { AuthContext } from '../../../context/AuthContext';

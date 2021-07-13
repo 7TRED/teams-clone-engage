@@ -33,7 +33,7 @@ function App () {
 			<Header />
 			<Switch>
 				{!authState.authToken ? (
-					!isLoading && <Route path="/" exact component={LandingPage} />
+					!isLoading && <Route path="/" component={LandingPage} />
 				) : (
 					<React.Fragment>
 						<Route path="/" exact component={HomePage} />

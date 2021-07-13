@@ -10,6 +10,7 @@ function ChatHeader ({ meeting, inMeeting }) {
 			<Typography className={classes.title} variant="h5">
 				{meeting?.room?.roomTitle}
 			</Typography>
+			{/* if in meeting these two buttons will not be displayed  */}
 			{!inMeeting && <div>
 				<JoinMeetingButton meeting={meeting} />
 				<LeaveMeetingButton meeting={meeting} />

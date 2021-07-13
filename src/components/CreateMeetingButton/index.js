@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Dialog, DialogContent, DialogContentText, DialogActions, DialogTitle, TextField, makeStyles, CircularProgress } from '@material-ui/core';
-import { MeetingContext, Errors } from '../../context/MeetingContext';
+import { MeetingContext} from '../../context/MeetingContext';
 import LogMessage from '../SnackBar';
 
 function CreateMeetingButton (props) {
@@ -29,19 +29,13 @@ function CreateMeetingButton (props) {
 	}
 
 	const handleOnClickCreate = async () => {
-		try {
-			const res = await createRoom(title, description);
+		// error thrown by createRoom is being implicitly handled
+			await createRoom(title, description);
 			setTitle('');
 			setDescription('');
 			setIsLogOpen(true);
-			setOpen(false);
-		} catch (err) {
-			console.log(err);
-		}
+			setOpen(false);		
 	};
-
-	console.log(isLogOpen);
-
 
 	return (
 		<div>
@@ -83,8 +77,7 @@ const useStyles = makeStyles({
 	description : {
 		width  : '100%',
 		height : '5rem',
-	},
-	createBtn   : {},
+	}
 });
 
 export default CreateMeetingButton;

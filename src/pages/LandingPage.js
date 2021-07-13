@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { Grid, makeStyles, Typography, CircularProgress, Button } from '@material-ui/core';
+import { Grid, makeStyles, Typography, Button, Avatar } from '@material-ui/core';
 import videoConferencingImage from '../assets/video_conferencing.jpg';
 import { AuthContext } from '../context/AuthContext';
 import history from '../history';
 import Loader from '../components/Loader';
+import googleLogo from '../assets/btn_google_light_normal_ios.svg';
 
 const useStyles = makeStyles({
 	root         : {
@@ -33,12 +34,14 @@ const LandingPage = (props) => {
 
 	const handleLogin = async () => {
 		await login();
-		history.replace('/');
+		history.replace(`${props.location.pathname}`);
 	};
 
 	if (isLoading) {
 		return <Loader open />;
 	}
+
+	console.log(props);
 
 	return (
 		<React.Fragment>
@@ -46,14 +49,14 @@ const LandingPage = (props) => {
 				<Grid container item direction="row" xs={4} justify="center" alignItems="center" className={styles.subContainer}>
 					<Grid container item direction="column" xs={10} spacing={10} justify="center" alignContent="center">
 						<Typography variant="h2" color="primary" className={styles.title}>
-							Teams
+							Teamspace
 						</Typography>
 						<Typography variant="h5" color="initial" className={styles.subtitle}>
 							Meet, chat, call and collab all at one place.
 						</Typography>
 						<div className={styles.margin}>
 							<Button variant="outlined" color="primary" onClick={handleLogin}>
-								Sign-in with Google {isLoading ? <Loader open={true} /> : null}
+								<img src={googleLogo} alt="google-logo" /> Sign-in with Google {isLoading ? <Loader open={true} /> : null}
 							</Button>
 						</div>
 					</Grid>
