@@ -12,7 +12,7 @@ Mentors were super supportive they taught us to ask right questions while approa
 
 ## Teamspace 
 
-During the period of last month, I built a video meeting and chat application using ``ReactJs, NodeJs, Firebase and Twilio Programmable Video API``. You can use the application [here]("https://teams-clone-c6129.web.app/")
+During the period of last month, I built a video meeting and chat application using ``ReactJs, NodeJs, Firebase and Twilio Programmable Video API``. You can use the application [here](https://teams-clone-c6129.web.app/)
 
 ### Key Features:
 This application has following key features:
@@ -28,9 +28,9 @@ This application has following key features:
 
 ![architecture](./snaps/archi.png)
 
-Authentication in Teamspace is handled by [Firebase GoogleAuthProvider]("https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider"). The chat feature is implemented by using firebase firestore, which manages groups/meetings, messages in groups and particpants.
+Authentication in Teamspace is handled by [Firebase GoogleAuthProvider](https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider). The chat feature is implemented by using firebase firestore, which manages groups/meetings, messages in groups and particpants.
 
-The Meetings feature is implemented by using the [Twilio Progammable-Video API]("https://www.twilio.com/docs/video"), it provides API for creating rooms, connecting to rooms, and managing participants and their tracks in the meeting.
+The Meetings feature is implemented by using the [Twilio Progammable-Video API](https://www.twilio.com/docs/video), it provides API for creating rooms, connecting to rooms, and managing participants and their tracks in the meeting.
 
 Teamspace's application server is used to generate access token for every particpant, everytime they join a meeting. It uses the functions provided by the ``Twilio Programmable Video SDK`` to generate those access tokens.
 
@@ -87,7 +87,7 @@ After setting up your media you can click on the join button to continue to the 
 
 ## References
 
-* [ReactJs]("https://reactjs.org/docs/getting-started.html")
-* [WebRTC MDN]("https://developer.mozilla.org/en-US/docs/Glossary/WebRTC")
-* [Twilio Programmable Video API]("https://www.twilio.com/docs/video")
-* [Firebase]("https://firebase.google.com/docs/")
+* [ReactJs](https://reactjs.org/docs/getting-started.html)
+* [WebRTC MDN](https://developer.mozilla.org/en-US/docs/Glossary/WebRTC)
+* [Twilio Programmable Video API](https://www.twilio.com/docs/video)
+* [Firebase](https://firebase.google.com/docs/)

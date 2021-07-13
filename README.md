@@ -1,8 +1,8 @@
-# [Teamspace]("https://teams-clone-c6129.web.app/")
+# [Teamspace](https://teams-clone-c6129.web.app/)
 
 **Build a Microsoft Teams Clone with Acehacker, in Microsoft Engage 2021**
 
-[Teamspace]("https://teams-clone-c6129.web.app/")
+[Teamspace](https://teams-clone-c6129.web.app/)
 
 ## Overview
 
@@ -22,10 +22,10 @@ This application has following features:
 
 ## Technologies Used:
 
-* [ReactJS]("https://reactjs.org") 
-* [NodeJs]("https://nodejs.org)
-* [Firebase]("https://firebase.google.com)
-* [Twilio Progammable-Video API]("https://www.twilio.com/docs/video")
+* [ReactJS](https://reactjs.org") 
+* [NodeJs](https://nodejs.org)
+* [Firebase](https://firebase.google.com)
+* [Twilio Progammable-Video API](https://www.twilio.com/docs/video)
 
 
 ## Architechture
@@ -53,7 +53,7 @@ To install the required dependencies run
 ```
 ### Setup a Local server for access_token
 
-To set up a local server for access_token visit [here]("https://github.com/7TRED/teams-clone-server.git")
+To set up a local server for access_token visit [here](https://github.com/7TRED/teams-clone-server.git)
 
 ### To run the app in development mode run the below command
 ```bash
