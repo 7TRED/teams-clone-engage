@@ -1,6 +1,11 @@
 import React from 'react';
 import { Grid, makeStyles, Avatar, Typography } from '@material-ui/core';
 import { Mic, MicOff } from '@material-ui/icons';
+
+/** 
+ * When the users video is closed this card is shown
+ */
+
 function VideoCloseCard ({ src, isAudioMuted, displayName, size }) {
 	const classes = useStyles();
 	return (

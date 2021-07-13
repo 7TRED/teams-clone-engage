@@ -1,4 +1,11 @@
 import { useState, useEffect } from 'react';
+import { Track } from 'twilio-video';
+
+/**
+ * Returns whether a track is enabled or not
+ * @param {Track} track 
+ * @returns {boolean}
+ */
 
 export function useIsTrackEnabled (track) {
 	const [ isEnabled, setIsEnabled ] = useState(track ? track.isEnabled : false);

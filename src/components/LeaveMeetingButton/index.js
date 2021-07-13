@@ -6,7 +6,7 @@ import LogMessage from '../SnackBar';
 
 
 function LeaveMeetingButton({ meeting }) {
-    const { leaveRoom, roomState, isLoading, setDefault } = React.useContext(MeetingContext);
+    const { leaveRoom, roomState, isLoading } = React.useContext(MeetingContext);
     const [isLogOpen, setIsLogOpen] = React.useState(false);
 
     const onLogClose = () => {

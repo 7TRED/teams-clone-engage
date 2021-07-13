@@ -6,12 +6,8 @@ import { MeetingContext } from '../context/MeetingContext';
 
 function OnDisconnectPage (props) {
 	const {disconnectLog } = useContext(RoomContext);
-	const { roomState,setDefault} = useContext(MeetingContext);
+	const {setDefault} = useContext(MeetingContext);
 	const classes = useStyles();
-
-	
-	console.log(disconnectLog);
-	console.log(roomState.log);
 
 	const onRejoinClick = () => {
 		history.replace(`/room/${props.match.params.id}`);

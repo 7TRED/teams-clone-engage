@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Grid, makeStyles, Typography, Button , Avatar} from '@material-ui/core';
-import ReactLoading from 'react-loading';
+import { Grid, makeStyles, Typography, Button} from '@material-ui/core';
 import PreviewTrack from '../components/PreviewTrack';
 import { useLocalMedia} from '../hooks';
 import { MeetingContext } from '../context/MeetingContext';
-import { RoomContext } from '../context/RoomContext';
 import history from '../history';
 import LogMessage from '../components/SnackBar';
 import Loader from '../components/Loader';
@@ -21,7 +19,6 @@ const PreJoinPage = (props) => {
 	useEffect(() => {
 		const check = async () => {
 			const res = await isValidRoom(props.match.params.id);
-			console.log(res);
 			if (!res?.exists) {
 				history.push('/');
 			}
@@ -84,7 +81,7 @@ const PreJoinPage = (props) => {
 				renderLoader()
 			) : (
 				<Grid container item direction="row" xs={12} className={classes.card} justify="center" alignItems="center">
-						 <PreviewTrack track={localTracks[1]} mediaConfig={mediaConfigurations} handleVideo={handleVideo} handleAudio={handleAudio} />
+						 <PreviewTrack track={localTracks} mediaConfig={mediaConfigurations} handleVideo={handleVideo} handleAudio={handleAudio} />
 						<Grid container item direction="column" xs={12} sm={4} lg={3} className={classes.container} justify="center" alignItems="center">
 							<Typography variant="h4" color="white" className={classes.hint}>Are you ready to Join?</Typography>
 							<Button variant="contained" color="primary" size={"large"} className={classes.join}onClick={handleJoin} disabled={localTrackLog?.severity === 'error'}>

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Button, makeStyles } from '@material-ui/core';
-import { Mic, MicOff, Videocam, VideocamOff, PresentToAll, StopScreenShareSharp, Group, CallEnd, ChatBubble } from '@material-ui/icons';
+import { Mic, MicOff, Videocam, VideocamOff,Group, CallEnd, ChatBubble } from '@material-ui/icons';
 import { useRoomContext } from '../../hooks';
-import { createLocalVideoTrack,createLocalAudioTrack, LocalVideoTrack } from 'twilio-video';
-import MEDIA_CONSTRAINTS from "../../constants/MediaConstraints";
+
 
 function MeetingControls (props) {
 	const classes = useStyles();
@@ -43,8 +42,6 @@ function MeetingControls (props) {
 		room.disconnect();
 	}
 
-	
-	console.log(room.localParticipant.tracks?.values());
 	function onChatButtonClick () {
 		if (props.isChatActive) {
 			props.handleChatActive(false);

@@ -1,4 +1,4 @@
-import { useState, createContext, useContext } from 'react';
+import { useState, createContext } from 'react';
 import { signin, signout } from '../../services/Firebase/firebaseAuth';
 import { addUser } from '../../services/Firebase/firebaseDB';
 import { auth } from '../../services/Firebase';

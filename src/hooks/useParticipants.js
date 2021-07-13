@@ -1,6 +1,9 @@
-
 import { useState, useEffect } from 'react';
 import { useRoomContext } from './useRoomContext';
+
+/**
+ * Returns an array of all the participants in the meeting
+ */
 
 export const useParticipants = () => {
 	const { room } = useRoomContext();

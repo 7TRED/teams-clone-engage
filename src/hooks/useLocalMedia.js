@@ -1,8 +1,14 @@
 import { useEffect, useState } from 'react';
-import { createLocalTracks, createLocalVideoTrack, LocalVideoTrack } from 'twilio-video';
+import { createLocalTracks } from 'twilio-video';
 import MEDIA_CONSTRAINTS from '../constants/MediaConstraints';
+import { LocalAudioTrack, LocalVideoTrack } from 'twilio-video';
 
-export const useLocalMedia = (wantLocalTrack) => {
+/**
+ * Returns the Local Participants LocalTracks and a log.
+ * @returns {[localTracks:[LocalAudioTrack, LocalVideoTrack],isAcquiringLocalTrack:boolean, localTrackLog:{severity:string, message:string}]}
+ */
+
+export const useLocalMedia = () => {
 	const [ localTracks, setLocalTrack ] = useState([]);
 	const [ isAcquiringLocalTrack, setIsAcquiringLocalTrack ] = useState(false);
 	const [ localTrackLog, setLocalTrackLog ] = useState({});
@@ -20,7 +26,7 @@ export const useLocalMedia = (wantLocalTrack) => {
 				}
 			}
 
-			if (!localTracks.length && wantLocalTrack) {
+			if (!localTracks.length) {
 				setIsAcquiringLocalTrack(true);
 				getMedia();
 			}
@@ -33,24 +39,13 @@ export const useLocalMedia = (wantLocalTrack) => {
 				}
 			};
 		},
-		[ localTracks, wantLocalTrack, navigator.permissions ],
+		[ localTracks ],
 	);
-
-	const createVideoTrack = async () => {
-		return createLocalVideoTrack({ ...MEDIA_CONSTRAINTS.video });
-	};
-
-	const createLocalScreenTrack = async () => {
-		const stream = await navigator.mediaDevices.getDisplayMedia();
-		return new LocalVideoTrack(stream.getTracks[0]);
-	};
 
 	return {
 		localTracks,
 		isAcquiringLocalTrack,
 		localTrackLog,
-		createVideoTrack,
-		createLocalScreenTrack,
 	};
 };
 

@@ -15,7 +15,7 @@ function ChatInputBox ({ meeting }) {
 	};
 
 	return (
-		<Grid container item direction="row" className={classes.root} justify="center" alignItems="center">
+		<Grid container item direction="row" className={classes.root} justify="space-evenly" alignItems="center">
 			<TextField placeholder="Type a Message" className={classes.input} value={message} onChange={(e) => setMessage(e.target.value)} />
 			<Button variant="contained" className={classes.btn} size="small" color="primary" disabled={!message} onClick={handleSend}>
 				<SendSharp />
@@ -25,19 +25,16 @@ function ChatInputBox ({ meeting }) {
 }
 
 const useStyles = makeStyles({
-	root     : {
+	root  : {
 		alignSelf    : 'center',
 		border       : '1px solid #ccc',
 		borderRadius : 8,
+		padding      : '0.5rem',
 	},
-	inputBox : {
-		margin : '1rem',
+	input : {
+		width : '78%',
 	},
-	input    : {
-		width  : '78%',
-		margin : '0.5rem',
-	},
-	btn      : {
+	btn   : {
 		maxWidth : '15%',
 	},
 });

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Grid, makeStyles, Typography } from '@material-ui/core';
 import Participant from './Participant';
-import { db } from '../../services/Firebase';
 import { getAllRoomParticipants } from '../../services/Firebase/firebaseDB';
 import InviteButton from '../InviteButton';
 

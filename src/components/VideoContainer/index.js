@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import { useParticipants, useRoomContext } from '../../hooks';
-import ParticipantCard from '../ParticipantCard'
-
+import ParticipantVideoCard from '../ParticipantVideoCard'
 import './styles.css';
 
 let _margin = 5;
@@ -10,7 +9,6 @@ let _w = 0;
 function VideoContainer (props) {
     const { room } = useRoomContext();
     const [cardWidthAndMargin, setCardWidthAndMargin] = useState({ width: 0, margin: 5 });
-    
     const localParticipant = room?.localParticipant;
     const participants = useParticipants();
     const containerRef = React.useRef(null);
@@ -19,7 +17,14 @@ function VideoContainer (props) {
         calcWidth();
     }, [participants, props.widthChanged]);
 
-    
+    React.useEffect(() => {
+        window.addEventListener('resize', calcWidth);
+        return () => {
+            window.removeEventListener('resize', calcWidth);
+        }
+    },[])
+
+    // to calculate the max width a Participant card can acquire while maintaining the aspect ratio
     const calcWidth = () => {
         _margin = 5;
         const offsetWidth = containerRef.current? containerRef.current.offsetWidth: 1428;
@@ -39,22 +44,18 @@ function VideoContainer (props) {
         setCardWidthAndMargin({ width: _w - _margin * 2, margin: _margin });
     }
 
-    return (
-        
+    return ( 
         <div className={'container'} ref={containerRef}>
-            <ParticipantCard participant={localParticipant} isLocalParticipant={true} cardWidthAndMargin={cardWidthAndMargin} />
+            <ParticipantVideoCard participant={localParticipant} isLocalParticipant={true} cardWidthAndMargin={cardWidthAndMargin} />
             {
                 participants.map(participant => {
                     return (
-                        <ParticipantCard participant={participant} isLocalParticipant={false} key={participant.sid} cardWidthAndMargin={cardWidthAndMargin} />
+                        <ParticipantVideoCard participant={participant} isLocalParticipant={false} key={participant.sid} cardWidthAndMargin={cardWidthAndMargin} />
                     )
                 })
             }
-
         </div>
-    )
-        
-        
+    )        
 }
 
 

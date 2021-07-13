@@ -6,10 +6,12 @@ import ToggleAudioButton from '../ToggleAudioButton';
 import ToggleVideoButton from '../ToggleVideoButton';
 import VideoCloseCard from '../VideoCloseCard';
 import {AuthContext} from '../../context/AuthContext';
+import AudioTrack from '../AudioTrack';
+
+
 
 function PreviewTrack (props) {
 	const videoRef = React.useRef(null);
-	const userAudio = React.useRef(null);
 	const { authState } = useContext(AuthContext);
 	const [ container, setContainer ] = useState({ height: 0, width: 0 });
 	const [ aspectRatio, calculateRatio ] = useCardRatio(1.7777778);
@@ -19,8 +21,7 @@ function PreviewTrack (props) {
 	React.useEffect(
 		() => {
 			if (props.track) {
-				// props.track[0]?.attach(userAudio.current);
-				props.track?.attach(videoRef.current)
+				props.track && props.track[1]?.attach(videoRef.current)
 			}
 		},
 		[ props.track, props.mediaConfig ],
@@ -52,6 +53,7 @@ function PreviewTrack (props) {
 							<ToggleVideoButton mediaConfig={props.mediaConfig} handleClick={props.handleVideo} />
 						</div>
 					</div>
+					<AudioTrack track={props.track[0]} />
 				</div>
 			)}
 		</Measure>
@@ -60,7 +62,7 @@ function PreviewTrack (props) {
 
 const useStyles = makeStyles({
 	videoContainer : {
-		borderRadius    : '1em',
+		borderRadius    : '1rem',
 		backgroundColor : '#222',
 		overflow        : 'hidden',
 		position: 'relative',

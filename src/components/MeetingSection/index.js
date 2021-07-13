@@ -2,8 +2,11 @@ import React from 'react';
 import { Grid, makeStyles } from '@material-ui/core';
 import Chat from '../Chat';
 import ParticipantList from '../ParticipantList';
-import { MeetingContext } from '../../context/MeetingContext';
 import PlaceHolderScreen from '../PlaceHolderScreen';
+
+/** 
+ * This component contains the chats and participant list of a meeting
+ */
 
 function MeetingSection ({ meeting }) {
 	const classes = useStyles();

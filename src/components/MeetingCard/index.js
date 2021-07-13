@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
-import { Card, Typography, makeStyles, CardActionArea, Avatar, CardHeader, Menu, MenuItem , IconButton, Badge} from '@material-ui/core';
-import { Group , MoreVert} from '@material-ui/icons';
+import React  from 'react';
+import { Card, Typography, makeStyles, CardActionArea, Avatar, CardHeader} from '@material-ui/core';
+import { Group} from '@material-ui/icons';
 import videoConferencingImage from '../../assets/video_conferencing.jpg';
-import { MeetingContext } from '../../context/MeetingContext'
-import { getAllMessages } from '../../services/Firebase/firebaseDB';
+
+/** 
+ * Card shown in the meeting list component on the homepage
+ */
 
 function MeetingCard ({ meeting, onSelect }) {
 	const classes = useStyles();
 	
-	console.log("card",meeting);
-
 	return (
 		<Card className={classes.root} onClick={()=>onSelect(meeting)}>
 			<CardActionArea>
@@ -27,7 +27,7 @@ function MeetingCard ({ meeting, onSelect }) {
 	);
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
 	root    : {
 		display      : 'flex',
 		width        : '100%',
@@ -43,6 +43,6 @@ const useStyles = makeStyles((theme) => ({
 	},
 	
 	
-}));
+});
 
 export default MeetingCard;

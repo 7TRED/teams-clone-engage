@@ -1,5 +1,14 @@
 import { useState, useEffect } from 'react';
 
+/**
+ * Calculates and returns x and y offsets to center the vided in the container
+ * @param {number} vWidth video width
+ * @param {number} vHeight video height
+ * @param {number} cWidth  container width
+ * @param {number} cHeight container height
+ * @returns {{x: number, y: number}} offsets
+ */
+
 export function useOffsets (vWidth, vHeight, cWidth, cHeight) {
 	const [ offsets, setOffsets ] = useState({ x: 0, y: 0 });
 

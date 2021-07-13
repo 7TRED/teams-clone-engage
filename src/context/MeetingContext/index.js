@@ -10,23 +10,11 @@ import {
 } from '../../services/Firebase/firebaseDB';
 import { AuthContext } from '../AuthContext';
 import * as uuid from 'uuid';
+
 /**
- * Meeting Context provides functions to create room using the twilio API.
- * Also, function to generate accessToken which is needed while joining the room.
+ * Meeting Context provides functions to create,join, leave, validate and generate access token  .
+ * for the room
  */
-
-// Errors
-
-export const LOGS = {
-	ROOM_NOT_CREATED   : 'Failed to create the room. Please check your network connection.',
-	INVALID_TOKEN      : 'Oops!! There seems to be a problem with your network connection',
-	TOKEN_GENERATED    : 'token generated successfully',
-	ROOM_NOT_FOUND     : 'Plese enter a valid room ID',
-	ROOM_CREATED       : 'Yoooo hooo !! Room Created',
-	ROOM_JOINED        : 'Yaayyy!! Successfully joined the room.',
-	LEFT_ROOM          : 'You have left the meeting',
-	LEAVING_ROOM_ERROR : 'There was some problem leavin the the meeting please try again after some time.',
-};
 
 const DEFAULT_STATE = {
 	room        : undefined,
@@ -98,7 +86,6 @@ export const MeetingProvider = ({ children }) => {
 		} finally {
 			setIsLoading(false);
 		}
-
 		return result;
 	};
 
@@ -128,7 +115,6 @@ export const MeetingProvider = ({ children }) => {
 					identity : authState.user.uid,
 				},
 			});
-
 			setRoomState({ ...roomState, accessToken: response.data.token, log: { severity: 'success', message: LOGS.TOKEN_GENERATED } });
 			return response.data.token;
 		} catch (err) {
@@ -154,4 +140,16 @@ export const MeetingProvider = ({ children }) => {
 			{children}
 		</MeetingContext.Provider>
 	);
+};
+
+//Errors
+export const LOGS = {
+	ROOM_NOT_CREATED   : 'Failed to create the room. Please check your network connection.',
+	INVALID_TOKEN      : 'Oops!! There seems to be a problem with your network connection',
+	TOKEN_GENERATED    : 'token generated successfully',
+	ROOM_NOT_FOUND     : 'Plese enter a valid room ID',
+	ROOM_CREATED       : 'Yoooo hooo !! Room Created',
+	ROOM_JOINED        : 'Yaayyy!! Successfully joined the room.',
+	LEFT_ROOM          : 'You have left the meeting',
+	LEAVING_ROOM_ERROR : 'There was some problem leavin the the meeting please try again after some time.',
 };

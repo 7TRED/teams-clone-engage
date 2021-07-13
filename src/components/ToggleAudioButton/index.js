@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Fab, makeStyles } from '@material-ui/core';
+import { Button, makeStyles } from '@material-ui/core';
 import { Mic, MicOff } from '@material-ui/icons';
 
 function ToggleAudioButton ({ mediaConfig, handleClick }) {

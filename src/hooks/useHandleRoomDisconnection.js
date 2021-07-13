@@ -1,6 +1,12 @@
-import { useEffect, useContext, useState } from 'react';
+import { useEffect, useState } from 'react';
 import history from '../history';
-import { MeetingContext } from '../context/MeetingContext';
+import { Room } from 'twilio-video';
+
+/**
+ * Handles the users disconnection from the room
+ * @param {Room} room - current room joined by the user
+ * @returns {[{severity:string, message:string}]} - disconnect log 
+ */
 
 export function useHandleRoomDisconnection (room) {
 	const [ disconnectLog, setDisconnectLog ] = useState(undefined);

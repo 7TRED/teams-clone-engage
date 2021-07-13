@@ -41,13 +41,11 @@ const LandingPage = (props) => {
 		return <Loader open />;
 	}
 
-	console.log(props);
-
 	return (
 		<React.Fragment>
 			<Grid container direction="row" className={styles.root}>
 				<Grid container item direction="row" xs={4} justify="center" alignItems="center" className={styles.subContainer}>
-					<Grid container item direction="column" xs={10} spacing={10} justify="center" alignContent="center">
+					<Grid container item direction="column" xs={10} spacing={10} justify="center" alignItems="center">
 						<Typography variant="h2" color="primary" className={styles.title}>
 							Teamspace
 						</Typography>

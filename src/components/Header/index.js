@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar, Typography, makeStyles, Toolbar } from '@material-ui/core';
+import { AppBar, Typography, makeStyles } from '@material-ui/core';
 
 /*
  * This is a header component which will be visible on top of every page
@@ -8,19 +8,21 @@ import { AppBar, Typography, makeStyles, Toolbar } from '@material-ui/core';
 const Header = () => {
 	const classes = useStyles();
 	return (
-		<AppBar position="">
-			<Toolbar>
-				<Typography variant="h6" color="inherit" className={classes.title}>
-					Teamspace
-				</Typography>
-			</Toolbar>
+		<AppBar position="relative" className={classes.appbar}>
+			<Typography variant="h6" color="inherit" className={classes.title}>
+				Teamspace
+			</Typography>
 		</AppBar>
 	);
 };
 
 const useStyles = makeStyles({
-	title : {
-		flexGrow : 1,
+	title  : {
+		marginLeft : '3%',
+	},
+	appbar : {
+		height         : '5%',
+		justifyContent : 'center',
 	},
 });
 

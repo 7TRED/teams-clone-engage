@@ -1,6 +1,14 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback } from 'react';
 import { connect as roomConnect } from 'twilio-video';
 import MEDIA_CONSTRAINTS from '../constants/MediaConstraints';
+
+/** 
+ * Handles the connection of a user with a room.This hook stores the current joined room
+ * and also returns a connect function which expects users accessToken and configuration
+ * options.
+ * Returns an array of current room, connection status, connect function and connect log
+ * @returns {[room, isConnecting:boolean, connect:((token:string, options:{*})=>Promise<boolean>), connectLog:{severity:string, message:string}]}
+ */
 
 export function useRoom () {
 	const [ room, setRoom ] = useState(null);
@@ -12,15 +20,15 @@ export function useRoom () {
 		return roomConnect(token, { ...options, ...MEDIA_CONSTRAINTS })
 			.then((newRoom) => {
 				setRoom(newRoom);
-				console.log(newRoom);
 				const disconnect = () => newRoom.disconnect();
 
+				//if user joined with audio muted, disable the audioTrack
 				if (window.mediaSettings.isAudioMuted) {
 					newRoom.localParticipant.audioTracks.forEach((trackPublication) => {
 						trackPublication.track.disable();
 					});
 				}
-
+				// if user joined with video muted disable the videoTrack
 				if (window.mediaSettings.isVideoMuted) {
 					newRoom.localParticipant.videoTracks.forEach((trackPublication) => {
 						trackPublication.track.disable();
@@ -30,20 +38,19 @@ export function useRoom () {
 				newRoom.setMaxListeners(15);
 
 				newRoom.once('disconnected', () => {
-					// setTimeout(() => setRoom(null));
 					window.removeEventListener('beforeunload', disconnect);
 				});
 
 				window.twilioRoom = newRoom;
 				newRoom.localParticipant.videoTracks.forEach((track) => track.setPriority('low'));
 
+				// if user refreshes while in meeting, user should disconnect from the meeting
 				window.addEventListener('beforeunload', disconnect);
 
 				setIsConnecting(false);
 				return true;
 			})
 			.catch((error) => {
-				console.log(error.name);
 				setConnectLog({ severity: 'error', message: CONNECT_ERRORS[error.name] });
 				setIsConnecting(false);
 				return false;

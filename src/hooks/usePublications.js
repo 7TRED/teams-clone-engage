@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
 
+/**
+ * Returns all the publications published by a participant and adds event listeners
+ * to track the trackPublished and trackUnpublished events.
+ */
+
 export const usePublications = (participant) => {
 	const [ publications, setPublications ] = useState([]);
 

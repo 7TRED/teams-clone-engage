@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 
+/**
+ * Returns the track of a publication
+ */
+
 export const useTracks = (publication) => {
 	const [ track, setTrack ] = useState(publication && publication.track);
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, makeStyles, Typography, Button } from '@material-ui/core';
+import { Grid, makeStyles } from '@material-ui/core';
 import { AuthContext } from '../context/AuthContext';
 import CreateMeetingButton from '../components/CreateMeetingButton';
 import JoinMeetingButton from '../components/JoinMeetingButtonForm';
@@ -8,7 +8,7 @@ import MeetingList from '../components/MeetingList';
 import MeetingSection from '../components/MeetingSection';
 import { getAllParticipantRooms } from '../services/Firebase/firebaseDB';
 
-const Homepage = (props) => {
+const Homepage = () => {
 	const styles = useStyles();
 	const { authState } = React.useContext(AuthContext);
 	const [ meetings, setMeetings ] = React.useState([]);
@@ -22,7 +22,6 @@ const Homepage = (props) => {
 			});
 			setMeetings(rooms);
 		};
-		console.log('meetings', meetings);
 		getAllParticipantRooms(authState.user.uid, callback);
 	}, []);
 
@@ -53,9 +52,6 @@ export default Homepage;
 
 const useStyles = makeStyles({
 	root              : {
-		// position   : 'absolute',
-		// top        : 0,
-		// left       : 0,
 		margin     : 0,
 		height     : '92%',
 		width      : '100%',

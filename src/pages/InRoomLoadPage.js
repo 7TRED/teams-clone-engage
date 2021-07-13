@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Grid, Typography, makeStyles, Button } from '@material-ui/core';
-import { Redirect } from 'react-router-dom';
 import history from '../history';
 import { RoomContext } from '../context/RoomContext';
 import { MeetingContext } from '../context/MeetingContext';
@@ -15,10 +14,8 @@ function InRoomLoadPage (props) {
 	useEffect(() => {
 		const connectToRoom = async () => {
 			const res = await joinRoom(props.match.params.id);
-			console.log(res);
 			if (res) {
 				const success = await connect(roomState.accessToken, { name: props.match.params.id });
-				console.log(success);
 				if (success) {
 					history.push(`/inroom/${props.match.params.id}`);
 				}
@@ -32,8 +29,6 @@ function InRoomLoadPage (props) {
 		connectToRoom();
 	}, []);
 
-	console.log(connectLog);
-	console.log(roomState.log);
 
 	const onRejoinClick = () => {
 		history.replace(`/room/${props.match.params.id}`);

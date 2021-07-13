@@ -1,6 +1,5 @@
 import React from 'react';
 import { Card, makeStyles, Typography, CardContent, CardMedia } from '@material-ui/core';
-import { fetchUser } from '../../../services/Firebase/firebaseDB';
 
 
 function Participant ({participant, isOwner}) {
